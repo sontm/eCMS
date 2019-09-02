@@ -1,0 +1,88 @@
+.app-title {
+  float: left;
+}
+
+/* Override Weird Heigh 64px of antd */
+.ant-layout-header {
+  height: 100% !important;
+  padding: 0;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+.ant-input-group-wrapper {
+  vertical-align: middle;
+}
+/* End Override */
+
+.app-title a {
+  text-decoration: none;
+  line-height: 64px;
+  font-size: 21px;
+  display: inline-block;
+}
+
+.app-title a:hover {
+  text-decoration: none;
+}
+
+.app-header {
+  position: fixed;
+  width: 100%;
+  box-shadow: 0 2px 8px #f0f1f2;
+  z-index: 10;
+  padding: 0;
+}
+
+.app-menu {
+  /* float: none; */
+  margin: 0 auto;
+}
+
+.app-menu > li {
+  padding: 0 20px;
+}
+
+.app-menu > li > a {
+  padding: 0 20px;
+  margin: 0 -20px;
+}
+
+.app-menu > li > a > i {
+  margin-right: 0 !important;
+}
+
+.dropdown-item {
+  padding: 10px 12px;
+}
+
+.dropdown-item a {
+  padding: 10px 12px;
+  margin: -10px -12px;
+}
+
+.nav-icon {
+  font-size: 30px;
+  
+}
+.nav-menu-text {
+  margin-left: 10px;
+}
+
+.poll-icon {
+  margin-top: -4px;
+}
+
+@media (max-width: 768px) {
+.app-title a {
+  font-size: 24px;
+}
+
+.app-menu > li {
+  padding: 0 15px;
+}
+
+.app-menu > li > a {
+  padding: 0 15px;
+  margin: 0 -15px;
+}
+}  

@@ -1,0 +1,27 @@
+{
+  "development": {
+    "username": "sontm",
+    "password": null,
+    "database": "phuphuong",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "sontm",
+    "password": null,
+    "database": "phuphuong",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "sontm",
+    "password": null,
+    "database": "phuphuong",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres",
+    "operatorsAliases": false
+  }
+}

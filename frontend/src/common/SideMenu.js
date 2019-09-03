@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { actCategoryGet } from '../redux/actions/CategoryActions';
+import { Card } from 'antd';
 
 const { Search } = Input;
 const Sider = Layout.Sider;
@@ -57,12 +58,42 @@ class SideMenu extends Component {
             );
         }
     }
+    renderBrand() {
+        return (
+            <Card size="small" title="Thuong Hieu" style={{marginTop: "10px"}}>
+                <p>Card content</p>
+                <p>Card content</p>
+                <p>Card content</p>
+            </Card>
+        )
+    }
+    renderBrandCountry() {
+        return (
+            <Card size="small" title="Xuat Xu Thuong Hieu" style={{marginTop: "10px"}}>
+                <p>Card content</p>
+                <p>Card content</p>
+                <p>Card content</p>
+            </Card>
+        )
+    }
+    renderPriceRange() {
+        return (
+            <Card size="small" title="Gia" style={{marginTop: "10px"}}>
+                <p>Card content</p>
+                <p>Card content</p>
+                <p>Card content</p>
+            </Card>
+        )
+    }
     render() {
         console.log(this.props.category)
         return (
-            <Sider>
+            <React.Fragment>
             {this.renderSelectCategory()}
-            </Sider>
+            {this.renderBrand()}
+            {this.renderBrandCountry()}
+            {this.renderPriceRange()}
+            </React.Fragment>
         )
     }
 }

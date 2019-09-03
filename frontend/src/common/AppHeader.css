@@ -5,6 +5,7 @@
 /* Override Weird Heigh 64px of antd */
 .ant-layout-header {
   height: 100% !important;
+  line-height: 50px !important;
   padding: 0;
   margin-left: 5%;
   margin-right: 5%;
@@ -16,7 +17,7 @@
 
 .app-title a {
   text-decoration: none;
-  line-height: 64px;
+  line-height: 50px;
   font-size: 21px;
   display: inline-block;
 }
@@ -32,36 +33,8 @@
   z-index: 10;
   padding: 0;
 }
-
-.app-menu {
-  /* float: none; */
-  margin: 0 auto;
-}
-
-.app-menu > li {
-  padding: 0 20px;
-}
-
-.app-menu > li > a {
-  padding: 0 20px;
-  margin: 0 -20px;
-}
-
-.app-menu > li > a > i {
-  margin-right: 0 !important;
-}
-
-.dropdown-item {
-  padding: 10px 12px;
-}
-
-.dropdown-item a {
-  padding: 10px 12px;
-  margin: -10px -12px;
-}
-
 .nav-icon {
-  font-size: 30px;
+  font-size: 20px;
   
 }
 .nav-menu-text {
@@ -76,13 +49,74 @@
 .app-title a {
   font-size: 24px;
 }
-
-.app-menu > li {
-  padding: 0 15px;
-}
-
-.app-menu > li > a {
-  padding: 0 15px;
-  margin: 0 -15px;
-}
 }  
+
+
+
+.flyout-container-hidden {
+  display: none;
+}
+.flyout-container-display {
+  display: block;
+  overflow: hidden;
+  position: absolute;
+  margin-top: 0px;
+  z-index: 100;
+  width: 90%;
+  /* background: rgb(240, 240, 240); */
+}
+.parent-menu-container-left {
+  border-right: 0.2px solid grey;
+  background: rgb(240, 240, 240);
+  text-align: center;
+
+  /* This is for same height on a Row */
+  margin-bottom: -99999px;
+  padding-bottom: 99999px;
+}
+.parent-menu-container-right {
+  background: rgb(250, 250, 250);
+
+  /* This is for same height on a Row */
+  margin-bottom: -99999px;
+  padding-bottom: 99999px;
+}
+.parent-menu-container-right-hidden {
+  display: none;
+}
+
+.parent-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  
+}
+
+.parent-menu li {
+  display: block;
+  position: relative;
+  width: 100%;
+  float: left;
+  clear: left;
+  line-height: 35px;
+  text-decoration: none;
+}
+.parent-menu-li-hovering {
+  background: blue;
+}
+
+.sub-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.sub-menu li {
+  display: block;
+  position: relative;
+  float: left;
+  clear: left;
+  line-height: 30px;
+  text-decoration: none;
+}

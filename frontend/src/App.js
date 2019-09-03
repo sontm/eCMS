@@ -21,6 +21,7 @@ import LoadingIndicator from './common/LoadingIndicator';
 import PrivateRoute from './common/PrivateRoute';
 
 import { Layout, notification, Menu } from 'antd';
+import { Row, Col } from 'antd';
 require('dotenv').config()
 
 const { Content, Header, Sider, Footer } = Layout;
@@ -55,13 +56,19 @@ class App extends Component {
         <Layout>
           <AppHeader />
           <Layout className="app-content">
-            <SideMenu />
+            
             <Content>
+              <Col span={4}>
+                <SideMenu />
+              </Col>
+
+              <Col span={20}>
               <Switch>      
                 <Route exact path="/" component={HomePage} />
                 <Route path="/category" component={CategoryPage} />
                 <Route component={NotFound}></Route>
               </Switch>
+              </Col>
             </Content>
           </Layout>
           <Footer style={{ textAlign: 'center' }}>Phu Phuong ©2019</Footer>

@@ -9,14 +9,29 @@ Project.hasMany(User, {as: 'Workers'}) //This will add the attribute projectId t
 https://sequelize.readthedocs.io/en/2.0/api/datatypes/
 
 ### Product
-$ sequelize model:create --name DBProduct --attributes name:string,image:string,description:string,available:boolean,price:float
-
-// complete:boolean
-
+$ sequelize model:create --name DBProducts --attributes name:string,descShort:string,descMedium:text,descLong:text,unitPrice:float,stockNum:integer,active:boolean,imgThump:string,img1:string,img2:string,img3:string,img4:string,img5:string,img6:string,firstCategoryId:integer,secondCategoryId:integer,thirdCategoryId:integer,brandId:integer,parentProductId:integer,productAttributeId:integer
 ### Category
+$ sequelize model:create --name DBCategories --attributes name:string,desc:text,active:boolean,order:smallint,parentCategoryId:integer
 
-$ sequelize model:create --name DBCategory --attributes name:string,icon:string
+### Country
+name, code
+$ sequelize model:create --name DBCountries --attributes name:string,code:text
 
+### Brand
+name, imgLogo, countryId, active
+$ sequelize model:create --name DBBrands --attributes name:string,imgLogo:string,countryId:integer,active:boolean
+
+### AttributeGroup
+name
+$ sequelize model:create --name DBAttributeGroups --attributes name:string
+
+### Attribute
+name, value, attributeGroupId
+$ sequelize model:create --name DBAttributes --attributes name:string,value:string,attributeGroupId:integer
+
+### ProductAttribute
+productId, attributeId
+$ sequelize model:create --name DBProductAttributes --attributes productId:integer,attributeId:integer
 
 
 ## Using in Sequilize
@@ -57,20 +72,20 @@ https://scotch.io/tutorials/getting-started-with-node-express-and-postgres-using
 
 Get
 // Get product of category
-curl --request GET --url http://localhost:3000/api/products/OfCategory/1
+curl --request GET --url http://localhost:5000/api/products/OfCategory/15
 
-curl --request GET --url http://localhost:3000/api/categories
-curl --request GET --url http://localhost:3000/api/categoriesFull
-curl --request GET --url http://localhost:3000/api/categoriesFull/1
+curl --request GET --url http://localhost:5000/api/categories
+curl --request GET --url http://localhost:5000/api/categoriesFull
+curl --request GET --url http://localhost:5000/api/categoriesFull/1
 
 ## Category Preparations
 
-curl --request POST --url http://localhost:3000/api/categories --header 'content-type: application/json' \
+curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
   --data '{
 	"name": "Banh Keo"
 }'
 
-curl --request POST --url http://localhost:3000/api/categories --header 'content-type: application/json' \
+curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
   --data '{
 	"name": "Sua Tuoi"
 }'

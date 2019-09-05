@@ -4,7 +4,7 @@ import {
     withRouter
 } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import { actCategoryGet } from '../redux/actions/CategoryActions';
 import './AppHeader.css';
 import { Layout, Menu, Dropdown, Icon, Input } from 'antd';
 import { Row, Col } from 'antd';
@@ -12,21 +12,24 @@ const { Search } = Input;
 const Header = Layout.Header;
 const {SubMenu} = Menu;
 
-const menuData = {
-  "BanhKeo":{
-    "Banh":["Banh1", "Banh2"],
-    "Keo":["Keo1", "Keo2"]
-  },
-  "ThucPham":{
-    "ThucPhamKho":["Tao", "Chuoi", "Dua"],
-    "Dac San": ["Nem chua", "Thit Cho", "Thit Lon"]
-  },
-  "Do Uong":{
-    "Bia":["Heiniken", "Tiger", "HaNoi"],
-    "Ruou":["Vodka", "Whisky", "Sochu"]
-  }
-};
-
+// const menuData = {
+//   "BanhKeo":{
+//     "Banh":["Banh1", "Banh2"],
+//     "Keo":["Keo1", "Keo2"]
+//   },
+//   "ThucPham":{
+//     "ThucPhamKho":["Tao", "Chuoi", "Dua"],
+//     "Dac San": ["Nem chua", "Thit Cho", "Thit Lon"]
+//   },
+//   "Do Uong":{
+//     "Bia":["Heiniken", "Tiger", "HaNoi"],
+//     "Ruou":["Vodka", "Whisky", "Sochu"]
+//   }
+// };
+// "BanhKeo":{
+  //       "id": 1,
+  //       "Banh":{id: 4, subs: [{id:8, name:"Banh1"}, {id:9, name:"Banh2"}]},
+  //     },
 class DropdownMenu extends React.Component {
   constructor(props) {
     super(props); 
@@ -42,7 +45,9 @@ class DropdownMenu extends React.Component {
         parentMenus.push(
             <li onMouseOver={this.props.onParentMenuHover} onMouseLeave={this.props.onParentMenuOut}
               className={this.props.hoveredParent == prop ? "parent-menu-li-hovering" : ""}>
+              <Link to={"/category/" + config["" +prop].id + "?lvl=3"}>
                 {prop}
+              </Link>
             </li>)
       }
     }
@@ -51,23 +56,33 @@ class DropdownMenu extends React.Component {
     if (curSubmenuItems) {
       for (var propSub in curSubmenuItems) {
         // One Sub menu. i.e Banh
-        let subMenus = [];
-        if (Object.prototype.hasOwnProperty.call(curSubmenuItems, propSub)) {
-          let subItems = curSubmenuItems[propSub]
-          if (subItems && subItems.length > 0) {
-            subItems.forEach((item, idx) => {
-              subMenus.push(
-                <li>
-                  {item}
-                </li>           
-              )
-            });
+        if (propSub != "id") {
+          let subMenus = [];
+          if (Object.prototype.hasOwnProperty.call(curSubmenuItems, propSub)) {
+            // {id: 4, subs: [{id:8, name:"Banh1"}, {id:9, name:"Banh2"}]}
+            let subItems = curSubmenuItems[propSub]
+            if (subItems && subItems.subs && subItems.subs.length > 0) {
+              subItems.subs.forEach((item, idx) => {
+                subMenus.push(
+                  <li key={item.id}>
+                  <Link to={"/category/" + item.id + "?lvl=1"}>
+                    {item.name}
+                  </Link>
+                  </li>           
+                )
+              });
+            }
+            allCols.push (<Col span={6}>
+              <span style={{fontWeight:"bold"}}>
+                <Link to={"/category/" + curSubmenuItems["" +propSub].id + "?lvl=2"}>
+                {propSub}
+                </Link>
+              </span>
+              <ul className="sub-menu">
+              {subMenus}
+              </ul>
+            </Col>);
           }
-          allCols.push (<Col span={6}>
-            <ul className="sub-menu">
-            {subMenus}
-            </ul>
-          </Col>);
         }
       }
     }
@@ -134,6 +149,21 @@ class AppHeader extends Component {
         hoveredParent: ""
       })
     }
+
+    componentDidMount() {
+      console.log("  >>DID MOUNT AppHeader")
+      if (this.props.category.categories.length <= 0 ) {
+          console.log("    >>>> actCategoryGet")
+          this.props.actCategoryGet();
+      }
+    }
+    componentDidUpdate() {
+        if (this.props.category.categories.length <= 0 ) {
+            console.log("  >>DID UPDATE AppHeader")
+            console.log("    >>>> actCategoryGet")
+            this.props.actCategoryGet();
+        }
+    }
     render() {
         return (
             <Header>
@@ -161,7 +191,7 @@ class AppHeader extends Component {
               </div>
             </Col>
             </Row>
-            <DropdownMenu config={menuData} onParentMenuOut={this.onParentMenuOut} onMenuContainerOut={this.onMenuContainerOut}
+            <DropdownMenu config={this.props.category.categoriesLevel} onParentMenuOut={this.onParentMenuOut} onMenuContainerOut={this.onMenuContainerOut}
               onParentMenuHover={this.onParentMenuHover} hoveredParent={this.state.hoveredParent}
               hoveredMenuList={this.state.hoveredMenuList}
               />
@@ -175,9 +205,10 @@ class AppHeader extends Component {
 
 const mapStateToProps = (state) => ({
   //user: state.user
+  category: state.category
 });
 const mapActionsToProps = {
-  //actLogout
+  actCategoryGet
 };
 
 export default withRouter(connect(

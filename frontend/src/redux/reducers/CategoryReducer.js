@@ -1,23 +1,29 @@
 import {
     CATE_GET_OK,CATE_GET_ERR
   } from '../actions/CategoryActions'
-
+import {levelingCategory} from '../../util/Helpers'
 const initialState = {
     categories: [],
+    categoriesLevel:{}
 };
+
+
 
 // Note, in this Reducer, cannot Access state.user
 export default function(state = initialState, action) {
     switch (action.type) {
     case CATE_GET_OK:
+        let levelCategory = levelingCategory(action.payload)
         return {
             ...state,
-            categories: action.payload
+            categories: action.payload,
+            categoriesLevel:levelCategory
         };
     case CATE_GET_ERR:
         return {
             ...state,
-            categories: []
+            categories: [],
+            categoriesLevel:{}
         };
     default:
         return state;

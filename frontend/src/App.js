@@ -8,6 +8,7 @@ import {
 import axios from 'axios';
 import HomePage from './pages/home/HomePage'
 import CategoryPage from './pages/category/CategoryPage'
+import ProductDetailPage from './pages/product/ProductDetailPage'
 
 // Redux stuff
 import { connect } from 'react-redux';
@@ -15,7 +16,6 @@ import store from './redux/store';
 import { ACCESS_TOKEN } from './constants';
 
 import AppHeader from './common/AppHeader';
-import SideMenu from './common/SideMenu';
 import NotFound from './common/NotFound';
 import LoadingIndicator from './common/LoadingIndicator';
 import PrivateRoute from './common/PrivateRoute';
@@ -55,20 +55,15 @@ class App extends Component {
     return (
         <Layout>
           <AppHeader />
-          <Layout className="app-content">
+          <Layout className="app-container">
             
             <Content>
-              <Col span={4}>
-                <SideMenu />
-              </Col>
-
-              <Col span={20}>
               <Switch>      
                 <Route exact path="/" component={HomePage} />
-                <Route path="/category" component={CategoryPage} />
+                <Route path="/category/:id" component={CategoryPage} />
+                <Route path="/product/:id" component={ProductDetailPage} />
                 <Route component={NotFound}></Route>
               </Switch>
-              </Col>
             </Content>
           </Layout>
           <Footer style={{ textAlign: 'center' }}>Phu Phuong ©2019</Footer>

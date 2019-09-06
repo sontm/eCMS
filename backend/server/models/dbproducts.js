@@ -24,9 +24,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   DBProducts.associate = function(models) {
     // associations can be defined here
-    DBProducts.belongsTo(models.DBCategories, {
-      foreignKey: 'firstCategoryId',
-      onDelete: 'CASCADE',
+    DBProducts.belongsTo(models.DBBrands, {
+      foreignKey: 'brandId'
     });
   };
   return DBProducts;

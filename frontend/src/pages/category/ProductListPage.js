@@ -10,9 +10,9 @@ import { actProductGetOfCategory } from '../../redux/actions/ProductActions';
 import { Row, Col } from 'antd';
 const queryString = require('query-string');
 
-class CategoryPage extends Component {
+class ProductListPage extends Component {
     componentDidMount() {
-        console.log("  >>DID MOUNT CategoryPage:" + this.props.match.params.id)
+        console.log("  >>DID MOUNT ProductListPage:" + this.props.match.params.id)
         var parsedQuery = queryString.parse(this.props.location.search);
         if (this.props.product.productsQuery.length <= 0 ) {
             console.log("    >>>> actProductGetOfCategory")
@@ -20,7 +20,7 @@ class CategoryPage extends Component {
         }
     }
     componentDidUpdate() {
-        console.log("  >>DID UPdate CategoryPage:" + this.props.match.params.id)
+        console.log("  >>DID UPdate ProductListPage:" + this.props.match.params.id)
         var parsedQuery = queryString.parse(this.props.location.search);
         if (this.previousCategoryId != this.props.match.params.id) {
             console.log("    >>>> actProductGetOfCategory")
@@ -30,7 +30,7 @@ class CategoryPage extends Component {
     }
 
     render() {
-        console.log("  >>render CategoryPage:" + this.props.match.params.id)
+        console.log("  >>render ProductListPage:" + this.props.match.params.id)
         var parsedQuery = queryString.parse(this.props.location.search);
         let producView = [];
         if (this.props.product.productsQuery.length > 0) {
@@ -66,4 +66,4 @@ const mapActionsToProps = {
 
 export default withRouter(connect(
     mapStateToProps,mapActionsToProps
-)(CategoryPage));
+)(ProductListPage));

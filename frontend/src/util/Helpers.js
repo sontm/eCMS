@@ -199,3 +199,53 @@ export function breakLineCRLF(text, intoList) {
         return result;
     }
 }
+
+class Helpers {
+    constructor() {
+    }
+
+    // Get the Not Duplicate DBBrand from List Products: [{xxx, DBBrand:{id, name, countryId}}]
+    // Result: {id1: {count:10, value:DBBrand}, id2:{}}
+    getBrandsQuery(products) {
+        let result = {};
+        if (products && products.length > 0) {
+            products.forEach((item, idx) => {
+                if (item.DBBrand) {
+                    if (result[""+item.DBBrand.id]) {
+                        // Existed, increase count
+                        result[""+item.DBBrand.id].count++;
+                    } else {
+                        result[""+item.DBBrand.id] = {count: 1, value: item.DBBrand}
+                    }
+                }
+            })
+        }
+        return result;
+    }
+
+    // DBBrand: {id, name, DBCountry:{id, name, code}}
+    // Input: {id1: {count:10, value:DBBrand}, id2:{}}
+    // Result: {id1: {count:10, value:DBCountry}, id2:{}}
+    getBrandCountriesQuery(brandQuery) {
+        let result = {};
+        if (brandQuery ) {
+            for (var prop in brandQuery) {
+                if (Object.prototype.hasOwnProperty.call(brandQuery, prop)) {
+                    let curBrand = brandQuery[""+prop].value;
+                    if (result[""+curBrand.DBCountry.id]) {
+                        // Existed, increase count
+                        result[""+curBrand.DBCountry.id].count += brandQuery[""+prop].count;
+                    } else {
+                        result[""+curBrand.DBCountry.id] = 
+                            {count: brandQuery[""+prop].count,
+                            value: curBrand.DBCountry}
+                    }
+                }
+            }
+            
+        }
+        return result;
+    }
+}
+const helpers = new Helpers();
+export default helpers;

@@ -66,7 +66,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       brandId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'DBBrands',
+          key: 'id',
+          as: 'brandId',
+        },
       },
       parentProductId: {
         type: Sequelize.INTEGER

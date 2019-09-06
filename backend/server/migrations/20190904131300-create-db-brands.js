@@ -15,7 +15,12 @@ module.exports = {
         type: Sequelize.STRING
       },
       countryId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'DBCountries',
+          key: 'id',
+          as: 'countryId',
+        },
       },
       active: {
         type: Sequelize.BOOLEAN

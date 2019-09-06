@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import axios from 'axios';
 import HomePage from './pages/home/HomePage'
-import CategoryPage from './pages/category/CategoryPage'
+import ProductListPage from './pages/category/ProductListPage'
 import ProductDetailPage from './pages/product/ProductDetailPage'
 
 // Redux stuff
@@ -60,7 +60,7 @@ class App extends Component {
             <Content>
               <Switch>      
                 <Route exact path="/" component={HomePage} />
-                <Route path="/category/:id" component={CategoryPage} />
+                <Route path="/category/:id" component={ProductListPage} />
                 <Route path="/product/:id" component={ProductDetailPage} />
                 <Route component={NotFound}></Route>
               </Switch>

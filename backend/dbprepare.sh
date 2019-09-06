@@ -116,36 +116,36 @@ curl --request POST --url http://localhost:5000/api/categories --header 'content
   "parentCategoryId":8
 }'
 
-# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-#   --data '{
-# 	"name": "Việt Nam",
-#   "code":"vn"
-# }'
-# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-#   --data '{
-# 	"name": "Nhật Bản",
-#   "code":"jp"
-# }'
-# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-#   --data '{
-# 	"name": "Đài Loan",
-#   "code":"tw"
-# }'
-# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-#   --data '{
-# 	"name": "Hàn Quốc",
-#   "code":"kr"
-# }'
-# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-#   --data '{
-# 	"name": "Trung Quốc",
-#   "code":"cn"
-# }'
-# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-#   --data '{
-# 	"name": "Mỹ",
-#   "code":"us"
-# }'
+curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+  --data '{
+	"name": "Việt Nam",
+  "code":"vn"
+}'
+curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+  --data '{
+	"name": "Nhật Bản",
+  "code":"jp"
+}'
+curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+  --data '{
+	"name": "Đài Loan",
+  "code":"tw"
+}'
+curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+  --data '{
+	"name": "Hàn Quốc",
+  "code":"kr"
+}'
+curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+  --data '{
+	"name": "Trung Quốc",
+  "code":"cn"
+}'
+curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+  --data '{
+	"name": "Mỹ",
+  "code":"us"
+}'
 
 # curl --request POST --url http://localhost:5000/api/brands --header 'content-type: application/json' \
 #   --data '{

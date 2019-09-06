@@ -8,6 +8,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   DBBrands.associate = function(models) {
     // associations can be defined here
+    DBBrands.hasMany(models.DBProducts, {
+      foreignKey: 'brandId',
+      as: 'productItems',
+    });
+    DBBrands.belongsTo(models.DBCountries, {
+      foreignKey: 'countryId'
+    });
   };
   return DBBrands;
 };

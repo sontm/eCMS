@@ -1,4 +1,6 @@
 const DBProducts = require('../server/models').DBProducts;
+const DBBrands = require('../server/models').DBBrands;
+const DBCountries = require('../server/models').DBCountries;
 
 module.exports = {
   create(req, res) {
@@ -29,9 +31,17 @@ module.exports = {
     console.log(wherObj)
       return DBProducts
       .findAll({
-          where: wherObj
+          where: wherObj,
+          include: [{
+            model: DBBrands,
+            include: [
+              DBCountries
+            ] 
+          }]
       })
-      .then(result => res.status(200).send(result))
+      .then(result => {
+        res.status(200).send(result)
+      })
       .catch(error => res.status(400).send(error));
   },
   getProductDetail(req, res) {

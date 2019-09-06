@@ -12,20 +12,6 @@ const { Search } = Input;
 const Header = Layout.Header;
 const {SubMenu} = Menu;
 
-// const menuData = {
-//   "BanhKeo":{
-//     "Banh":["Banh1", "Banh2"],
-//     "Keo":["Keo1", "Keo2"]
-//   },
-//   "ThucPham":{
-//     "ThucPhamKho":["Tao", "Chuoi", "Dua"],
-//     "Dac San": ["Nem chua", "Thit Cho", "Thit Lon"]
-//   },
-//   "Do Uong":{
-//     "Bia":["Heiniken", "Tiger", "HaNoi"],
-//     "Ruou":["Vodka", "Whisky", "Sochu"]
-//   }
-// };
 // "BanhKeo":{
   //       "id": 1,
   //       "Banh":{id: 4, subs: [{id:8, name:"Banh1"}, {id:9, name:"Banh2"}]},

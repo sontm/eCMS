@@ -42,6 +42,22 @@ class Backend {
             .catch((error) => {onError(error);});
     }
 
+    // POST
+    queryProducts(queryParams, onOK, onError) {
+        axios.post("/products/query",
+            JSON.stringify(queryParams),
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    // POST
+    getSomeProducts(queryParams, onOK, onError) {
+        axios.post("/products/get",
+            JSON.stringify(queryParams),
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
 }
 
 const backend = new Backend();

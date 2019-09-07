@@ -5,9 +5,9 @@ module.exports = function override(config, env) {
     config = injectBabelPlugin(['import', { libraryName: 'antd', style: true }], config);
     config = rewireLess.withLoaderOptions({
       modifyVars: { 
-          "@layout-body-background": "#ECECEC",
-          "@layout-header-background": "#FFFFFF",
-          "@layout-footer-background": "#FFFFFF" 
+          "@layout-body-background": "#f4f4f4",
+          "@layout-header-background": "#ffffff",
+          "@layout-footer-background": "#189eff" 
       },
       javascriptEnabled: true
     })(config, env);

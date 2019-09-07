@@ -1,0 +1,11 @@
+.product-filter {
+    height: 60px;
+    background: rgb(235, 235, 235);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+.product-filter .filter-option {
+    display:inline-block;
+    margin-left: 10px;
+}

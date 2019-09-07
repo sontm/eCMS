@@ -1,8 +1,10 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
-import CategoryReducer from './reducers/CategoryReducer';
-import ProductReducer from './reducers/ProductReducer';
+import CategoryReducer from './CategoryReducer';
+import ProductReducer from './ProductReducer';
+import ProductQueryReducer from './ProductQueryReducer';
+import CartReducer from './CartReducer';
 
 const initialState = {};
 
@@ -10,7 +12,9 @@ const middleware = [thunk];
 
 const reducers = combineReducers({
   category: CategoryReducer,
-  product: ProductReducer
+  product: ProductReducer,
+  query: ProductQueryReducer, // Product Query options
+  cart: CartReducer
 });
 
 const composeEnhancers =

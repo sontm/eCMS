@@ -1,7 +1,7 @@
 import {
     CATE_GET_OK,CATE_GET_ERR
-  } from '../actions/CategoryActions'
-import {levelingCategory} from '../../util/Helpers'
+  } from './CategoryActions'
+import {levelingCategory} from '../util/Helpers'
 const initialState = {
     categories: [],
     categoriesLevel:{}

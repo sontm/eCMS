@@ -1,13 +1,17 @@
 import {
-    PROD_QUERY_OK,PROD_QUERY_ERR, PROD_GETDETAIL_OK, PROD_BRANDLIST_OK,PROD_BRANDCOUNTRYLIST_OK
-  } from '../actions/ProductActions'
-import Helpers from '../../util/Helpers'
+    PROD_QUERY_OK,PROD_QUERY_ERR, PROD_GETDETAIL_OK, PROD_BRANDLIST_OK,PROD_BRANDCOUNTRYLIST_OK,
+    PROD_ATTRIBUTE_QUERY_OK, PROD_FILTER
+  } from './ProductActions'
+import Helpers from '../util/Helpers'
 
 const initialState = {
     productsQuery: [],
+    productsQueryFiltered: [],
     brandsQuery:{},
     brandCountriesQuery:{},
+    attributesQuery:{},
     productDetail: null,
+    filter:"popular", // popular, new, discount, lowprice, highprice
 };
 
 
@@ -17,7 +21,14 @@ export default function(state = initialState, action) {
     case PROD_QUERY_OK:
         return {
             ...state,
-            productsQuery: action.payload
+            productsQuery: action.payload,
+            productsQueryFiltered: action.payload
+        };
+    case PROD_FILTER:
+        return {
+            ...state,
+            productsQueryFiltered: action.payload.result,
+            filter: action.payload.filter
         };
     case PROD_BRANDLIST_OK:
         return {
@@ -28,6 +39,11 @@ export default function(state = initialState, action) {
         return {
             ...state,
             brandCountriesQuery: action.payload
+        };
+    case PROD_ATTRIBUTE_QUERY_OK:
+        return {
+            ...state,
+            attributesQuery: action.payload
         };
     case PROD_GETDETAIL_OK:
         console.log("Prod detail")
@@ -44,6 +60,6 @@ export default function(state = initialState, action) {
     default:
         return state;
     }
-  }
+}
 
   

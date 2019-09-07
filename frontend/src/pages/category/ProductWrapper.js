@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Card, Row, Col, Button } from 'antd';
 import {Link} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {actCartAddToCart} from '../../redux/CartReducer'
 import './ProductWrapper.css'
 
 class ProductWrapper extends Component {
@@ -12,26 +14,27 @@ class ProductWrapper extends Component {
     }
 
     onAddToCart(e) {
-        console.log("onAddToCart:" + this.props.name)
+        console.log("onAddToCart:" + this.props.product.name)
         // Stop onLick of parent to go Product Detail
         e.stopPropagation()
+        this.props.actCartAddToCart(this.props.product.id)
     }
     onClickProductDetail() {
-        console.log("onClickProductDetail:" + this.props.name)
-        this.props.history.push("/product/" + this.props.id);
+        console.log("onClickProductDetail:" + this.props.product.name)
+        this.props.history.push("/product/" + this.props.product.id);
     }
     render() {
         return (
             <Card className="product-wrapper" onClick={this.onClickProductDetail}>
                 <div className="image-thump">
-                    <img src={"/"+this.props.imgThump} style={{width:"100%", height:"100%"}}/>
+                    <img src={"/"+this.props.product.imgThump} style={{width:"100%", height:"100%"}}/>
                 </div>
                 <div className="product-title">
-                    {this.props.name}
+                    {this.props.product.name}
                 </div>
                
                 <div className="product-price">
-                    {this.props.unitPrice}đ
+                    {this.props.product.unitPrice}đ
                 </div>
                 <div className="product-price-old">
                     100000đ
@@ -46,4 +49,13 @@ class ProductWrapper extends Component {
     }
 }
 
-export default withRouter(ProductWrapper);
+const mapStateToProps = (state) => ({
+    
+});
+const mapActionsToProps = {
+    actCartAddToCart
+};
+
+export default withRouter(connect(
+    mapStateToProps,mapActionsToProps
+)(ProductWrapper));

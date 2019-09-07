@@ -9,6 +9,7 @@ import axios from 'axios';
 import HomePage from './pages/home/HomePage'
 import ProductListPage from './pages/category/ProductListPage'
 import ProductDetailPage from './pages/product/ProductDetailPage'
+import CartPage from './pages/cart/CartPage'
 
 // Redux stuff
 import { connect } from 'react-redux';
@@ -62,11 +63,12 @@ class App extends Component {
                 <Route exact path="/" component={HomePage} />
                 <Route path="/category/:id" component={ProductListPage} />
                 <Route path="/product/:id" component={ProductDetailPage} />
+                <Route path="/cart" component={CartPage} />
                 <Route component={NotFound}></Route>
               </Switch>
             </Content>
           </Layout>
-          <Footer style={{ textAlign: 'center' }}>Phu Phuong ©2019</Footer>
+          <Footer style={{ textAlign: 'center', minHeight:"200px" }}>Phu Phuong ©2019</Footer>
         </Layout>
     );
   }

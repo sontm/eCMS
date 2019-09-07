@@ -4,10 +4,11 @@ import {
     withRouter
 } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { actCategoryGet } from '../redux/actions/CategoryActions';
+import { actCategoryGet } from '../redux/CategoryActions';
+
 import './AppHeader.css';
 import { Layout, Menu, Dropdown, Icon, Input } from 'antd';
-import { Row, Col } from 'antd';
+import { Row, Col, Button,Badge } from 'antd';
 const { Search } = Input;
 const Header = Layout.Header;
 const {SubMenu} = Menu;
@@ -161,12 +162,42 @@ class AppHeader extends Component {
               </div>
               </Col>
 
-              <Col span={12}><Search
+              <Col span={10}><Search
                 placeholder="Search product, category..."
                 enterButton="Tìm Kiếm"
                 size="large"
                 onSearch={value => console.log(value)}
               /></Col>
+
+              <Col span={3}>
+              <div className="top-header-menu-item">
+                <Button type="link" size="large">
+                  <Icon type="shopping-cart" style={{fontSize:"1.2em"}}/>
+                  Theo Doi Don Hang
+                </Button>
+              </div>
+              </Col>
+              <Col span={3}>
+              <div className="top-header-menu-item">
+                <Button type="link" size="large">
+                  <Icon type="user" style={{fontSize:"1.2em"}}/>
+                  Tai Khoan
+                </Button>
+              </div>
+              </Col>
+
+              <Col span={4}>
+              <div className="cart-container">
+                <Link to={"/cart"}>
+                <Button type="primary" ghost size="large">
+                  <Icon type="shopping-cart" style={{fontSize:"1.2em"}} />
+                  Giỏ Hàng
+                  <Badge showZero count={this.props.cart.products ? this.props.cart.products.length : 0} 
+                    className="cart-badge"/>
+                </Button>
+                </Link>
+              </div>
+              </Col>
               
             </Row>
             <Row>
@@ -191,7 +222,8 @@ class AppHeader extends Component {
 
 const mapStateToProps = (state) => ({
   //user: state.user
-  category: state.category
+  category: state.category,
+  cart: state.cart
 });
 const mapActionsToProps = {
   actCategoryGet

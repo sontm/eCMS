@@ -20,6 +20,8 @@ app.get('/api/productattributes', countryBrandAttribute.getAllProductAttributes)
 app.get('/api/attributegroups', countryBrandAttribute.getAllAttributeGroups);
 
 app.post('/api/products', product.create);
+app.post('/api/products/query', product.queryProducts);
+app.post('/api/products/get', product.getSomeProducts); // Get some products
 app.get('/api/products', product.getAll);
 app.get('/api/products/:productId', product.getProductDetail);
 app.get('/api/products/OfCategory/:categoryId', product.getAllOfCategory);

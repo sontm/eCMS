@@ -7,7 +7,9 @@ import { connect } from 'react-redux';
 import { Card, Row, Col, Button } from 'antd';
 import ReactImageMagnify from 'react-image-magnify';
 
-import { actProductGetDetail } from '../../redux/actions/ProductActions';
+import { actProductGetDetail } from '../../redux/ProductActions';
+import {actCartAddToCart} from '../../redux/CartReducer'
+
 import { breakLineCRLF } from '../../util/Helpers';
 import './ProductDetailPage.css'
 
@@ -127,7 +129,8 @@ const mapStateToProps = (state) => ({
     product: state.product
   });
   const mapActionsToProps = {
-    actProductGetDetail
+    actProductGetDetail,
+    actCartAddToCart
   };
   
   export default withRouter(connect(

@@ -4,7 +4,9 @@ import { Row, Col } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { actCategoryGet } from '../redux/actions/CategoryActions';
+import { actCategoryGet } from '../redux/CategoryActions';
+import {actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry} from '../redux/ProductQueryReducer'
+
 import { Card } from 'antd';
 import { Checkbox } from 'antd';
 
@@ -13,6 +15,16 @@ const Sider = Layout.Sider;
 const {SubMenu} = Menu;
 
 class SideMenu extends Component {
+    constructor(props) {
+        super(props);
+
+        this.onChangeBrand = this.onChangeBrand.bind(this);
+        this.onChangeBrandCountry = this.onChangeBrandCountry.bind(this);
+        this.onChangeAttribute = this.onChangeAttribute.bind(this);
+        
+    }
+    
+
     componentDidMount() {
         console.log("  >>DID MOUNT SideMenu")
         if (this.props.category.categories.length <= 0 ) {
@@ -150,8 +162,14 @@ class SideMenu extends Component {
         }
     }
 
+
+    onChangeBrand(e) {
+        console.log("BrandID:" + e.target.name + ":" + e.target.checked);
+        this.props.actQuerySetBrand(this.props.query, e.target.name, e.target.checked)
+    }
     // this.props.product.brandsQuery: {id1: {count:10, value:DBBrand}, id2:{}}
     renderBrand() {
+        console.log("SIdeMenu: renderBrand")
         if (this.props.product.brandsQuery) {
             const content = [];
             for (var prop in this.props.product.brandsQuery) {
@@ -159,7 +177,9 @@ class SideMenu extends Component {
                     content.push(
                         <React.Fragment>
                         <Checkbox
-    
+                            key={this.props.product.brandsQuery[""+prop].value.id}
+                            name={this.props.product.brandsQuery[""+prop].value.id}
+                            onChange={this.onChangeBrand}
                         >
                             {this.props.product.brandsQuery[""+prop].value.name + 
                                 "(" + this.props.product.brandsQuery[""+prop].count + ")"}
@@ -170,11 +190,16 @@ class SideMenu extends Component {
                 }
             }
             return (
-                <Card size="small" title="Thuong Hieu" style={{marginTop: "10px"}}>
+                <Card size="small" title="Thuong Hieu" style={{marginTop: "1px"}}>
                     {content}
                 </Card>
             )
         }
+    }
+
+    onChangeBrandCountry(e) {
+        console.log("BrandCountryID:" + e.target.name + ":" + e.target.checked);
+        this.props.actQuerySetBrandCountry(this.props.query, e.target.name, e.target.checked)
     }
     renderBrandCountry() {
         if (this.props.product.brandCountriesQuery) {
@@ -184,7 +209,9 @@ class SideMenu extends Component {
                     content.push(
                         <React.Fragment>
                         <Checkbox
-    
+                            key={this.props.product.brandCountriesQuery[""+prop].value.id}
+                            name={this.props.product.brandCountriesQuery[""+prop].value.id}
+                            onChange={this.onChangeBrandCountry}
                         >
                             {this.props.product.brandCountriesQuery[""+prop].value.name + 
                                 "(" + this.props.product.brandCountriesQuery[""+prop].count + ")"}
@@ -195,7 +222,7 @@ class SideMenu extends Component {
                 }
             }
             return (
-                <Card size="small" title="Xuat Xu Thuong Hieu" style={{marginTop: "10px"}}>
+                <Card size="small" title="Xuat Xu Thuong Hieu" style={{marginTop: "1px"}}>
                     {content}
                 </Card>
             )
@@ -203,12 +230,58 @@ class SideMenu extends Component {
     }
     renderPriceRange() {
         return (
-            <Card size="small" title="Gia" style={{marginTop: "10px"}}>
-                <p>Card content</p>
-                <p>Card content</p>
+            <Card size="small" title="Gia" style={{marginTop: "1px"}}>
                 <p>Card content</p>
             </Card>
         )
+    }
+
+    onChangeAttribute(e) {
+        console.log("AttributeID:" + e.target.name + ":" + e.target.checked);
+        this.props.actQuerySetAttribute(this.props.query, e.target.name, e.target.checked)
+    }
+    // Input
+    // {
+    //     "MauSac": {
+    //         "id": 1,
+    //         attributes:[
+    //             {name: Xanh, id:2, count: 5},
+    //             {name: Do, id:3, count: 6}
+    //         ]
+    //     }
+    // }
+    renderAttributes() {
+        if (this.props.product.attributesQuery) {
+            let content = [];
+            for (var prop in this.props.product.attributesQuery) {
+                if (Object.prototype.hasOwnProperty.call(this.props.product.attributesQuery, prop)) {
+                    var attributes = this.props.product.attributesQuery[""+prop].attributes;
+                    let subValue = [];
+                    if (attributes && attributes.length > 0) {
+                        attributes.forEach(attribute => {
+                            subValue.push(
+                                <React.Fragment>
+                                <Checkbox
+                                    key={attribute.id}
+                                    name={attribute.id}
+                                    onChange={this.onChangeAttribute}
+                                >
+                                    {attribute.name+"(" + attribute.count + ")"}
+                                </Checkbox>
+                                <br />
+                                </React.Fragment>
+                            )
+                        })
+                    }
+                    content.push(
+                        <Card size="small" title={prop} style={{marginTop: "1px"}}>
+                            {subValue}
+                        </Card>
+                    )
+                }
+            }
+            return content;
+        }
     }
     render() {
         console.log(this.props.category)
@@ -218,18 +291,20 @@ class SideMenu extends Component {
             {this.renderBrand()}
             {this.renderBrandCountry()}
             {this.renderPriceRange()}
+            {this.renderAttributes()}
             </React.Fragment>
         )
     }
 }
 
-
 const mapStateToProps = (state) => ({
     category: state.category,
-    product: state.product
+    product: state.product,
+    query: state.query
 });
 const mapActionsToProps = {
-    actCategoryGet
+    actCategoryGet,
+    actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry
 };
 
 export default withRouter(connect(

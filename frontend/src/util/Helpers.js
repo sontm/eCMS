@@ -1,5 +1,15 @@
 import React from 'react'
 
+if (!String.prototype.trim) {
+    (function() {
+        // Make sure we trim BOM and NBSP
+        var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+        String.prototype.trim = function() {
+            return this.replace(rtrim, '');
+        };
+    })();
+}
+
 export function formatDate(dateString) {
     const date = new Date(dateString);
 
@@ -204,6 +214,24 @@ class Helpers {
     constructor() {
     }
 
+    // Co Dau thanh Khong Dau
+    changeVietnameseToNonSymbol(alias) {
+        var str = alias;
+        str = str.toLowerCase();
+        // ES2015/ES6 String.Prototype.Normalize()
+        str = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D");
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
+        str = str.replace(/đ/g,"d");
+        str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g," ");
+        str = str.replace(/ + /g," ");
+        str = str.trim(); 
+        return str;
+    }
     // Get the Not Duplicate DBBrand from List Products: [{xxx, brands:{id, name, countryId}}]
     // Result: {id1: {count:10, value:DBBrand}, id2:{}}
     getBrandsQuery(products) {
@@ -245,6 +273,118 @@ class Helpers {
             
         }
         return result;
+    }
+
+    // Input data is:
+    // [
+    //     {"id":2,"name":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) Trang",
+    //         "descShort":"","descMedium":"","descLong":"",
+    //         "unitPrice":10000,"stockNum":1000,"active":true,"imgThump":"images/products/BanhKeo/p2_1.jpg",
+    //         "img1":"images/products/BanhKeo/p2_1.jpg","img2":null,"img3":null,"img4":null,"img5":null,"img6":null,
+    //         "firstCategoryId":11,"secondCategoryId":4,"thirdCategoryId":1,"brandId":3,"parentProductId":null,
+    //         "productAttributeId":null,"createdAt":"","updatedAt":"",
+            
+    //         "brands":
+    //             {"id":3,"name":"Orang Tua","imgLogo":null,"countryId":5,"active":true,
+    //             "createdAt":"2019-09-04T13:53:53.555Z","updatedAt":"2019-09-04T13:53:53.555Z",
+                    
+    //             "countries":{"id":5,"name":"Trung Quốc","code":"cn","createdAt":"","updatedAt":""}
+    //             },
+
+    //         "attributes":[{"id":2,"name":"Trắng","value":null,"attributeGroupId":1,"createdAt":"","updatedAt":"",
+    //             "attributeGroups":{"id":1,"name":"Màu Sắc","createdAt":"","updatedAt":""}
+    //         }]
+    //     }
+    // ]
+
+    // Output
+    // {
+    //     "MauSac": {
+    //         "id": 1,
+    //         attributes:[
+    //             {name: Xanh, id:2, count:5},
+    //             {name: Do, id:3, count: 10}
+    //         ]
+    //     }
+    // }
+    getAttributesQuery(products) {
+        let result = {}
+        let lstAttGroupIds = []
+        if (products && products.length > 0) {
+            products.forEach((p, idx) => {
+                if (p.attributes && p.attributes.length > 0) {
+                    p.attributes.forEach(attribute => {
+                        let curAttributeGroups = attribute.attributeGroups;
+                        if (result[""+curAttributeGroups.name]) {
+                            // Exist Attribute Group
+
+                            // CHeck if Attribute exist
+                            let isExistAttr = false;
+                            for (let l = 0 ; l < result[""+curAttributeGroups.name].attributes.length; l++) {
+                                let aVal = result[""+curAttributeGroups.name].attributes[l];
+                                if (attribute.id == aVal.id) {
+                                    // Exist attribute, increase count
+                                    aVal.count++;
+                                    isExistAttr = true;
+                                    break;
+                                }
+                            }
+                            if (isExistAttr == false) {
+                                result[""+curAttributeGroups.name].attributes.push({
+                                    id: attribute.id,
+                                    name: attribute.name,
+                                    count: 1
+                                });
+                            }
+                            
+                        } else {
+                            // Not Exist Group, create new
+                            result[""+curAttributeGroups.name] = {
+                                id:curAttributeGroups.id,
+                                attributes:[{
+                                    id: attribute.id,
+                                    name: attribute.name,
+                                    count: 1
+                                }]
+                            }
+                        }
+                    })
+                }
+            })
+        }
+        console.log(result)
+        return result;
+    }
+
+    // popular, new, discount, lowprice, highprice and searchname
+    filterProduct (filter, searchname, products) {
+        let productFilters = [...products];
+        if (filter == "lowprice") {
+            productFilters.sort((a, b) =>
+                (a.unitPrice > b.unitPrice) ? 1 : -1
+            );
+        } else if (filter == "highprice") {
+            productFilters.sort((a, b) =>
+                (a.unitPrice < b.unitPrice) ? 1 : -1
+            );
+        }
+
+        // Apply Search for all Name
+        if (searchname) {
+            searchname = searchname.trim();
+        }
+        if (searchname && searchname.length > 0) {
+            productFilters = productFilters.filter(product => {
+                // Search substring using indexOf instead of includes for IE support
+                if (this.changeVietnameseToNonSymbol(product.name).indexOf(
+                        this.changeVietnameseToNonSymbol(searchname)) !== -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
+        return productFilters;
     }
 }
 const helpers = new Helpers();

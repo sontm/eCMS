@@ -4,6 +4,7 @@
 //export const API_BASE_URL = 'http://10.116.226.30:4000/graphql';
 export const API_BASE_URL = 'http://localhost:4000/graphql';
 export const ACCESS_TOKEN = 'accessToken';
+export const STORAGE_CART_PROD = 'cartProdIds';
 
 export const POLL_LIST_SIZE = 30;
 export const MAX_CHOICES = 6;
@@ -20,3 +21,9 @@ export const EMAIL_MAX_LENGTH = 40;
 
 export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 20;
+
+// export default class AppConstants extends Component {
+//     static get API_BASE_URL() {
+//         return API_BASE_URL;
+//     }
+// }

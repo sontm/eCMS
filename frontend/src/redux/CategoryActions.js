@@ -1,4 +1,4 @@
-import Backend from '../../util/Backend';
+import Backend from '../util/Backend';
 
 export const CATE_GET_OK = 'CATE_GET_OK';
 export const CATE_GET_ERR = 'CATE_GET_ERR';

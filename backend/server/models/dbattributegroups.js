@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   DBAttributeGroups.associate = function(models) {
     // associations can be defined here
+    DBAttributeGroups.hasMany(models.DBAttributes, {
+      foreignKey: 'attributeGroupId',
+      as: 'attributeItems',
+    });
   };
   return DBAttributeGroups;
 };

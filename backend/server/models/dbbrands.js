@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       as: 'productItems',
     });
     DBBrands.belongsTo(models.DBCountries, {
-      foreignKey: 'countryId'
+      foreignKey: 'countryId',
+      as: 'countries'
     });
   };
   return DBBrands;

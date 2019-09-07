@@ -7,6 +7,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   DBAttributes.associate = function(models) {
     // associations can be defined here
+    DBAttributes.belongsToMany(models.DBProducts, {
+      through: 'DBProductAttributes',
+      foreignKey: 'attributeid',
+      otherKey: 'productId',
+      as: 'products'
+    });
+    DBAttributes.belongsTo(models.DBAttributeGroups, {
+      foreignKey: 'attributeGroupId',
+      as: 'attributeGroups'
+    });
   };
   return DBAttributes;
 };

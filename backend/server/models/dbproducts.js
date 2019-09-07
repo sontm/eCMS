@@ -25,7 +25,14 @@ module.exports = (sequelize, DataTypes) => {
   DBProducts.associate = function(models) {
     // associations can be defined here
     DBProducts.belongsTo(models.DBBrands, {
-      foreignKey: 'brandId'
+      foreignKey: 'brandId',
+      as: 'brands'
+    });
+    DBProducts.belongsToMany(models.DBAttributes, {
+      through: 'DBProductAttributes',
+      foreignKey: 'productId',
+      otherKey: 'attributeId',
+      as: 'attributes'
     });
   };
   return DBProducts;

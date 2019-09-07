@@ -78,8 +78,6 @@ class SideMenu extends Component {
             //     },
             const subMenusFirst = [];
             const subMenusSecond = [];
-            console.log("hihihiiiiiiiiiiiiii")
-            console.log(menuToDisplay)
             if (menuToDisplay) {
                 // propD is "BanhKeo"
                 for (var propD in menuToDisplay) {
@@ -110,7 +108,7 @@ class SideMenu extends Component {
                                         }
                                         subMenusSecond.push(
                                             <SubMenu
-                                            key={curItem.id}
+                                            key={curMenuLvl.id}
                                             title={propD2}>
                                                 {subMenuItems}
                                             </SubMenu>

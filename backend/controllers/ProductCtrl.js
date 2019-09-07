@@ -1,6 +1,8 @@
 const DBProducts = require('../server/models').DBProducts;
 const DBBrands = require('../server/models').DBBrands;
 const DBCountries = require('../server/models').DBCountries;
+const DBAttributes = require('../server/models').DBAttributes;
+const DBAttributeGroups = require('../server/models').DBAttributeGroups;
 
 module.exports = {
   create(req, res) {
@@ -34,12 +36,23 @@ module.exports = {
           where: wherObj,
           include: [{
             model: DBBrands,
-            include: [
-              DBCountries
-            ] 
+            as: 'brands',
+            include: [{
+              model:DBCountries,
+              as: 'countries'
+            }] 
+            },{
+            model: DBAttributes,
+            as: 'attributes',
+            through: {attributes: []},
+            include: [{
+              model:DBAttributeGroups,
+              as: 'attributeGroups'
+            }] 
           }]
       })
       .then(result => {
+        console.log(result)
         res.status(200).send(result)
       })
       .catch(error => res.status(400).send(error));

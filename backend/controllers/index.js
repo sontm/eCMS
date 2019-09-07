@@ -1,16 +1,23 @@
 import product from './ProductCtrl'
 import category from './CategoryCtrl'
-import countryBrand from './CountryBrandCtrl'
+import countryBrandAttribute from './CountryBrandAttributeCtrl'
 
 module.exports = (app) => {
 app.get('/api', (req, res) => res.status(200).send({
   message: 'Welcome to the PP!',
 }));
 
-app.post('/api/countries', countryBrand.createCountry);
-app.get('/api/countries', countryBrand.getAllCountries);
-app.post('/api/brands', countryBrand.createBrand);
-app.get('/api/brands', countryBrand.getAllBrands);
+app.post('/api/countries', countryBrandAttribute.createCountry);
+app.get('/api/countries', countryBrandAttribute.getAllCountries);
+app.post('/api/brands', countryBrandAttribute.createBrand);
+app.get('/api/brands', countryBrandAttribute.getAllBrands);
+
+app.post('/api/attributes', countryBrandAttribute.createAttribute);
+app.post('/api/productattributes', countryBrandAttribute.createProductAttribute);
+app.post('/api/attributegroups', countryBrandAttribute.createAttributeGroup);
+app.get('/api/attributes', countryBrandAttribute.getAllAttributes);
+app.get('/api/productattributes', countryBrandAttribute.getAllProductAttributes);
+app.get('/api/attributegroups', countryBrandAttribute.getAllAttributeGroups);
 
 app.post('/api/products', product.create);
 app.get('/api/products', product.getAll);

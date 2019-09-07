@@ -61,91 +61,91 @@
 #   "parentCategoryId":3
 # }'
 
-curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
-  --data '{
-	"name": "Bánh Cứng",
-  "active": true,
-  "parentCategoryId":3
-}'
-curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
-  --data '{
-	"name": "Bánh Mềm",
-  "active": true,
-  "parentCategoryId":4
-}'
-curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
-  --data '{
-	"name": "Bánh Cứng",
-  "active": true,
-  "parentCategoryId":4
-}'
-curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
-  --data '{
-	"name": "Kẹo Cứng",
-  "active": true,
-  "parentCategoryId":5
-}'
-curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
-  --data '{
-	"name": "Kẹo Mềm",
-  "active": true,
-  "parentCategoryId":5
-}'
-curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
-  --data '{
-	"name": "Hoa Quả Khô",
-  "active": true,
-  "parentCategoryId":6
-}'
-curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
-  --data '{
-	"name": "Thực Phẩm Khô",
-  "active": true,
-  "parentCategoryId":6
-}'
-curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
-  --data '{
-	"name": "Bia Lon",
-  "active": true,
-  "parentCategoryId":8
-}'
-curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
-  --data '{
-	"name": "Bia Chai",
-  "active": true,
-  "parentCategoryId":8
-}'
+# curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Bánh Cứng",
+#   "active": true,
+#   "parentCategoryId":3
+# }'
+# curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Bánh Mềm",
+#   "active": true,
+#   "parentCategoryId":4
+# }'
+# curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Bánh Cứng",
+#   "active": true,
+#   "parentCategoryId":4
+# }'
+# curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Kẹo Cứng",
+#   "active": true,
+#   "parentCategoryId":5
+# }'
+# curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Kẹo Mềm",
+#   "active": true,
+#   "parentCategoryId":5
+# }'
+# curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Hoa Quả Khô",
+#   "active": true,
+#   "parentCategoryId":6
+# }'
+# curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Thực Phẩm Khô",
+#   "active": true,
+#   "parentCategoryId":6
+# }'
+# curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Bia Lon",
+#   "active": true,
+#   "parentCategoryId":8
+# }'
+# curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Bia Chai",
+#   "active": true,
+#   "parentCategoryId":8
+# }'
 
-curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-  --data '{
-	"name": "Việt Nam",
-  "code":"vn"
-}'
-curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-  --data '{
-	"name": "Nhật Bản",
-  "code":"jp"
-}'
-curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-  --data '{
-	"name": "Đài Loan",
-  "code":"tw"
-}'
-curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-  --data '{
-	"name": "Hàn Quốc",
-  "code":"kr"
-}'
-curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-  --data '{
-	"name": "Trung Quốc",
-  "code":"cn"
-}'
-curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
-  --data '{
-	"name": "Mỹ",
-  "code":"us"
-}'
+# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Việt Nam",
+#   "code":"vn"
+# }'
+# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Nhật Bản",
+#   "code":"jp"
+# }'
+# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Đài Loan",
+#   "code":"tw"
+# }'
+# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Hàn Quốc",
+#   "code":"kr"
+# }'
+# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Trung Quốc",
+#   "code":"cn"
+# }'
+# curl --request POST --url http://localhost:5000/api/countries --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Mỹ",
+#   "code":"us"
+# }'
 
 # curl --request POST --url http://localhost:5000/api/brands --header 'content-type: application/json' \
 #   --data '{
@@ -273,4 +273,118 @@ curl --request POST --url http://localhost:5000/api/countries --header 'content-
 #     "firstCategoryId":8,
 #     "secondCategoryId":3,
 #     "brandId":6
+# }'
+
+
+# --------------------------Insert Attribute Groups-------------------------------
+# curl --request POST --url http://localhost:5000/api/attributegroups --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Màu Sắc"
+# }'
+# curl --request POST --url http://localhost:5000/api/attributegroups --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Số Lon"
+# }'
+# curl --request POST --url http://localhost:5000/api/attributegroups --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Dung Tích"
+# }'
+
+
+# --------------------------Insert Attribute -------------------------------
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Xanh",
+#   "attributeGroupId":1
+# }'
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Trắng",
+#   "attributeGroupId":1
+# }'
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Vảng",
+#   "attributeGroupId":1
+# }'
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "Đỏ",
+#   "attributeGroupId":1
+# }'
+
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "6 Lon",
+#   "attributeGroupId":2
+# }'
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "30 Lon",
+#   "attributeGroupId":2
+# }'
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "10 Lon",
+#   "attributeGroupId":2
+# }'
+
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "330ml",
+#   "attributeGroupId":3
+# }'
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "500ml",
+#   "attributeGroupId":3
+# }'
+# curl --request POST --url http://localhost:5000/api/attributes --header 'content-type: application/json' \
+#   --data '{
+# 	"name": "1000ml",
+#   "attributeGroupId":3
+# }'
+
+
+
+# --------------------------Insert Product Attribute -------------------------------
+# curl --request POST --url http://localhost:5000/api/productattributes --header 'content-type: application/json' \
+#   --data '{
+# 	"productId": 1,
+#   "attributeId":3
+# }'
+# curl --request POST --url http://localhost:5000/api/productattributes --header 'content-type: application/json' \
+#   --data '{
+# 	"productId": 2,
+#   "attributeId":2
+# }'
+# curl --request POST --url http://localhost:5000/api/productattributes --header 'content-type: application/json' \
+#   --data '{
+# 	"productId": 3,
+#   "attributeId":2
+# }'
+# curl --request POST --url http://localhost:5000/api/productattributes --header 'content-type: application/json' \
+#   --data '{
+# 	"productId": 4,
+#   "attributeId":4
+# }'
+# curl --request POST --url http://localhost:5000/api/productattributes --header 'content-type: application/json' \
+#   --data '{
+# 	"productId": 5,
+#   "attributeId":1
+# }'
+# curl --request POST --url http://localhost:5000/api/productattributes --header 'content-type: application/json' \
+#   --data '{
+# 	"productId": 6,
+#   "attributeId":1
+# }'
+# curl --request POST --url http://localhost:5000/api/productattributes --header 'content-type: application/json' \
+#   --data '{
+# 	"productId": 6,
+#   "attributeId":5
+# }'
+# curl --request POST --url http://localhost:5000/api/productattributes --header 'content-type: application/json' \
+#   --data '{
+# 	"productId": 6,
+#   "attributeId":8
 # }'

@@ -204,18 +204,18 @@ class Helpers {
     constructor() {
     }
 
-    // Get the Not Duplicate DBBrand from List Products: [{xxx, DBBrand:{id, name, countryId}}]
+    // Get the Not Duplicate DBBrand from List Products: [{xxx, brands:{id, name, countryId}}]
     // Result: {id1: {count:10, value:DBBrand}, id2:{}}
     getBrandsQuery(products) {
         let result = {};
         if (products && products.length > 0) {
             products.forEach((item, idx) => {
-                if (item.DBBrand) {
-                    if (result[""+item.DBBrand.id]) {
+                if (item.brands) {
+                    if (result[""+item.brands.id]) {
                         // Existed, increase count
-                        result[""+item.DBBrand.id].count++;
+                        result[""+item.brands.id].count++;
                     } else {
-                        result[""+item.DBBrand.id] = {count: 1, value: item.DBBrand}
+                        result[""+item.brands.id] = {count: 1, value: item.brands}
                     }
                 }
             })
@@ -223,7 +223,7 @@ class Helpers {
         return result;
     }
 
-    // DBBrand: {id, name, DBCountry:{id, name, code}}
+    // DBBrand: {id, name, countries:{id, name, code}}
     // Input: {id1: {count:10, value:DBBrand}, id2:{}}
     // Result: {id1: {count:10, value:DBCountry}, id2:{}}
     getBrandCountriesQuery(brandQuery) {
@@ -232,13 +232,13 @@ class Helpers {
             for (var prop in brandQuery) {
                 if (Object.prototype.hasOwnProperty.call(brandQuery, prop)) {
                     let curBrand = brandQuery[""+prop].value;
-                    if (result[""+curBrand.DBCountry.id]) {
+                    if (result[""+curBrand.countries.id]) {
                         // Existed, increase count
-                        result[""+curBrand.DBCountry.id].count += brandQuery[""+prop].count;
+                        result[""+curBrand.countries.id].count += brandQuery[""+prop].count;
                     } else {
-                        result[""+curBrand.DBCountry.id] = 
+                        result[""+curBrand.countries.id] = 
                             {count: brandQuery[""+prop].count,
-                            value: curBrand.DBCountry}
+                            value: curBrand.countries}
                     }
                 }
             }

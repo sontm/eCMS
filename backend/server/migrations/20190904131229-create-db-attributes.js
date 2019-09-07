@@ -15,7 +15,12 @@ module.exports = {
         type: Sequelize.STRING
       },
       attributeGroupId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'DBAttributeGroups',
+          key: 'id',
+          as: 'attributeGroupId',
+        },
       },
       createdAt: {
         allowNull: false,

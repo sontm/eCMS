@@ -6,7 +6,7 @@ module.exports = function override(config, env) {
     config = rewireLess.withLoaderOptions({
       modifyVars: { 
           "@layout-body-background": "#f4f4f4",
-          "@layout-header-background": "#ffffff",
+          "@layout-header-background": "#189eff",
           "@layout-footer-background": "#189eff" 
       },
       javascriptEnabled: true

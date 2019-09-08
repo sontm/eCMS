@@ -9,6 +9,7 @@ export const PROD_QUERY_ERR = 'PROD_QUERY_ERR';
 export const PROD_BRANDLIST_OK = 'PROD_BRANDLIST_OK';
 export const PROD_BRANDCOUNTRYLIST_OK = 'PROD_BRANDCOUNTRYLIST_OK';
 export const PROD_ATTRIBUTE_QUERY_OK = 'PROD_ATTRIBUTE_QUERY_OK';
+export const PROD_PRICERANGE_QUERY_OK = 'PROD_PRICERANGE_QUERY_OK';
 
 // level = 1 mean THirst Menu, 2 mean Second Menu, 3 mean Parent menu
 
@@ -61,6 +62,12 @@ export const actProductGetOfCategory = ({isFirstQuery=false} = {}, queryParams, 
             dispatch({
                 type: PROD_ATTRIBUTE_QUERY_OK,
                 payload:  attributesQuery
+            });
+            
+            let priceRangeQuery = Helpers.getPriceRanges(response.data)
+            dispatch({
+                type: PROD_PRICERANGE_QUERY_OK,
+                payload:  priceRangeQuery
             });
         }
     },

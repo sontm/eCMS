@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
-import { List, Row, Col, Icon,Slider, InputNumber, Button } from 'antd';
+import { List, Row, Col, Icon,Slider, InputNumber, Input, Button, Card } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {STORAGE_CART_PROD} from '../../constants'
 import './CartPage.css'
 
 import {actProductGetProductsInCart} from '../../redux/ProductActions'
+import AppTouchSpin from '../../common/AppTouchSpin'
+
 
 const IconText = ({ type, text }) => (
     <span>
@@ -62,9 +64,12 @@ class CartPage extends Component {
                     <List.Item
                         key={item.id}
                         actions={[
-                            <span>{item.unitPrice}đ</span>,
-                            <span>10000đ</span>,
-                            <span>-20%</span>,
+                            <Button type="link">Xoá</Button>,
+                            <Button type="link">Để Dành Mua Sau</Button>,
+                            <div className="product-quantity">
+                                <span>&nbsp;&nbsp;Số Lượng (Hộp):&nbsp;&nbsp;</span>
+                                <AppTouchSpin value={1}/>
+                            </div>
                         ]}
                         extra={
                         <img
@@ -84,40 +89,44 @@ class CartPage extends Component {
                         />
                         
                         <Row>
-                            <Col span={3}>
-                                <span style={{float:"right", marginRight:"10px"}}>Số Lương:</span>
-                            </Col>
-                            <Col span={5}>
-                            <Slider
-                                min={1}
-                                max={20}
-                                onChange={this.onChange}
-                                value={typeof 1 === 'number' ? 1 : 0}
-                            />
-                            </Col>
-                            <Col span={4}>
-                            <InputNumber
-                                min={1}
-                                max={20}
-                                style={{ marginLeft: 16 }}
-                                value={5}
-                                onChange={this.onChange}
-                            />
-                            </Col>
-                            <Col span={2}>
-                                <Button type="link">Xoá</Button>
-                            </Col>
-                            <Col span={4}>
-                                <Button type="link">Để Dành Mua Sau</Button>
-                            </Col>
+                        <Col span={10}>
+                        <div className="product-price-old">
+                            100000đ
+                        </div>
+                        
+                        <div className="product-price-discount">
+                            -27%
+                        </div>
+                        <div className="product-price">
+                            {item.unitPrice}đ
+                        </div>
+                        
+                        </Col>
+                        <Col span={4}>
+
+                        </Col>
+                        <Col span={10}>
+                        <div className="product-sumprice-item">
+                            {" x 3 = " + item.unitPrice * 3 + "đ"}
+                            <span>&nbsp;</span>
+                        </div>
+                        </Col>
                         </Row>
+                        
                     </List.Item>
                     )}
                 />
                 </Col>
 
                 <Col span={6}>
-
+                    <Card size="med" title={<span>Tổng: 100000đ</span>} 
+                            style={{marginLeft: "5px"}}>
+                        <p>VAT: 0%</p>
+                        <p>Points to be earned: 50pt</p>
+                        <div style={{textAlign: "center"}}>
+                            <Button type="primary" size="large">Tiến Hành Đặt Hàng</Button>
+                        </div>
+                    </Card>
                 </Col>
             </Row>
             </React.Fragment>

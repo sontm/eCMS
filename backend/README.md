@@ -1,4 +1,12 @@
 # eCMS
+Idea:
+  Track Don Hang, Shipper will Report Status
+  Give Point to User
+
+TODO
+1. THem Unit Name to Product (so in Cart, User easy to see quantity)
+2. Add Order Position for Menu
+
 
 # DB Tables:
 

@@ -17,6 +17,8 @@ import store from './redux/store';
 import { ACCESS_TOKEN } from './constants';
 
 import AppHeader from './common/AppHeader';
+import AppFooter from './common/AppFooter';
+
 import NotFound from './common/NotFound';
 import LoadingIndicator from './common/LoadingIndicator';
 import PrivateRoute from './common/PrivateRoute';
@@ -68,7 +70,9 @@ class App extends Component {
               </Switch>
             </Content>
           </Layout>
-          <Footer style={{ textAlign: 'center', minHeight:"200px" }}>Phu Phuong ©2019</Footer>
+          <Footer style={{ textAlign: 'center', minHeight:"200px", marginTop:"20px"}}>
+            <AppFooter />
+          </Footer>
         </Layout>
     );
   }

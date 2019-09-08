@@ -386,6 +386,88 @@ class Helpers {
         }
         return productFilters;
     }
+
+    // Get Final Price After Discount, Extra....
+    getFinalPriceOfProduct(product) {
+        // TODO
+        // Now return unitPrice only
+        if (product) {
+            return product.unitPrice;
+        }
+        return 0;
+    }
+
+
+    // Input data is:
+    // [
+    //     {"id":2,"name":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) Trang",
+    //         "descShort":"","descMedium":"","descLong":"",
+    //         "unitPrice":10000,"stockNum":1000,"active":true,"imgThump":"images/products/BanhKeo/p2_1.jpg",
+    //         "img1":"images/products/BanhKeo/p2_1.jpg","img2":null,"img3":null,"img4":null,"img5":null,"img6":null,
+    //         "firstCategoryId":11,"secondCategoryId":4,"thirdCategoryId":1,"brandId":3,"parentProductId":null,
+    //         "productAttributeId":null,"createdAt":"","updatedAt":"",
+            
+    //         "brands":
+    //             {"id":3,"name":"Orang Tua","imgLogo":null,"countryId":5,"active":true,
+    //             "createdAt":"2019-09-04T13:53:53.555Z","updatedAt":"2019-09-04T13:53:53.555Z",
+                    
+    //             "countries":{"id":5,"name":"Trung Quốc","code":"cn","createdAt":"","updatedAt":""}
+    //             },
+
+    //         "attributes":[{"id":2,"name":"Trắng","value":null,"attributeGroupId":1,"createdAt":"","updatedAt":"",
+    //             "attributeGroups":{"id":1,"name":"Màu Sắc","createdAt":"","updatedAt":""}
+    //         }]
+    //     }
+    // ]
+
+    // Output
+    // [
+    //     {name: 1, from:1000, to: 2000},
+    //     {name: 2,from:1000, to: 2000},
+    //     {name: 3,from:1000, to: 2000},
+    //     {name: 4,from:1000, to: 2000},
+    //     {name: 5,from:10000, to: 1000000000},
+    // ]
+    // THis function will Divide into 5 Ranges Equally by Number of Products in each Range (0-20%).
+    getPriceRanges(products) {
+        let result = []
+        if (products && products.length > 0) {
+            const COUNT_EACH_RANGE = Math.floor(products.length/5);
+            let countP = -1
+            let countRange = 1;
+            // Sort Products by LowPrice First
+
+            products.sort((a, b) =>
+                (a.unitPrice > b.unitPrice) ? 1 : -1
+            );
+            let prevPriceRange = 0;
+            let curPriceRange = 0;
+            products.forEach((p, idx) => {
+                // Min Price
+                if (countP == -1) {
+                    // Always 0 for First Range
+                    //prevPriceRange = this.getFinalPriceOfProduct(p);
+                    prevPriceRange = 0;
+                    countP = 0;
+                }
+                countP++;
+                if (countP >= COUNT_EACH_RANGE) {
+                    // Finish a Range, get this price Round Up to 50K
+                    curPriceRange = this.getFinalPriceOfProduct(p);
+                    let roundDivider = Math.ceil(curPriceRange/50000); // 50K
+                    curPriceRange = roundDivider * 50000;
+                    result.push({name:countRange, from: prevPriceRange, to: curPriceRange})
+                    countRange++;
+                    prevPriceRange = curPriceRange;
+                    countP = 0;
+                }
+
+            })
+        }
+        console.log("getPriceRanges.....")
+        console.log(result)
+        return result;
+    }
 }
 const helpers = new Helpers();
 export default helpers;

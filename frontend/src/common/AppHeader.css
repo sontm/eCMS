@@ -1,6 +1,54 @@
 .app-title {
   float: left;
 }
+/* .app-header {
+  position: fixed;
+  width: 100%;
+  box-shadow: 0 2px 8px #f0f1f2;
+  z-index: 10;
+  padding: 0;
+} */
+
+/* Override ANTD Header margin  */
+.ant-layout-header {
+  margin-left: 0% !important;
+  margin-right: 0% !important;
+}
+
+
+.app-header {
+  background: #189eff;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+/* OVerride When Hover WHite button on Header */
+.app-header .ant-btn:hover {
+  color: rgb(230, 230, 230)
+}
+.app-header .ant-btn:active {
+  color: white;
+}
+.app-header .ant-btn:focus {
+  color: white;
+}
+
+
+/* OVerride Border color of Search */
+.app-header .ant-input-group-addon button {
+  /* background: red !important; */
+  border: 2px solid white !important;
+}
+
+/* Override color of Link  */
+.app-title a {
+  display: block;
+  color: white;
+}
+
+.ant-layout-header{
+  z-index: 100 !important;
+}
 
 /* Override Weird Heigh 64px of antd */
 .ant-layout-header {
@@ -26,100 +74,17 @@
   text-decoration: none;
 }
 
-.app-header {
-  position: fixed;
-  width: 100%;
-  box-shadow: 0 2px 8px #f0f1f2;
-  z-index: 10;
-  padding: 0;
-}
-.nav-icon {
+
+
+.hamburger-category-menu {
+  color: white;
   font-size: 20px;
-  
 }
-.nav-menu-text {
+.category-menu-text {
   margin-left: 10px;
 }
 
-.poll-icon {
-  margin-top: -4px;
-}
 
-@media (max-width: 768px) {
-.app-title a {
-  font-size: 24px;
-}
-}  
-
-
-
-.flyout-container-hidden {
-  display: none;
-}
-.flyout-container-display {
-  display: block;
-  overflow: hidden;
-  position: absolute;
-  margin-top: 0px;
-  z-index: 100;
-  width: 90%;
-  /* background: rgb(240, 240, 240); */
-}
-.parent-menu-container-left {
-  border-right: 0.2px solid grey;
-  background: rgb(240, 240, 240);
-  text-align: center;
-
-  /* This is for same height on a Row */
-  margin-bottom: -99999px;
-  padding-bottom: 99999px;
-}
-.parent-menu-container-right {
-  background: rgb(250, 250, 250);
-
-  /* This is for same height on a Row */
-  margin-bottom: -99999px;
-  padding-bottom: 99999px;
-}
-.parent-menu-container-right-hidden {
-  display: none;
-}
-
-.parent-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  
-}
-
-.parent-menu li {
-  display: block;
-  position: relative;
-  width: 100%;
-  float: left;
-  clear: left;
-  line-height: 35px;
-  text-decoration: none;
-}
-.parent-menu-li-hovering {
-  background: blue;
-}
-
-.sub-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-.sub-menu li {
-  display: block;
-  position: relative;
-  float: left;
-  clear: left;
-  line-height: 30px;
-  text-decoration: none;
-}
 
 .top-header-menu-item {
   display: block;
@@ -143,4 +108,18 @@
 .cart-container .cart-badge .ant-badge-count {
   background: #fdd835 !important;
   color: #4a4a4a;
+}
+/* OVerride Border color of CART */
+.cart-container button {
+  border: 2px solid white !important;
+}
+
+.flyout-outside-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 50;
 }

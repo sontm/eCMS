@@ -11,7 +11,8 @@ const initialState = {
     category:{}, // {id, level}
     brands:[], // list of brand ID, if empty mean All
     brandCountries:[], // list of ID
-    attributes:[] // list of ID
+    attributes:[], // list of ID,
+    priceRange:{} // {name: 1, from: m to:}; name is start from 1, just the Range in Query
 };
 
 // level 1,2,3 for First Second and Third Level

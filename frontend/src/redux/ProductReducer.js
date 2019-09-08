@@ -1,6 +1,6 @@
 import {
     PROD_QUERY_OK,PROD_QUERY_ERR, PROD_GETDETAIL_OK, PROD_BRANDLIST_OK,PROD_BRANDCOUNTRYLIST_OK,
-    PROD_ATTRIBUTE_QUERY_OK, PROD_FILTER
+    PROD_ATTRIBUTE_QUERY_OK, PROD_FILTER, PROD_PRICERANGE_QUERY_OK
   } from './ProductActions'
 import Helpers from '../util/Helpers'
 
@@ -10,6 +10,7 @@ const initialState = {
     brandsQuery:{},
     brandCountriesQuery:{},
     attributesQuery:{},
+    priceRangeQuery:[],  // [{name: 1, from:1000, to: 2000},{name: 2, from:2000, to: 4000},]
     productDetail: null,
     filter:"popular", // popular, new, discount, lowprice, highprice
 };
@@ -44,6 +45,11 @@ export default function(state = initialState, action) {
         return {
             ...state,
             attributesQuery: action.payload
+        };
+    case PROD_PRICERANGE_QUERY_OK:
+        return {
+            ...state,
+            priceRangeQuery: action.payload
         };
     case PROD_GETDETAIL_OK:
         console.log("Prod detail")

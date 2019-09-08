@@ -64,12 +64,12 @@ class ProductDetailPage extends Component {
                             },
                             largeImage: {
                                 src: "/"+this.props.product.productDetail.img1,
-                                width: 1000,
+                                width: 1200,
                                 height: 1000
                             },
                             enlargedImageContainerDimensions: {
-                                width: '200%',
-                                height: '120%'
+                                width: '150%',
+                                height: '100%'
                             },
                             isHintEnabled: true,
                             shouldHideHintAfterFirstActivation: false

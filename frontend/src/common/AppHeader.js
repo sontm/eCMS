@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actCategoryGet } from '../redux/CategoryActions';
+import AppDropdownMenu from './AppDropdownMenu'
 
 import './AppHeader.css';
 import { Layout, Menu, Dropdown, Icon, Input } from 'antd';
@@ -12,85 +13,6 @@ import { Row, Col, Button,Badge } from 'antd';
 const { Search } = Input;
 const Header = Layout.Header;
 const {SubMenu} = Menu;
-
-// "BanhKeo":{
-  //       "id": 1,
-  //       "Banh":{id: 4, subs: [{id:8, name:"Banh1"}, {id:9, name:"Banh2"}]},
-  //     },
-class DropdownMenu extends React.Component {
-  constructor(props) {
-    super(props); 
-  }
-  
-  
-  render = () => {
-    let {config} = this.props;
-    let parentMenus = [];
-    for (var prop in config) {
-      if (Object.prototype.hasOwnProperty.call(config, prop)) {
-        // do stuff
-        parentMenus.push(
-            <li onMouseOver={this.props.onParentMenuHover} onMouseLeave={this.props.onParentMenuOut}
-              className={this.props.hoveredParent == prop ? "parent-menu-li-hovering" : ""}>
-              <Link to={"/category/" + config["" +prop].id + "?lvl=3"}>
-                {prop}
-              </Link>
-            </li>)
-      }
-    }
-    let allCols = [];
-    let curSubmenuItems = config["" + this.props.hoveredParent];
-    if (curSubmenuItems) {
-      for (var propSub in curSubmenuItems) {
-        // One Sub menu. i.e Banh
-        if (propSub != "id") {
-          let subMenus = [];
-          if (Object.prototype.hasOwnProperty.call(curSubmenuItems, propSub)) {
-            // {id: 4, subs: [{id:8, name:"Banh1"}, {id:9, name:"Banh2"}]}
-            let subItems = curSubmenuItems[propSub]
-            if (subItems && subItems.subs && subItems.subs.length > 0) {
-              subItems.subs.forEach((item, idx) => {
-                subMenus.push(
-                  <li key={item.id}>
-                  <Link to={"/category/" + item.id + "?lvl=1"}>
-                    {item.name}
-                  </Link>
-                  </li>           
-                )
-              });
-            }
-            allCols.push (<Col span={6}>
-              <span style={{fontWeight:"bold"}}>
-                <Link to={"/category/" + curSubmenuItems["" +propSub].id + "?lvl=2"}>
-                {propSub}
-                </Link>
-              </span>
-              <ul className="sub-menu">
-              {subMenus}
-              </ul>
-            </Col>);
-          }
-        }
-      }
-    }
-    return (
-      <React.Fragment>
-        <Row className={this.props.hoveredMenuList ? "flyout-container-display" : "flyout-container-hidden"}
-          onMouseLeave={this.props.onMenuContainerOut}>
-          <Col span={4} className="parent-menu-container-left">
-            <ul className="parent-menu">
-              {parentMenus}
-            </ul>
-          </Col>
-
-          <Col span={20} className={this.props.hoveredParent != "" ? "parent-menu-container-right" 
-              : "parent-menu-container-right-hidden"} ><Row>
-            {allCols}
-          </Row></Col>
-        </Row>
-      </React.Fragment>);
-  }
-}
 
 class AppHeader extends Component {
     constructor(props) {
@@ -103,6 +25,8 @@ class AppHeader extends Component {
         this.onMenuListOut = this.onMenuListOut.bind(this);
         this.onParentMenuHover = this.onParentMenuHover.bind(this);   
         this.onMenuContainerOut = this.onMenuContainerOut.bind(this); 
+        this.onParentMenuClick = this.onParentMenuClick.bind(this); 
+        
     }
 
     onMenuListHover() {
@@ -136,6 +60,12 @@ class AppHeader extends Component {
         hoveredParent: ""
       })
     }
+    onParentMenuClick() {
+      this.setState({
+        hoveredMenuList: false,
+        hoveredParent: ""
+      })
+    }
 
     componentDidMount() {
       console.log("  >>DID MOUNT AppHeader")
@@ -153,9 +83,12 @@ class AppHeader extends Component {
     }
     render() {
         return (
-            <Header>
-            <React.Fragment>
+          <React.Fragment>
+            <div className={(this.state.hoveredMenuList) ? "flyout-outside-mask" : ""}></div>
+            <Header style={{zIndex: 100}}>
+            <div className="app-header">
             <Row>
+              <div>
               <Col span={4}>
               <div className="app-title" >
                 <Link to="/" style={{paddingLeft: "20px"}}>Phu Phuong</Link>
@@ -171,7 +104,7 @@ class AppHeader extends Component {
 
               <Col span={3}>
               <div className="top-header-menu-item">
-                <Button type="link" size="large">
+                <Button type="link" ghost size="large">
                   <Icon type="shopping-cart" style={{fontSize:"1.2em"}}/>
                   Theo Doi Don Hang
                 </Button>
@@ -179,7 +112,7 @@ class AppHeader extends Component {
               </Col>
               <Col span={3}>
               <div className="top-header-menu-item">
-                <Button type="link" size="large">
+                <Button type="link" ghost size="large">
                   <Icon type="user" style={{fontSize:"1.2em"}}/>
                   Tai Khoan
                 </Button>
@@ -189,32 +122,34 @@ class AppHeader extends Component {
               <Col span={4}>
               <div className="cart-container">
                 <Link to={"/cart"}>
-                <Button type="primary" ghost size="large">
+                <Button  ghost size="large">
                   <Icon type="shopping-cart" style={{fontSize:"1.2em"}} />
                   Giỏ Hàng
-                  <Badge showZero count={this.props.cart.products ? this.props.cart.products.length : 0} 
+                  <Badge showZero count={this.props.cart.savedProductsId ? this.props.cart.savedProductsId.length : 0} 
                     className="cart-badge"/>
                 </Button>
                 </Link>
               </div>
               </Col>
-              
+              </div>
             </Row>
             <Row>
             <Col span={4}>
-              <div onMouseOver={this.onMenuListHover} onMouseLeave={this.onMenuListOut}>
-              <Icon type="menu" className="nav-icon"/>
-              <span className="nav-menu-text" >Danh Mục Sản Phẩm</span>
+              <div onMouseOver={this.onMenuListHover} onMouseLeave={this.onMenuListOut}
+                style={{marginLeft:"15px"}} className="hamburger-category-menu">
+                <Icon type="menu"/>
+                <span className="category-menu-text" >Danh Mục Sản Phẩm</span>
               </div>
             </Col>
             </Row>
-            <DropdownMenu config={this.props.category.categoriesLevel} onParentMenuOut={this.onParentMenuOut} onMenuContainerOut={this.onMenuContainerOut}
+            <AppDropdownMenu config={this.props.category.categoriesLevel} onParentMenuOut={this.onParentMenuOut} onMenuContainerOut={this.onMenuContainerOut}
               onParentMenuHover={this.onParentMenuHover} hoveredParent={this.state.hoveredParent}
+              onParentMenuClick={this.onParentMenuClick}
               hoveredMenuList={this.state.hoveredMenuList}
               />
-            
-            </React.Fragment>
+          </div>
           </Header>
+          </React.Fragment>
         );
     }
 }

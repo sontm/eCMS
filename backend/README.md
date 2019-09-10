@@ -9,6 +9,8 @@ TODO
 
 
 # DB Tables:
+#sequelize db:migrate:undo:all
+#sequelize db:migrate
 
 Player.belongsTo(Team)  // `teamId` will be added on Player / Source model
 Coach.hasOne(Team)  // `coachId` will be added on Team / Target model
@@ -17,7 +19,18 @@ Project.hasMany(User, {as: 'Workers'}) //This will add the attribute projectId t
 https://sequelize.readthedocs.io/en/2.0/api/datatypes/
 
 ### Product
+//firstCategoryId is Nearast Parent ID
+//secondCategoryId is parent ID of first
 $ sequelize model:create --name DBProducts --attributes name:string,descShort:string,descMedium:text,descLong:text,unitPrice:float,stockNum:integer,active:boolean,imgThump:string,img1:string,img2:string,img3:string,img4:string,img5:string,img6:string,firstCategoryId:integer,secondCategoryId:integer,thirdCategoryId:integer,brandId:integer,parentProductId:integer,productAttributeId:integer
+
+### Discount
+
+// type: "discount", "coupon", "gift"
+// Amount: by fixMoney (Higher Priority) or percent
+//Apply Priority: General-All prouducts -> Category -> Brand -> Product ID 
+$ sequelize model:create --name DBDiscounts --attributes desc:text,from:date,to:date,type:string,fixMoney:integer,percent:smallint,applyCategoryId:integer,applyBrandId:integer,applyProductId:integer,img:string,coupon:string
+
+
 ### Category
 $ sequelize model:create --name DBCategories --attributes name:string,desc:text,active:boolean,order:smallint,parentCategoryId:integer
 

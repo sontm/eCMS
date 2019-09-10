@@ -22,6 +22,11 @@ export const EMAIL_MAX_LENGTH = 40;
 export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 20;
 
+//DISCOUNT_TYPE_DISCOUNT, DISCOUNT_TYPE_COUPON, DISCOUNT_TYPE_GIFT
+export const DISCOUNT_TYPE_DISCOUNT = "discount";
+export const DISCOUNT_TYPE_COUPON = "coupon";
+export const DISCOUNT_TYPE_GIFT = "gift";
+
 // export default class AppConstants extends Component {
 //     static get API_BASE_URL() {
 //         return API_BASE_URL;

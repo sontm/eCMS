@@ -3,6 +3,7 @@ const DBBrands = require('../server/models').DBBrands;
 const DBAttributeGroups = require('../server/models').DBAttributeGroups;
 const DBAttributes = require('../server/models').DBAttributes;
 const DBProductAttributes = require('../server/models').DBProductAttributes;
+const DBDiscounts = require('../server/models').DBDiscounts;
 
 module.exports = {
   createCountry(req, res) {
@@ -66,6 +67,20 @@ module.exports = {
   getAllProductAttributes(req, res) {
     console.log(req.body);
     return DBProductAttributes
+        .findAll()
+        .then(result => res.status(200).send(result))
+        .catch(error => res.status(400).send(error));
+  },
+
+  createDiscount(req, res) {
+    return DBDiscounts
+      .create(req.body)
+      .then(p => res.status(201).send(p))
+      .catch(error => res.status(400).send(error));
+  },
+  getAllDiscounts(req, res) {
+    console.log(req.body);
+    return DBDiscounts
         .findAll()
         .then(result => res.status(200).send(result))
         .catch(error => res.status(400).send(error));

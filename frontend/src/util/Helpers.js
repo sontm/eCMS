@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {DISCOUNT_TYPE_DISCOUNT, DISCOUNT_TYPE_COUPON, DISCOUNT_TYPE_GIFT} from '../constants'
 if (!String.prototype.trim) {
     (function() {
         // Make sure we trim BOM and NBSP
@@ -277,25 +277,16 @@ class Helpers {
 
     // Input data is:
     // [
-    //     {"id":2,"name":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) Trang",
-    //         "descShort":"","descMedium":"","descLong":"",
-    //         "unitPrice":10000,"stockNum":1000,"active":true,"imgThump":"images/products/BanhKeo/p2_1.jpg",
-    //         "img1":"images/products/BanhKeo/p2_1.jpg","img2":null,"img3":null,"img4":null,"img5":null,"img6":null,
-    //         "firstCategoryId":11,"secondCategoryId":4,"thirdCategoryId":1,"brandId":3,"parentProductId":null,
-    //         "productAttributeId":null,"createdAt":"","updatedAt":"",
-            
-    //         "brands":
-    //             {"id":3,"name":"Orang Tua","imgLogo":null,"countryId":5,"active":true,
-    //             "createdAt":"2019-09-04T13:53:53.555Z","updatedAt":"2019-09-04T13:53:53.555Z",
-                    
-    //             "countries":{"id":5,"name":"Trung Quốc","code":"cn","createdAt":"","updatedAt":""}
-    //             },
-
-    //         "attributes":[{"id":2,"name":"Trắng","value":null,"attributeGroupId":1,"createdAt":"","updatedAt":"",
-    //             "attributeGroups":{"id":1,"name":"Màu Sắc","createdAt":"","updatedAt":""}
-    //         }]
-    //     }
-    // ]
+    // [{
+    //     "id":2,"name":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) Trang","descShort":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) desc Short","descMedium":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk)","descLong":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk)","unitPrice":10000,"stockNum":1000,"active":true,"imgThump":"images/products/BanhKeo/p2_1.jpg","img1":"images/products/BanhKeo/p2_1.jpg","img2":null,"img3":null,"img4":null,"img5":null,"img6":null,"firstCategoryId":11,"secondCategoryId":4,"thirdCategoryId":1,"brandId":3,"parentProductId":null,"productAttributeId":null,"createdAt":"","updatedAt":"",
+    //     "categories":{"id":11,"name":"Bánh Mềm","desc":null,"active":true,"order":null,"parentCategoryId":4,"createdAt":"","updatedAt":"",
+    //         "cateDiscounts":[]},
+    //     "brands":{"id":3,"name":"Orang Tua","imgLogo":null,"countryId":5,"active":true,"createdAt":"","updatedAt":"",
+    //         "countries":{"id":5,"name":"Trung Quốc","code":"cn","createdAt":"","updatedAt":""},
+    //         "brandDiscounts":[]},
+    //     "attributes":[{"id":2,"name":"Trắng","value":null,"attributeGroupId":1,"createdAt":"","updatedAt":"2019-09-07T02:25:51.137Z",
+    //         "attributeGroups":{"id":1,"name":"Màu Sắc","createdAt":"2019-09-07T02:24:00.454Z","updatedAt":""}}],
+    //     "productDiscounts":[]}]
 
     // Output
     // {
@@ -467,6 +458,70 @@ class Helpers {
         console.log("getPriceRanges.....")
         console.log(result)
         return result;
+    }
+
+    // One product may have Category Discount, Brand Discount, Product Discount
+    // THis will check all types and sort by "discount", "coupon" or "gift"
+    // THen from discount, found Final Best Discount Fix Price Or Percent
+
+    // Input data is:
+    // [
+    // [{
+    //     "id":2,"name":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) Trang","descShort":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) desc Short","descMedium":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk)","descLong":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk)","unitPrice":10000,"stockNum":1000,"active":true,"imgThump":"images/products/BanhKeo/p2_1.jpg","img1":"images/products/BanhKeo/p2_1.jpg","img2":null,"img3":null,"img4":null,"img5":null,"img6":null,"firstCategoryId":11,"secondCategoryId":4,"thirdCategoryId":1,"brandId":3,"parentProductId":null,"productAttributeId":null,"createdAt":"","updatedAt":"",
+    //     "categories":{"id":11,"name":"Bánh Mềm","desc":null,"active":true,"order":null,"parentCategoryId":4,"createdAt":"","updatedAt":"",
+    //         "cateDiscounts":[]},
+    //     "brands":{"id":3,"name":"Orang Tua","imgLogo":null,"countryId":5,"active":true,"createdAt":"","updatedAt":"",
+    //         "countries":{"id":5,"name":"Trung Quốc","code":"cn","createdAt":"","updatedAt":""},
+    //         "brandDiscounts":[]},
+    //     "attributes":[{"id":2,"name":"Trắng","value":null,"attributeGroupId":1,"createdAt":"","updatedAt":"2019-09-07T02:25:51.137Z",
+    //         "attributeGroups":{"id":1,"name":"Màu Sắc","createdAt":"2019-09-07T02:24:00.454Z","updatedAt":""}}],
+    //     "productDiscounts":[]}]
+
+    // One Disocunt: {"id":1,"desc":"Category Banh Mem giam gia 30% trong thang 9","from":"2019-09-01T16:42:06.000Z",
+    //          "to":"2019-09-30T16:42:06.000Z","type":"discount","fixMoney":0,"percent":30,
+    //     "applyCategoryId":11,"applyBrandId":0,"applyProductId":0,"img":"","coupon":null,"createdAt":"","updatedAt":""}
+    // Output
+    // return {bestDiscount: 23, unit:"%|d", newPrice: 12}
+
+    //product["combinedDiscount"] = []
+    parseDiscountInformation(product) {
+        let discounts = [];
+        if (product && product.categories && product.categories.cateDiscounts.length > 0) {
+            discounts = [...discounts, ...product.categories.cateDiscounts]
+        }
+        if (product && product.brands && product.brands.brandDiscounts.length > 0) {
+            discounts = [...discounts, ...product.brands.brandDiscounts]
+        }
+        if (product && product.productDiscounts.length > 0) {
+            discounts = [...discounts, ...product.productDiscounts]
+        }
+        product["combinedDiscounts"] = discounts;
+        let bestDiscountMoney = 0;
+        let curUnit = "";
+        let newPrice = product.unitPrice;
+        let bestDiscountPercentOrFix = 0;
+        discounts.forEach(element => {
+            if (element.type == DISCOUNT_TYPE_DISCOUNT) {
+                let curDiscountPercent = Math.floor((element.percent/100) * product.unitPrice);
+                let curDiscountFix = element.fixMoney;
+                let maxDiscount = Math.max(curDiscountPercent, curDiscountFix);
+                
+                if (bestDiscountMoney < maxDiscount) {
+                    bestDiscountMoney = maxDiscount;
+                    if (curDiscountPercent >= curDiscountFix) {
+                        curUnit = "%";
+                        newPrice = product.unitPrice - curDiscountPercent;
+                        bestDiscountPercentOrFix = element.percent;
+                    } else {
+                        newPrice = product.unitPrice - curDiscountFix;
+                        curUnit = "đ";
+                        bestDiscountPercentOrFix = element.fixMoney;
+                    }
+                }
+            }
+        })
+
+        return {bestDiscount: bestDiscountPercentOrFix, unit: curUnit, newPrice: newPrice};
     }
 }
 const helpers = new Helpers();

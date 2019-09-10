@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {actCartAddToCart} from '../../redux/CartReducer'
 import './ProductWrapper.css'
+import helpers from '../../util/Helpers';
 
 class ProductWrapper extends Component {
     constructor(props) {
@@ -24,6 +25,8 @@ class ProductWrapper extends Component {
         this.props.history.push("/product/" + this.props.product.id);
     }
     render() {
+        //{bestDiscount: 23, unit:"%|d", newPrice: 12}
+        let bestDiscount = helpers.parseDiscountInformation(this.props.product);
         return (
             <Card className="product-wrapper" onClick={this.onClickProductDetail}>
                 <div className="image-thump">
@@ -34,13 +37,14 @@ class ProductWrapper extends Component {
                 </div>
                
                 <div className="product-price">
-                    {this.props.product.unitPrice}đ
+                    {bestDiscount.newPrice}đ
                 </div>
                 <div className="product-price-old">
-                    100000đ
+                    {bestDiscount.bestDiscount > 0 ? 
+                        this.props.product.unitPrice + "đ" : ""}
                 </div>
                 <div className="product-price-discount">
-                    -27%
+                    {bestDiscount.bestDiscount > 0 ? ("-" + bestDiscount.bestDiscount + bestDiscount.unit): ""}
                 </div>
 
                 <Button type="primary" className="btn-addtocart" onClick={this.onAddToCart}>Add to Cart</Button>

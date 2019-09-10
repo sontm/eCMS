@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'firstCategoryId',
       as: 'productItems',
     });
+    DBCategories.hasMany(models.DBDiscounts, {
+      foreignKey: 'applyCategoryId',
+      as: 'cateDiscounts',
+    });
   };
   return DBCategories;
 };

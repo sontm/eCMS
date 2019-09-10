@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'countryId',
       as: 'countries'
     });
+    DBBrands.hasMany(models.DBDiscounts, {
+      foreignKey: 'applyBrandId',
+      as: 'brandDiscounts',
+    });
   };
   return DBBrands;
 };

@@ -1,8 +1,11 @@
 const DBProducts = require('../server/models').DBProducts;
 const DBBrands = require('../server/models').DBBrands;
+const DBCategories = require('../server/models').DBCategories;
 const DBCountries = require('../server/models').DBCountries;
 const DBAttributes = require('../server/models').DBAttributes;
 const DBAttributeGroups = require('../server/models').DBAttributeGroups;
+const DBDiscounts = require('../server/models').DBDiscounts;
+
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
 
@@ -93,14 +96,28 @@ module.exports = {
     if (req.body.attributes && req.body.attributes.length > 0) {
       wherObjAtt = {id: {[Op.in]: req.body.attributes}};
     }
-
-    console.log("Where OBJ .......")
+    let nowDateTime = new Date(); // TODO: careful with this Now TImeZone
+    console.log("Where OBJ ......., Now:" + nowDateTime)
     console.log(wherObj)
     console.log(wherObjBrand)
     return DBProducts
     .findAll({
         where: wherObj,
         include: [{
+          model: DBCategories,
+          as: 'categories',
+          include: [{
+              model:DBDiscounts, // Query Discount also
+              as:'cateDiscounts',
+              where: {
+            from: {[Op.lte]: nowDateTime},
+            [Op.and]: {
+              to: {[Op.gte]: nowDateTime}
+            }
+          },
+          required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+          }]
+        },{
           model: DBBrands,
           as: 'brands',
           where: wherObjBrand,
@@ -108,8 +125,18 @@ module.exports = {
             model:DBCountries,
             as: 'countries',
             where:wherObjBrandCountry
-          }] 
           },{
+              model:DBDiscounts, // Query Discount also
+              as:'brandDiscounts',
+              where: {
+                from: {[Op.lte]: nowDateTime},
+                [Op.and]: {
+                  to: {[Op.gte]: nowDateTime}
+                }
+              },
+              required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+          }] 
+        },{
           model: DBAttributes,
           as: 'attributes',
           where: wherObjAtt,
@@ -118,6 +145,16 @@ module.exports = {
             model:DBAttributeGroups,
             as: 'attributeGroups'
           }] 
+        },{
+          model: DBDiscounts,// Get Discounts of Product
+          as: 'productDiscounts',// Must Have
+          where: {
+            from: {[Op.lte]: nowDateTime},
+            [Op.and]: {
+              to: {[Op.gte]: nowDateTime}
+            }
+          },
+          required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
         }]
     })
     .then(result => {

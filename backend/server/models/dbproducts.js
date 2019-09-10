@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   DBProducts.associate = function(models) {
     // associations can be defined here
+    DBProducts.belongsTo(models.DBCategories, {
+      foreignKey: 'firstCategoryId',
+      as: 'categories'
+    });
     DBProducts.belongsTo(models.DBBrands, {
       foreignKey: 'brandId',
       as: 'brands'
@@ -33,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'productId',
       otherKey: 'attributeId',
       as: 'attributes'
+    });
+    DBProducts.hasMany(models.DBDiscounts, {
+      foreignKey: 'applyProductId',
+      as: 'productDiscounts', // Must Have
     });
   };
   return DBProducts;

@@ -388,3 +388,110 @@
 # 	"productId": 6,
 #   "attributeId":8
 # }'
+
+
+### ------------------Discount--------------------
+
+curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+  --data '{
+	"desc": "Category Banh Mem giam gia 30% trong thang 9",
+    "from":"2019-09-01 23:42:06",
+    "to":"2019-09-30 23:42:06",
+    "type":"discount",
+    "fixMoney":0,
+    "percent":30,
+    "applyCategoryId":11,
+    "applyBrandId":0,
+    "applyProductId":0,
+    "img":""
+}'
+
+curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+  --data '{
+	"desc": "Banh Kindo Oreo duoc giam gia 20000",
+    "from":"2019-09-01 23:42:06",
+    "to":"2019-09-30 23:42:06",
+    "type":"discount",
+    "fixMoney":20000,
+    "percent":30,
+    "applyCategoryId":0,
+    "applyBrandId":0,
+    "applyProductId":3,
+    "img":""
+}'
+
+curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+  --data '{
+	"desc": "Nhan Hieu Calbee have coupon JP20 giam 20K Het Thang 12",
+    "from":"2019-09-01 23:42:06",
+    "to":"2019-12-30 23:42:06",
+    "type":"coupon",
+    "fixMoney":20000,
+    "percent":0,
+    "applyCategoryId":0,
+    "applyBrandId":5,
+    "applyProductId":0,
+    "img":"",
+    "coupon":"JP20"
+}'
+
+curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+  --data '{
+	"desc": "Nhan Dip Trung thu, PP tang 5000 PP5",
+    "from":"2019-09-01 23:42:06",
+    "to":"2019-12-30 23:42:06",
+    "type":"coupon",
+    "fixMoney":5000,
+    "percent":0,
+    "applyCategoryId":0,
+    "applyBrandId":0,
+    "applyProductId":0,
+    "img":"",
+    "coupon":"PP5"
+}'
+
+curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+  --data '{
+	"desc": "Mua Bia TIger duoc tang them 1 Lon",
+    "from":"2019-09-01 23:42:06",
+    "to":"2019-09-15 23:42:06",
+    "type":"gift",
+    "fixMoney":0,
+    "percent":0,
+    "applyCategoryId":0,
+    "applyBrandId":0,
+    "applyProductId":6,
+    "img":"",
+    "coupon":""
+}'
+
+curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+  --data '{
+	"desc": "Tang 1 Hop Sua khi mua Banh Mem FUlio",
+    "from":"2019-09-01 23:42:06",
+    "to":"2019-09-09 23:42:06",
+    "type":"gift",
+    "fixMoney":0,
+    "percent":0,
+    "applyCategoryId":0,
+    "applyBrandId":0,
+    "applyProductId":2,
+    "img":"",
+    "coupon":""
+}'
+
+
+curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+  --data '{
+	"desc": "Nhan Hieu Calbee Giam 10%",
+    "from":"2019-09-01 23:42:06",
+    "to":"2019-11-30 23:42:06",
+    "type":"discount",
+    "fixMoney":0,
+    "percent":10,
+    "applyCategoryId":0,
+    "applyBrandId":5,
+    "applyProductId":0,
+    "img":"",
+    "coupon":""
+}'

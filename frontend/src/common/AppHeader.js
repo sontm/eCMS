@@ -30,25 +30,26 @@ class AppHeader extends Component {
     }
 
     onMenuListHover() {
-      this.setState({
-        hoveredMenuList: true
-      })
+      if (!this.isHomePage) {
+        this.setState({
+          hoveredMenuList: true
+        })
+      }
     }
     onMenuListOut() {
-      // If is not SET any more, mean hover then right after that, will disappear
-      setTimeout(() => {
-        if (this.state.hoveredParent == "") {
-          this.setState({
-            hoveredMenuList: false,
-            hoveredParent: ""
-          })
-        }
-       }, 100);
-      
+      if (!this.isHomePage) {
+        // If is not SET any more, mean hover then right after that, will disappear
+        setTimeout(() => {
+          if (this.state.hoveredParent == "") {
+            this.setState({
+              hoveredMenuList: false,
+              hoveredParent: ""
+            })
+          }
+        }, 100);
+      }
     }
     onParentMenuHover(e) {
-      console.log("onParentMenuHover")
-      console.log(e)
       this.setState({
         hoveredParent: e.target.textContent.trim()
       })
@@ -82,75 +83,81 @@ class AppHeader extends Component {
         }
     }
     render() {
-        return (
-          <React.Fragment>
-            <div className={(this.state.hoveredMenuList) ? "flyout-outside-mask" : ""}></div>
-            <Header style={{zIndex: 100}}>
-            <div className="app-header">
-            <Row>
-              <div>
-              <Col span={4}>
-              <div className="app-title" >
-                <Link to="/" style={{paddingLeft: "20px"}}>Phu Phuong</Link>
-              </div>
-              </Col>
-
-              <Col span={10}><Search
-                placeholder="Search product, category..."
-                enterButton="Tìm Kiếm"
-                size="large"
-                onSearch={value => console.log(value)}
-              /></Col>
-
-              <Col span={3}>
-              <div className="top-header-menu-item">
-                <Button type="link" ghost size="large">
-                  <Icon type="shopping-cart" style={{fontSize:"1.2em"}}/>
-                  Theo Doi Don Hang
-                </Button>
-              </div>
-              </Col>
-              <Col span={3}>
-              <div className="top-header-menu-item">
-                <Button type="link" ghost size="large">
-                  <Icon type="user" style={{fontSize:"1.2em"}}/>
-                  Tai Khoan
-                </Button>
-              </div>
-              </Col>
-
-              <Col span={4}>
-              <div className="cart-container">
-                <Link to={"/cart"}>
-                <Button  ghost size="large">
-                  <Icon type="shopping-cart" style={{fontSize:"1.2em"}} />
-                  Giỏ Hàng
-                  <Badge showZero count={this.props.cart.savedProductsId ? this.props.cart.savedProductsId.length : 0} 
-                    className="cart-badge"/>
-                </Button>
-                </Link>
-              </div>
-              </Col>
-              </div>
-            </Row>
-            <Row>
+      let isHomePage = this.props.location.pathname == "/" ? true : false;
+      this.isHomePage = isHomePage;
+      let appDropDownMenu = 
+        <AppDropdownMenu config={this.props.category.categoriesLevel} onParentMenuOut={this.onParentMenuOut} onMenuContainerOut={this.onMenuContainerOut}
+          onParentMenuHover={this.onParentMenuHover} hoveredParent={this.state.hoveredParent}
+          onParentMenuClick={this.onParentMenuClick}
+          hoveredMenuList={this.state.hoveredMenuList}
+          isHomePage={isHomePage}
+          />;
+      return (
+        <React.Fragment>
+          <div className={(this.state.hoveredMenuList) ? "flyout-outside-mask" : ""}></div>
+          <Header>
+          <div className="app-header">
+          <Row>
+            <div>
             <Col span={4}>
-              <div onMouseOver={this.onMenuListHover} onMouseLeave={this.onMenuListOut}
-                style={{marginLeft:"15px"}} className="hamburger-category-menu">
-                <Icon type="menu"/>
-                <span className="category-menu-text" >Danh Mục Sản Phẩm</span>
-              </div>
+            <div className="app-title" >
+              <Link to="/" style={{paddingLeft: "20px"}}>Phu Phuong</Link>
+            </div>
             </Col>
-            </Row>
-            <AppDropdownMenu config={this.props.category.categoriesLevel} onParentMenuOut={this.onParentMenuOut} onMenuContainerOut={this.onMenuContainerOut}
-              onParentMenuHover={this.onParentMenuHover} hoveredParent={this.state.hoveredParent}
-              onParentMenuClick={this.onParentMenuClick}
-              hoveredMenuList={this.state.hoveredMenuList}
-              />
-          </div>
-          </Header>
-          </React.Fragment>
-        );
+
+            <Col span={10}><Search
+              placeholder="Search product, category..."
+              enterButton="Tìm Kiếm"
+              size="large"
+              onSearch={value => console.log(value)}
+            /></Col>
+
+            <Col span={3}>
+            <div className="top-header-menu-item">
+              <Button type="link" ghost size="large">
+                <Icon type="shopping-cart" style={{fontSize:"1.2em"}}/>
+                Theo Doi Don Hang
+              </Button>
+            </div>
+            </Col>
+            <Col span={3}>
+            <div className="top-header-menu-item">
+              <Button type="link" ghost size="large">
+                <Icon type="user" style={{fontSize:"1.2em"}}/>
+                Tai Khoan
+              </Button>
+            </div>
+            </Col>
+
+            <Col span={4}>
+            <div className="cart-container">
+              <Link to={"/cart"}>
+              <Button  ghost size="large">
+                <Icon type="shopping-cart" style={{fontSize:"1.2em"}} />
+                Giỏ Hàng
+                <Badge showZero count={this.props.cart.savedProductsId ? this.props.cart.savedProductsId.length : 0} 
+                  className="cart-badge"/>
+              </Button>
+              </Link>
+            </div>
+            </Col>
+            </div>
+          </Row>
+          <Row>
+          <Col span={4}>
+            <div onMouseOver={this.onMenuListHover} onMouseLeave={this.onMenuListOut}
+              style={{marginLeft:"15px"}} className="hamburger-category-menu">
+              <Icon type="menu"/>
+              <span className="category-menu-text" >Danh Mục Sản Phẩm</span>
+            </div>
+          </Col>
+          </Row>
+          {isHomePage ? null : appDropDownMenu}
+        </div>
+        </Header>
+        {isHomePage ? appDropDownMenu: null}
+        </React.Fragment>
+      );
     }
 }
 

@@ -65,8 +65,62 @@ module.exports = {
   getProductDetail(req, res) {
     console.log("getProductDetail........")
     console.log(req.body);
+    let nowDateTime = new Date();
       return DBProducts
-      .findByPk(req.params.productId)
+      //.findByPk(req.params.productId)
+      .findAll({
+        where: {id: req.params.productId},
+        include: [{
+          model: DBCategories,
+          as: 'categories',
+          include: [{
+              model:DBDiscounts, // Query Discount also
+              as:'cateDiscounts',
+              where: {
+            from: {[Op.lte]: nowDateTime},
+            [Op.and]: {
+              to: {[Op.gte]: nowDateTime}
+            }
+          },
+          required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+          }]
+        },{
+          model: DBBrands,
+          as: 'brands',
+          include: [{
+            model:DBCountries,
+            as: 'countries'
+          },{
+              model:DBDiscounts, // Query Discount also
+              as:'brandDiscounts',
+              where: {
+                from: {[Op.lte]: nowDateTime},
+                [Op.and]: {
+                  to: {[Op.gte]: nowDateTime}
+                }
+              },
+              required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+          }] 
+        },{
+          model: DBAttributes,
+          as: 'attributes',
+          through: {attributes: []},
+          include: [{
+            model:DBAttributeGroups,
+            as: 'attributeGroups'
+          }] 
+        },{
+          model: DBDiscounts,// Get Discounts of Product
+          as: 'productDiscounts',// Must Have
+          where: {
+            from: {[Op.lte]: nowDateTime},
+            [Op.and]: {
+              to: {[Op.gte]: nowDateTime}
+            }
+          },
+          required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+        }]
+      })
       .then(result => res.status(200).send(result))
       .catch(error => res.status(400).send(error));
   },

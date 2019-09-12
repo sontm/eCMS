@@ -96,10 +96,12 @@ export const actProductGetDetail = (prodId) => (dispatch) => {
     response => {
         console.log("Backend getProductDetail:" + prodId)
         console.log(response.data)
-        dispatch({
-            type: PROD_GETDETAIL_OK,
-            payload:  response.data
-        });
+        if (response.data && response.data.length > 0) {
+            dispatch({
+                type: PROD_GETDETAIL_OK,
+                payload:  response.data[0]
+            });
+        }
     },
     error => {
         console.log("Get All Product error")

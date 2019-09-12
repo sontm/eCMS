@@ -110,8 +110,9 @@ class ProductListPage extends Component {
         let producView = [];
         if (this.props.product.productsQueryFiltered.length > 0) {
             this.props.product.productsQueryFiltered.forEach(element => {
+                //ViewPort: xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl≥1600px
                 producView.push(
-                    <Col span={6}>
+                    <Col xs={24} sm={12} md={12} lg={8} xl={6} xxl={6}>
                         <ProductWrapper product={element}/>
                     </Col>)
             });
@@ -124,7 +125,9 @@ class ProductListPage extends Component {
                     </Col>
                     <Col span={20}>
                         {this.renderFilterBar()}
+                        <Row type="flex">
                         {producView}
+                        </Row>
                     </Col>
                 </Row>
             </React.Fragment>

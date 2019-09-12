@@ -30,6 +30,9 @@ export default class AppDropdownMenu extends Component {
         this.props.onParentMenuClick()
     }
     render = () => {
+      // If homepage, this.props.location.pathname is "/"
+      console.log(this.props.isHomePage)
+
         let {config} = this.props;
         let parentMenus = [];
         for (var prop in config) {
@@ -40,8 +43,10 @@ export default class AppDropdownMenu extends Component {
                     onClick={this.onClickParentMenuItem}
                   className={this.props.hoveredParent == prop ? "parent-menu-li-hovering" : ""}>
                   <Link to={"/category/" + config["" +prop].id + "?lvl=3"}>
-                    {prop}
-                    <div className="right-arrow"></div>
+                    <Icon type="account-book" /> {prop}
+                    <span style={{float: "right", marginRight: "5px", fontSize:"12px", pointerEvents:"none"}}>
+                      <Icon type="right" />
+                    </span>
                   </Link>
                 </li>)
           }
@@ -70,7 +75,7 @@ export default class AppDropdownMenu extends Component {
                 }
                 allCols.push (<Col span={6}>
                   <span style={{fontWeight:"bold"}}>
-                  <div onClick={this.onClickParentMenuItem}>
+                  <div onClick={this.onClickParentMenuItem} className="sub-menu-top-li">
                     <Link to={"/category/" + curSubmenuItems["" +propSub].id + "?lvl=2"}>
                     {propSub}
                     </Link>
@@ -87,7 +92,8 @@ export default class AppDropdownMenu extends Component {
         return (
           <React.Fragment>
             
-            <Row className={this.props.hoveredMenuList ? "flyout-container-display" : "flyout-container-hidden"}
+            <Row className={this.props.isHomePage ? "flyout-container-display-home" : 
+              (this.props.hoveredMenuList ? "flyout-container-display" : "flyout-container-hidden")}
               onMouseLeave={this.props.onMenuContainerOut}>
               <Col span={4} className="parent-menu-container-left">
                 <ul className="parent-menu">

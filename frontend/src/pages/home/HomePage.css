@@ -1,0 +1,26 @@
+.homepage-container {
+    position: relative;
+
+    /* -10px is because of margin-top of app-container */
+    top: -410px;
+
+}
+.home-first-impression-space {
+    /* position: relative;
+    top: -400px; */
+    height: 400px;
+}
+
+.ant-carousel .slick-slide {
+    text-align: center;
+    height: 400px;
+    line-height: 400px;
+    background: #364d79;
+    overflow: hidden;
+}
+
+.empty-space-20px {
+    height: 20px;
+    width: 100%;
+}
+

@@ -23,6 +23,21 @@ hr {
   line-height: 19px;
   margin-top: 0;
   margin-bottom: 14px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 20px;
+
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 /* FOr Touch Spin (Quantity Increase/Decrease) */
@@ -36,11 +51,15 @@ hr {
                                   supported by Chrome and Opera */
 }
 
-/* Override Card header color */
-.ant-card-head {
+/* Override Card header color, SIdeMenu and Product Detail */
+.app-side-menu .ant-card-head {
   background: #189eff !important;
   color: white !important;
 }
 
+.product-detail .ant-card-head {
+  background: #189eff !important;
+  color: white !important;
+}
 
 

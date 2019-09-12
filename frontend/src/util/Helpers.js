@@ -232,6 +232,15 @@ class Helpers {
         str = str.trim(); 
         return str;
     }
+    // from 20000 -> 20K
+    convertPriceToShortAbbr(price) {
+        if (price > 1000) {
+            let priceInK = Math.floor(price / 1000);
+            return priceInK + "K";
+        }
+        return price + "%";
+    }
+
     // Get the Not Duplicate DBBrand from List Products: [{xxx, brands:{id, name, countryId}}]
     // Result: {id1: {count:10, value:DBBrand}, id2:{}}
     getBrandsQuery(products) {
@@ -481,10 +490,12 @@ class Helpers {
     //          "to":"2019-09-30T16:42:06.000Z","type":"discount","fixMoney":0,"percent":30,
     //     "applyCategoryId":11,"applyBrandId":0,"applyProductId":0,"img":"","coupon":null,"createdAt":"","updatedAt":""}
     // Output
-    // return {bestDiscount: 23, unit:"%|d", newPrice: 12}
+    // return {bestDiscount: 23, unit:"%|d", newPrice: 12, hasGift:true, 
+    //      coupon: null|"JP20", bestCoupon:"", couponUnit:"%|K",discounts[]}
 
     //product["combinedDiscount"] = []
     parseDiscountInformation(product) {
+        let result = {};
         let discounts = [];
         if (product && product.categories && product.categories.cateDiscounts.length > 0) {
             discounts = [...discounts, ...product.categories.cateDiscounts]
@@ -500,6 +511,10 @@ class Helpers {
         let curUnit = "";
         let newPrice = product.unitPrice;
         let bestDiscountPercentOrFix = 0;
+
+        let bestCoPercentOrFix = 0;
+        let bestCoMoney = 0;
+        let curCouponUnit = "";
         discounts.forEach(element => {
             if (element.type == DISCOUNT_TYPE_DISCOUNT) {
                 let curDiscountPercent = Math.floor((element.percent/100) * product.unitPrice);
@@ -518,10 +533,34 @@ class Helpers {
                         bestDiscountPercentOrFix = element.fixMoney;
                     }
                 }
+            } else if (element.type == DISCOUNT_TYPE_GIFT) {
+                result.hasGift = true;
+            } else if (element.type == DISCOUNT_TYPE_COUPON) {
+                result.coupon = element.coupon;
+
+                let curCoPercent = Math.floor((element.percent/100) * product.unitPrice);
+                let curCoFix = element.fixMoney;
+                let maxCo = Math.max(curCoPercent, curCoFix);
+                
+                if (bestCoMoney < maxCo) {
+                    bestCoMoney = maxCo;
+                    if (curCoPercent >= curCoFix) {
+                        curCouponUnit = "%";
+                        bestCoPercentOrFix = element.percent;
+                    } else {
+                        curCouponUnit = "K";
+                        bestCoPercentOrFix = element.fixMoney;
+                    }
+                }
             }
         })
-
-        return {bestDiscount: bestDiscountPercentOrFix, unit: curUnit, newPrice: newPrice};
+        result.bestDiscount = bestDiscountPercentOrFix;
+        result.unit = curUnit;
+        result.newPrice = newPrice;
+        result.discounts = discounts;
+        result.bestCoupon = bestCoPercentOrFix;
+        result.couponUnit = curCouponUnit;
+        return result;
     }
 }
 const helpers = new Helpers();

@@ -495,3 +495,18 @@ curl --request POST --url http://localhost:5000/api/discounts --header 'content-
     "img":"",
     "coupon":""
 }'
+
+curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+  --data '{
+	"desc": "Tang 1 Goi Milo",
+    "from":"2019-09-01 23:42:06",
+    "to":"2019-10-30 23:42:06",
+    "type":"gift",
+    "fixMoney":0,
+    "percent":0,
+    "applyCategoryId":0,
+    "applyBrandId":0,
+    "applyProductId":1,
+    "img":"",
+    "coupon":""
+}'

@@ -4,6 +4,10 @@ const DBAttributeGroups = require('../server/models').DBAttributeGroups;
 const DBAttributes = require('../server/models').DBAttributes;
 const DBProductAttributes = require('../server/models').DBProductAttributes;
 const DBDiscounts = require('../server/models').DBDiscounts;
+const DBProducts = require('../server/models').DBProducts;
+
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 
 module.exports = {
   createCountry(req, res) {
@@ -83,6 +87,32 @@ module.exports = {
     return DBDiscounts
         .findAll()
         .then(result => res.status(200).send(result))
+        .catch(error => res.status(400).send(error));
+  },
+  getBestDiscounts(req, res) {
+    console.log ("getBestDiscounts calledddddddddddd")
+    console.log(req.body);
+    let nowDateTime = new Date(); // TODO: careful with this Now TImeZone
+    return DBDiscounts
+        .findAll({
+          where:{
+            'applyProductId' : {[Op.not]: 0},
+            // from: {[Op.lte]: nowDateTime},
+            //     [Op.and]: {
+            //       to: {[Op.gte]: nowDateTime}
+            //     }
+          },
+          order: [
+            ['percent', 'DESC'],
+            // ['fixMoney', 'ASC'],
+          ],
+          include: [{
+            model:DBProducts, // Query associated product also
+            as:'product'
+          }],
+          limit: 10
+        })
+        .then(result => {res.status(200).send(result)})
         .catch(error => res.status(400).send(error));
   },
 };

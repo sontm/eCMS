@@ -9,9 +9,10 @@ import SideMenu from '../../common/SideMenu';
 import { actProductGetOfCategory, actProductFilter } from '../../redux/ProductActions';
 import './ProductListPage.css';
 
-import { Row, Col, Radio, Button, Icon, Input } from 'antd';
+import { Row, Col, Radio, Button, Icon, Input, Select } from 'antd';
 const queryString = require('query-string');
 const { Search } = Input;
+const { Option } = Select;
 
 class ProductListPage extends Component {
     constructor(props) {
@@ -68,7 +69,7 @@ class ProductListPage extends Component {
         return (
             <Row>
             <div className="product-filter">
-                <Col span={16}>
+                <Col xs={0} sm={0} md={0} lg={24} xl={16} xxl={16}>
                     <span className="filter-option">Sắp Xếp:</span>
                     <Button type={this.props.product.filter=="popular" ? "danger" : "dashed"} size="large" className="filter-option" 
                             name="popular" onClick={this.onChangeFilter}>
@@ -91,7 +92,24 @@ class ProductListPage extends Component {
                         Giá Cao
                     </Button>
                 </Col>
-                <Col span={8}>
+                {/* {For Mobile UI} */}
+                <Col xs={24} sm={24} md={24} lg={0} xl={0} xxl={0}>
+                    <Row>
+                    <Col xs={8} sm={6} span={6}>
+                    <span className="filter-option">Sắp Xếp:</span>
+                    </Col>
+                    <Col xs={16} sm={18} span={18}>
+                    <Select defaultValue="popular" style={{width: "100%"}}>
+                        <Option value="popular">Bán Chạy</Option>
+                        <Option value="new">Hàng Mới</Option>
+                        <Option value="discount">Giảm Giá</Option>
+                        <Option value="lowprice">Giá Thấp</Option>
+                        <Option value="highprice">Giá Cao</Option>
+                    </Select>
+                    </Col>
+                    </Row>
+                </Col>
+                <Col xs={0} sm={0} md={0} lg={0} xl={8} xxl={8}>
                     <Search
                         placeholder="Search product"
                         enterButton
@@ -112,7 +130,7 @@ class ProductListPage extends Component {
             this.props.product.productsQueryFiltered.forEach(element => {
                 //ViewPort: xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl≥1600px
                 producView.push(
-                    <Col xs={24} sm={12} md={12} lg={8} xl={6} xxl={6}>
+                    <Col xs={12} sm={12} md={12} lg={8} xl={6} xxl={6}>
                         <ProductWrapper product={element}/>
                     </Col>)
             });
@@ -120,10 +138,10 @@ class ProductListPage extends Component {
         return (
             <React.Fragment>
                 <Row>
-                    <Col span={4}>
+                    <Col xs={0} sm={0} md={6} lg={5} xl={4} xxl={4}>
                     <SideMenu />
                     </Col>
-                    <Col span={20}>
+                    <Col xs={24} sm={24} md={18} lg={19} xl={20} xxl={20}>
                         {this.renderFilterBar()}
                         <Row type="flex">
                         {producView}

@@ -7,5 +7,6 @@
 }
 .product-filter .filter-option {
     display:inline-block;
+    vertical-align: middle;
     margin-left: 10px;
 }

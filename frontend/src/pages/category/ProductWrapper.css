@@ -8,6 +8,8 @@
     /* background: var(--xx) */
     height: 100%;
     display: inline-block;
+
+    max-width: 300px;
 }
 
 /* Override Padding 24 of ANTD */
@@ -32,8 +34,9 @@
 }
 
 .product-wrapper .product-title {
-    height: 50px;
+    height: 48px;
     text-align: left;
+    overflow: hidden;
 }
 
 .product-wrapper .product-price {

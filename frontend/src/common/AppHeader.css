@@ -1,5 +1,7 @@
 .app-title {
   float: left;
+  height: 50px;
+  overflow: hidden;
 }
 /* .app-header {
   position: fixed;
@@ -18,8 +20,39 @@
 
 .app-header {
   background: #189eff;
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+/* xs, sm */
+@media (max-width: 768px) {
+  .app-header {
+    background: #189eff;
+    margin-left: 3px;
+    margin-right: 3px;
+  }
+}
+/* md */
+@media (max-width: 992px) {
+  .app-header {
+    background: #189eff;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .show-only-in-md {
+    font-size: 24px !important;
+  }
+  .hidden-in-md {
+    display: none !important;
+  }
+}
+/* lg */
+@media (max-width: 1200px) {
+  .app-header {
+    background: #189eff;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 }
 
 /* OVerride When Hover WHite button on Header */
@@ -81,7 +114,7 @@
   font-size: 20px;
 }
 .category-menu-text {
-  margin-left: 10px;
+  margin-left: 7px;
 }
 
 
@@ -122,4 +155,38 @@
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5); 
   z-index: 50;
+}
+
+
+/* THis contaiin Menu such as Danh Muc San Pham, Hot .. */
+.header-options {
+
+}
+/* ViewPort: xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl≥1600px */
+@media (max-width: 768px) {
+  .header-options {
+    display: none;
+  }
+}
+
+
+
+
+
+@media (max-width: 768px) {
+  .mobile-bottom-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  
+    width: 100%;
+    z-index: 300;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-bottom-menu {
+    display: none !important;
+  }
 }

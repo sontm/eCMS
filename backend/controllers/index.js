@@ -13,6 +13,7 @@ app.post('/api/brands', countryBrandAttribute.createBrand);
 app.get('/api/brands', countryBrandAttribute.getAllBrands);
 app.post('/api/discounts', countryBrandAttribute.createDiscount);
 app.get('/api/discounts', countryBrandAttribute.getAllDiscounts); 
+app.get('/api/discounts/best', countryBrandAttribute.getBestDiscounts); 
 
 app.post('/api/attributes', countryBrandAttribute.createAttribute);
 app.post('/api/productattributes', countryBrandAttribute.createProductAttribute);

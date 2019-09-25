@@ -55,7 +55,6 @@ class AppHeader extends Component {
       })
     }
     onMenuContainerOut() {
-      console.log("onMenuContainerOut")
       this.setState({
         hoveredMenuList: false,
         hoveredParent: ""
@@ -82,6 +81,33 @@ class AppHeader extends Component {
             this.props.actCategoryGet();
         }
     }
+
+    renderBottomMenuMobile () {
+      return (
+        <Menu
+            mode="horizontal"
+            inlineIndent={20}
+            className="mobile-bottom-menu"
+        >
+            <Menu.Item key="home">
+              <Icon type="mail" />
+              <span>Home</span>
+            </Menu.Item>
+            <Menu.Item key="category">
+              <Icon type="mail" />
+              <span>Category</span>
+            </Menu.Item>
+            <Menu.Item key="cart">
+              <Icon type="shopping-cart" />
+              <span>Cart</span>
+            </Menu.Item>
+            <Menu.Item key="user">
+              <Icon type="user" />
+              <span>User</span>
+            </Menu.Item>
+        </Menu>
+      )
+    }
     render() {
       let isHomePage = this.props.location.pathname == "/" ? true : false;
       this.isHomePage = isHomePage;
@@ -92,6 +118,8 @@ class AppHeader extends Component {
           hoveredMenuList={this.state.hoveredMenuList}
           isHomePage={isHomePage}
           />;
+
+      //xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl	≥1600px
       return (
         <React.Fragment>
           <div className={(this.state.hoveredMenuList) ? "flyout-outside-mask" : ""}></div>
@@ -99,63 +127,70 @@ class AppHeader extends Component {
           <div className="app-header">
           <Row>
             <div>
-            <Col span={4}>
+            <Col xs={0} sm={0} md={4} lg={4} xl={4} xxl={4}>
             <div className="app-title" >
               <Link to="/" style={{paddingLeft: "20px"}}>Phu Phuong</Link>
             </div>
             </Col>
 
-            <Col span={10}><Search
+            <Col xs={24} sm={24} md={12} lg={10} xl={10} xxl={10}><Search
               placeholder="Search product, category..."
               enterButton="Tìm Kiếm"
               size="large"
               onSearch={value => console.log(value)}
             /></Col>
 
-            <Col span={3}>
-            <div className="top-header-menu-item">
-              <Button type="link" ghost size="large">
-                <Icon type="shopping-cart" style={{fontSize:"1.2em"}}/>
-                Theo Doi Don Hang
-              </Button>
-            </div>
-            </Col>
-            <Col span={3}>
-            <div className="top-header-menu-item">
-              <Button type="link" ghost size="large">
-                <Icon type="user" style={{fontSize:"1.2em"}}/>
-                Tai Khoan
-              </Button>
-            </div>
-            </Col>
+            <Col xs={0} sm={0} md={8} lg={10} xl={10} xxl={10}>
+              <Row>
+                <Col md={7} lg={7} xl={7} xxl={7}>
+                <div className="top-header-menu-item">
+                  <Button type="link" ghost size="large">
+                    <Icon type="shopping-cart" style={{fontSize:"1.2em"}} className="show-only-in-md"/>
+                    <span className="hidden-in-md">Theo Doi Don Hang</span>
+                  </Button>
+                </div>
+                </Col>
+                <Col md={7} lg={7} xl={7} xxl={7}>
+                <div className="top-header-menu-item">
+                  <Button type="link" ghost size="large">
+                    <Icon type="user" style={{fontSize:"1.2em"}} className="show-only-in-md"/>
+                    <span className="hidden-in-md">Tai Khoan</span>
+                  </Button>
+                </div>
+                </Col>
 
-            <Col span={4}>
-            <div className="cart-container">
-              <Link to={"/cart"}>
-              <Button  ghost size="large">
-                <Icon type="shopping-cart" style={{fontSize:"1.2em"}} />
-                Giỏ Hàng
-                <Badge showZero count={this.props.cart.savedProductsId ? this.props.cart.savedProductsId.length : 0} 
-                  className="cart-badge"/>
-              </Button>
-              </Link>
-            </div>
-            </Col>
+                <Col md={10} lg={10} xl={10} xxl={10}>
+                <div className="cart-container">
+                  <Link to={"/cart"}>
+                  <Button  ghost size="large">
+                    <Icon type="shopping-cart" style={{fontSize:"1.2em"}} className="show-only-in-md"/>
+                    <span className="hidden-in-md">Giỏ Hàng</span>
+                    <Badge showZero count={this.props.cart.savedProductsId ? this.props.cart.savedProductsId.length : 0} 
+                      className="cart-badge"/>
+                  </Button>
+                  </Link>
+                </div>
+                </Col>
+              </Row>
+              </Col>
             </div>
           </Row>
           <Row>
-          <Col span={4}>
+          <div className="header-options">
+          <Col xs={0} sm={0} md={12} lg={6} xl={6} xxl={4}>
             <div onMouseOver={this.onMenuListHover} onMouseLeave={this.onMenuListOut}
               style={{marginLeft:"15px"}} className="hamburger-category-menu">
               <Icon type="menu"/>
               <span className="category-menu-text" >Danh Mục Sản Phẩm</span>
             </div>
           </Col>
+          </div>
           </Row>
           {isHomePage ? null : appDropDownMenu}
         </div>
         </Header>
         {isHomePage ? appDropDownMenu: null}
+        {this.renderBottomMenuMobile()}
         </React.Fragment>
       );
     }

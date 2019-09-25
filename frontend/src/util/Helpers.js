@@ -503,7 +503,7 @@ class Helpers {
         if (product && product.brands && product.brands.brandDiscounts.length > 0) {
             discounts = [...discounts, ...product.brands.brandDiscounts]
         }
-        if (product && product.productDiscounts.length > 0) {
+        if (product && product.productDiscounts && product.productDiscounts.length > 0) {
             discounts = [...discounts, ...product.productDiscounts]
         }
         product["combinedDiscounts"] = discounts;

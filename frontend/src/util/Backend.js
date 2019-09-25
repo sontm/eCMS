@@ -58,6 +58,16 @@ class Backend {
             .then((response) => {onOK(response);})
             .catch((error) => {onError(error);});
     }
+
+
+    // Discount------------
+    // Best Discount for Home
+    getBestDiscountHome(onOK, onError) {
+        axios.get("/discounts/best",
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
 }
 
 const backend = new Backend();

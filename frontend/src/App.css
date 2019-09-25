@@ -1,8 +1,34 @@
 .app-container {
   margin-top: 10px;   
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 2%;
+  margin-right: 2%;
   min-height: 600px;
+}
+
+/* ViewPort: xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl≥1600px */
+@media (max-width: 768px) {
+  .app-container {
+    margin-top: 10px;   
+    margin-left: 3px;
+    margin-right: 3px;
+    min-height: 600px;
+  }
+}
+@media (max-width: 992px) {
+  .app-container {
+    margin-top: 10px;   
+    margin-left: 5px;
+    margin-right: 5px;
+    min-height: 600px;
+  }
+}
+@media (max-width: 1200px) {
+  .app-container {
+    margin-top: 10px;   
+    margin-left: 10px;
+    margin-right: 10px;
+    min-height: 600px;
+  }
 }
 
 .app-content {

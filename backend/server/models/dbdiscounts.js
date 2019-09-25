@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   DBDiscounts.associate = function(models) {
     // associations can be defined here
+    DBDiscounts.belongsTo(models.DBProducts, {
+      foreignKey: 'applyProductId',
+      as: 'product', // Must Have
+    });
   };
   return DBDiscounts;
 };

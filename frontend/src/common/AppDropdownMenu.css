@@ -8,11 +8,11 @@
     display: block;
     margin-top: 0px;
     z-index: 100;
-    width: 90%;
+    width: 96%;
     /* background: rgb(240, 240, 240); */
 
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 .flyout-container-display-home a {
     display: block;

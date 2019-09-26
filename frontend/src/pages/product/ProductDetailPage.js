@@ -13,6 +13,9 @@ import helpers from '../../util/Helpers';
 import { breakLineCRLF } from '../../util/Helpers';
 import AppTouchSpin from '../../common/AppTouchSpin'
 import ProductDetailImageList from '../../common/ProductDetailImageList'
+
+import AppConstant from '../../util/AppConstant'
+
 import './ProductDetailPage.css'
 // import "react-image-gallery/styles/css/image-gallery.css";
 import Carousel, { Modal, ModalGateway } from 'react-images';
@@ -83,6 +86,7 @@ class ProductDetailPage extends Component {
     componentDidMount() {
         console.log("  >>DID MOUNT ProductDetailPage:" + this.props.match.params.id)
         this.props.actProductGetDetail(this.props.match.params.id);
+        AppConstant.addProductToRecentView(this.props.match.params.id);
     }
     componentDidUpdate() {
         // When have just Receive Product Detail

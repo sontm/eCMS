@@ -5,6 +5,7 @@
     transition: all 0.2s linear;
     min-height: 390px;
     margin:0.5px;
+    margin-top: 5px;
     /* background: var(--xx) */
     height: 100%;
     display: inline-block;

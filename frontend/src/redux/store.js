@@ -6,6 +6,7 @@ import ProductReducer from './ProductReducer';
 import ProductQueryReducer from './ProductQueryReducer';
 import CartReducer from './CartReducer';
 import DiscountReducer from './DiscountReducer';
+import HomeReducer from './HomeReducer';
 
 const initialState = {};
 
@@ -16,7 +17,8 @@ const reducers = combineReducers({
   product: ProductReducer,
   query: ProductQueryReducer, // Product Query options
   cart: CartReducer,
-  discount: DiscountReducer
+  discount: DiscountReducer,
+  home:HomeReducer
 });
 
 const composeEnhancers =

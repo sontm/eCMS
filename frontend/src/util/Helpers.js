@@ -500,7 +500,7 @@ class Helpers {
         if (product && product.categories && product.categories.cateDiscounts.length > 0) {
             discounts = [...discounts, ...product.categories.cateDiscounts]
         }
-        if (product && product.brands && product.brands.brandDiscounts.length > 0) {
+        if (product && product.brands && product.brands.brandDiscounts && product.brands.brandDiscounts.length > 0) {
             discounts = [...discounts, ...product.brands.brandDiscounts]
         }
         if (product && product.productDiscounts && product.productDiscounts.length > 0) {

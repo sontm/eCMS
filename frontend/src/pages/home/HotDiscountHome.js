@@ -7,7 +7,7 @@ import ProductWrapper from '../category/ProductWrapper'
 import { Row, Col, Radio, Button, Icon, Input, Select } from 'antd';
 import './HomePage.css';
 
-class HotDiscount extends Component {
+class HotDiscountHome extends Component {
     constructor(props) {
         super(props)
 
@@ -57,4 +57,4 @@ const mapActionsToProps = {
 
 export default withRouter(connect(
     mapStateToProps,mapActionsToProps
-)(HotDiscount));
+)(HotDiscountHome));

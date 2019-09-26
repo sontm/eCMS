@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Carousel, Row, Col, Card} from 'antd';
 
-import HotDiscount from './HotDiscount';
+import HotDiscountHome from './HotDiscountHome';
+import RecentViewHome from './RecentViewHome';
 
 import './HomePage.css';
 
@@ -34,7 +35,7 @@ export default class HomePage extends Component {
 
                 <div className="empty-space-20px" />
                 <Card title="Hot Deals" bordered={false}>
-                    <HotDiscount />
+                    <HotDiscountHome />
                 </Card>
 
                 <div className="empty-space-20px" />
@@ -44,7 +45,7 @@ export default class HomePage extends Component {
 
                 <div className="empty-space-20px" />
                 <Card title="San Pham Ban Da Xem" bordered={false}>
-                    <p>Hot Deals Here</p>
+                    <RecentViewHome />
                 </Card>
                 </div>
             </React.Fragment>

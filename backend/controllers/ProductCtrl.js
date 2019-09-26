@@ -222,6 +222,8 @@ module.exports = {
     console.log(req.body)
     var wherObj = {id: {[Op.in]: req.body.productIds}};
     console.log("   wherObj ne")
+    let nowDateTime = new Date(); // TODO: careful with this Now TImeZone
+
     console.log(wherObj)
     return DBProducts
     .findAll({
@@ -230,18 +232,39 @@ module.exports = {
           model: DBBrands,
           as: 'brands',
           include: [{
-            model:DBCountries,
-            as: 'countries',
-          }] 
+              model:DBCountries,
+              as: 'countries',
+            },{
+              model:DBDiscounts, // Query Discount also
+              as:'brandDiscounts',
+              where: {
+                from: {[Op.lte]: nowDateTime},
+                [Op.and]: {
+                  to: {[Op.gte]: nowDateTime}
+                }
+              },
+              required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+            }] 
           },{
-          model: DBAttributes,
-          as: 'attributes',
-          through: {attributes: []},
-          include: [{
-            model:DBAttributeGroups,
-            as: 'attributeGroups'
-          }] 
-        }]
+            model: DBAttributes,
+            as: 'attributes',
+            through: {attributes: []},
+            include: [{
+              model:DBAttributeGroups,
+              as: 'attributeGroups'
+            }] 
+          },{
+            model: DBDiscounts,// Get Discounts of Product
+            as: 'productDiscounts',// Must Have
+            where: {
+              from: {[Op.lte]: nowDateTime},
+              [Op.and]: {
+                to: {[Op.gte]: nowDateTime}
+              }
+            },
+            required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+          }
+        ]
     })
     .then(result => {
       res.status(200).send(result)

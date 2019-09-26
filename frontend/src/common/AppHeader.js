@@ -29,15 +29,27 @@ class AppHeader extends Component {
         
     }
 
+    // WHen mouse over DanhMucSanPham
     onMenuListHover() {
       if (!this.isHomePage) {
-        this.setState({
-          hoveredMenuList: true
-        })
+        // Below timeout to prevent when Mouse only Move through DanhMucSanPham-menu shown
+        // wait 300ms to show Menu list
+        this.timeout = setTimeout(() => {
+          this.setState({
+            hoveredMenuList: true
+          })
+        },300);
+        
       }
     }
+    // WHen mouse out DanhMucSanPham
     onMenuListOut() {
       if (!this.isHomePage) {
+        if(this.timeout) {
+          clearTimeout(this.timeout);
+        }
+
+        // Below Timeout to make Time for Mouse move from DanhMucSanPham to the shown menu below
         // If is not SET any more, mean hover then right after that, will disappear
         setTimeout(() => {
           if (this.state.hoveredParent == "") {
@@ -178,7 +190,7 @@ class AppHeader extends Component {
           <Row>
           <div className="header-options">
           <Col xs={0} sm={0} md={12} lg={6} xl={6} xxl={4}>
-            <div onMouseOver={this.onMenuListHover} onMouseLeave={this.onMenuListOut}
+            <div onMouseEnter={this.onMenuListHover} onMouseLeave={this.onMenuListOut}
               style={{marginLeft:"15px"}} className="hamburger-category-menu">
               <Icon type="menu"/>
               <span className="category-menu-text" >Danh Mục Sản Phẩm</span>

@@ -1,11 +1,27 @@
+const passport = require('passport');
+
 import product from './ProductCtrl'
 import category from './CategoryCtrl'
 import countryBrandAttribute from './CountryBrandAttributeCtrl'
+import auth from './AuthCtrl'
+import user from './UserCtrl'
 
 module.exports = (app) => {
 app.get('/api', (req, res) => res.status(200).send({
   message: 'Welcome to the PP!',
 }));
+
+app.post('/api/login', auth.login);
+
+
+
+app.post('/api/roles', user.createRole);
+app.get('/api/roles', user.getAllRoles);
+
+app.post('/api/users', user.registerUser);
+app.get('/api/users', user.getAllUsers);
+// this request is Protected by JWT Authentication
+app.get('/api/users/profile', passport.authenticate('jwt', {session: false}), user.getUserProfile);
 
 app.post('/api/countries', countryBrandAttribute.createCountry);
 app.get('/api/countries', countryBrandAttribute.getAllCountries);

@@ -8,7 +8,7 @@ import { actCategoryGet } from '../redux/CategoryActions';
 import AppDropdownMenu from './AppDropdownMenu'
 
 import './AppHeader.css';
-import { Layout, Menu, Dropdown, Icon, Input } from 'antd';
+import { Layout, Menu, Dropdown, Icon, Input, Popover } from 'antd';
 import { Row, Col, Button,Badge } from 'antd';
 const { Search } = Input;
 const Header = Layout.Header;
@@ -120,6 +120,46 @@ class AppHeader extends Component {
         </Menu>
       )
     }
+    renderPopoverUser() {
+      if (this.props.user.isLogined && this.props.user.userid) {
+        return (
+          <div style={{textAlign: "center", width: "200px"}}>
+            <Row>
+            <Link to={"/login"}>
+              <Button type="link" style={{width: "100%", marginBottom: "10px"}}>
+                <span style={{width: "100%", textAlign: "left"}}>
+                Profile
+                </span>
+              </Button></Link>
+            </Row>
+            <Row>
+            <Link to={"/login"}>
+              <Button type="link" style={{width: "100%", marginBottom: "10px"}}>
+                <span style={{width: "100%", textAlign: "left"}}>
+                Thong Tin
+                </span>
+              </Button>
+            </Link>
+            </Row>
+          </div>
+        )
+      } else {
+        return (
+          <div style={{textAlign: "center", width: "200px"}}>
+          <Row>
+          <Link to={"/login"}>
+            <Button type="primary" size="large" style={{width: "100%", marginBottom: "10px"}}>Đăng Nhập</Button>
+          </Link>
+          </Row>
+          <Row>
+          <Link to={"/register"}>
+            <Button type="primary" size="large" style={{width: "100%", marginBottom: "10px"}}>Đăng Ký Tài Khoản</Button>
+          </Link>
+          </Row>
+        </div>
+        );
+      }
+    }
     render() {
       let isHomePage = this.props.location.pathname == "/" ? true : false;
       this.isHomePage = isHomePage;
@@ -164,10 +204,14 @@ class AppHeader extends Component {
                 </Col>
                 <Col md={7} lg={7} xl={7} xxl={7}>
                 <div className="top-header-menu-item">
+                <Popover content={this.renderPopoverUser()} placement="bottom">
                   <Button type="link" ghost size="large">
                     <Icon type="user" style={{fontSize:"1.2em"}} className="show-only-in-md"/>
-                    <span className="hidden-in-md">Tai Khoan</span>
+                    <span className="hidden-in-md">
+                      {this.props.user.userid ? this.props.user.userid : "Tài Khoản"}
+                    </span>
                   </Button>
+                </Popover>
                 </div>
                 </Col>
 
@@ -210,7 +254,7 @@ class AppHeader extends Component {
 
 
 const mapStateToProps = (state) => ({
-  //user: state.user
+  user: state.user,
   category: state.category,
   cart: state.cart
 });

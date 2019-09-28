@@ -3,6 +3,8 @@ import { API_BASE_URL, POLL_LIST_SIZE, ACCESS_TOKEN } from '../constants';
 import axios from 'axios';
 import axiosDefaults from 'axios/lib/defaults';
 
+import AppContant from './AppConstant'
+
 require('dotenv').config()
 
 class Backend {
@@ -10,15 +12,41 @@ class Backend {
     }
     createHeader() {
         //if(Cookies.get('XSRF-TOKEN')) {
-        if (localStorage.getItem("xsrfToken")) {
+        if (localStorage.getItem(AppContant.LOCAL_CSRF_TOKEN)) {
             var headers = {
                             'Content-Type': 'application/json',
-                            'Authorization': 'X-XSRF-TOKEN ' + localStorage.getItem("xsrfToken")
+                            'Access-Control-Allow-Credentials':true,
+                            'Authorization': 'CSRF-TOKEN ' + localStorage.getItem(AppContant.LOCAL_CSRF_TOKEN)
+                        };
+        } else if (localStorage.getItem(AppContant.LOCAL_JWT_TOKEN)) {
+            var headers = {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Credentials':true,
+                            'Authorization': 'Bearer ' + localStorage.getItem(AppContant.LOCAL_JWT_TOKEN)
                         };
         } else {
-            var headers = {'Content-Type': 'application/json'};
+            var headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Credentials':true
+            };
         }
         return headers;
+    }
+
+    // USER---------------------------------------
+    login({username, password}, onOK, onError) {
+        axios.post("/login",
+            JSON.stringify({'username': username, 'password': password}),
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    getUserProfile(onOK, onError) {
+        axios.get("/users/profile",
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
     }
 
     getAllCategoriesName(onOK, onError) {

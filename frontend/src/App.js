@@ -10,6 +10,7 @@ import HomePage from './pages/home/HomePage'
 import ProductListPage from './pages/category/ProductListPage'
 import ProductDetailPage from './pages/product/ProductDetailPage'
 import CartPage from './pages/cart/CartPage'
+import Login from './pages/user/Login'
 
 // Redux stuff
 import { connect } from 'react-redux';
@@ -25,16 +26,19 @@ import PrivateRoute from './common/PrivateRoute';
 
 import { Layout, notification, Menu } from 'antd';
 import { Row, Col } from 'antd';
-require('dotenv').config()
+import {actUserGetProfile} from './redux/UserReducer'
 
+require('dotenv').config()
 const { Content, Header, Sider, Footer } = Layout;
 const {SubMenu} = Menu;
 
 // console.log("URL:" + process.env.API_URL)
 // TODO: WHy process.env not work
 axios.defaults.baseURL = "http://localhost:5000/api";
+// IMPORTANT: set this to send Cookie in request
+axios.defaults.withCredentials = true;
 
-//store.dispatch(actGetCurrentUser());
+store.dispatch(actUserGetProfile());
 
 class App extends Component {
   constructor(props) {
@@ -51,10 +55,10 @@ class App extends Component {
   }
 
   render() {
-    // if(this.props.user.isLoading) {
-    //   console.log("****** User is NOT READY");
-    //   return <LoadingIndicator />
-    // }
+    if(this.props.user.isLoading) {
+      console.log("****** User is NOT READY");
+      //return <LoadingIndicator />
+    }
     return (
         <Layout>
           <AppHeader />
@@ -66,6 +70,7 @@ class App extends Component {
                 <Route path="/category/:id" component={ProductListPage} />
                 <Route path="/product/:id" component={ProductDetailPage} />
                 <Route path="/cart" component={CartPage} />
+                <Route path="/login" component={Login} />
                 <Route component={NotFound}></Route>
               </Switch>
             </Content>
@@ -79,7 +84,7 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  //user: state.user
+  user: state.user
 });
 
 const mapActionsToProps = {

@@ -54,6 +54,11 @@ $ sequelize model:create --name DBAttributes --attributes name:string,value:stri
 productId, attributeId
 $ sequelize model:create --name DBProductAttributes --attributes productId:integer,attributeId:integer
 
+### Role
+$ sequelize model:create --name DBRoles --attributes rolename:string
+
+### User
+$ sequelize model:create --name DBUsers --attributes username:string,email:string,phone:string,password:string,passwordRaw:string,fullName:string,roleId:integer
 
 ## Using in Sequilize
 sequelize init
@@ -79,7 +84,12 @@ sequelize model:create --name TodoItem --attributes content:string,complete:bool
   sequelize model:generate                    Generates a model and its migration  [aliases: model:create]
   sequelize seed:generate                     Generates a new seed file            [aliases: seed:create]
 
-
+username: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true
+    },
+    
 # APIs
 
 

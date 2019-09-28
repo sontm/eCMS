@@ -6,8 +6,60 @@
 #sequelize model:create --name DBAttributes --attributes name:string,value:string,attributeGroupId:integer
 #sequelize model:create --name DBProductAttributes --attributes productId:integer,attributeId:integer
 
+#sequelize db:migrate:undo
 #sequelize db:migrate:undo:all
 #sequelize db:migrate
+
+# curl --request POST --url http://localhost:5000/api/roles --header 'content-type: application/json' \
+#   --data '{
+# 	"rolename": "admin"
+# }'
+# curl --request POST --url http://localhost:5000/api/roles --header 'content-type: application/json' \
+#   --data '{
+# 	"rolename": "customer"
+# }'
+# curl --request POST --url http://localhost:5000/api/roles --header 'content-type: application/json' \
+#   --data '{
+# 	"rolename": "editor"
+# }'
+# curl --request POST --url http://localhost:5000/api/roles --header 'content-type: application/json' \
+#   --data '{
+# 	"rolename": "supporter"
+# }'
+
+
+
+curl --request POST --url http://localhost:5000/api/users --header 'content-type: application/json' \
+  --data '{
+	"username": "admin",
+  "email": "admin",
+  "phone": "admin",
+  "password": "admin",
+  "passwordRaw": "admin",
+  "fullName": "PP Admin",
+  "roleId": 1
+}'
+curl --request POST --url http://localhost:5000/api/users --header 'content-type: application/json' \
+  --data '{
+	"username": "customer1",
+  "email": "customer1@gmail.com",
+  "phone": null,
+  "password": "customer1",
+  "passwordRaw": "customer1",
+  "fullName": "PP customer1",
+  "roleId": 2
+}'
+curl --request POST --url http://localhost:5000/api/users --header 'content-type: application/json' \
+  --data '{
+	"username": null,
+  "email": "customer2@gmail.com",
+  "phone": null,
+  "password": "customer2",
+  "passwordRaw": "customer2",
+  "fullName": "Customer2,Email Only",
+  "roleId": 2
+}'
+
 
 # curl --request POST --url http://localhost:5000/api/categories --header 'content-type: application/json' \
 #   --data '{
@@ -392,121 +444,121 @@
 
 ### ------------------Discount--------------------
 
-curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
-  --data '{
-	"desc": "Category Banh Mem giam gia 30% trong thang 9",
-    "from":"2019-09-01 23:42:06",
-    "to":"2019-09-30 23:42:06",
-    "type":"discount",
-    "fixMoney":0,
-    "percent":30,
-    "applyCategoryId":11,
-    "applyBrandId":0,
-    "applyProductId":0,
-    "img":""
-}'
+# curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+#   --data '{
+# 	"desc": "Category Banh Mem giam gia 30% trong thang 9",
+#     "from":"2019-09-01 23:42:06",
+#     "to":"2019-09-30 23:42:06",
+#     "type":"discount",
+#     "fixMoney":0,
+#     "percent":30,
+#     "applyCategoryId":11,
+#     "applyBrandId":0,
+#     "applyProductId":0,
+#     "img":""
+# }'
 
-curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
-  --data '{
-	"desc": "Banh Kindo Oreo duoc giam gia 20000",
-    "from":"2019-09-01 23:42:06",
-    "to":"2019-09-30 23:42:06",
-    "type":"discount",
-    "fixMoney":20000,
-    "percent":30,
-    "applyCategoryId":0,
-    "applyBrandId":0,
-    "applyProductId":3,
-    "img":""
-}'
+# curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+#   --data '{
+# 	"desc": "Banh Kindo Oreo duoc giam gia 20000",
+#     "from":"2019-09-01 23:42:06",
+#     "to":"2019-09-30 23:42:06",
+#     "type":"discount",
+#     "fixMoney":20000,
+#     "percent":30,
+#     "applyCategoryId":0,
+#     "applyBrandId":0,
+#     "applyProductId":3,
+#     "img":""
+# }'
 
-curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
-  --data '{
-	"desc": "Nhan Hieu Calbee have coupon JP20 giam 20K Het Thang 12",
-    "from":"2019-09-01 23:42:06",
-    "to":"2019-12-30 23:42:06",
-    "type":"coupon",
-    "fixMoney":20000,
-    "percent":0,
-    "applyCategoryId":0,
-    "applyBrandId":5,
-    "applyProductId":0,
-    "img":"",
-    "coupon":"JP20"
-}'
+# curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+#   --data '{
+# 	"desc": "Nhan Hieu Calbee have coupon JP20 giam 20K Het Thang 12",
+#     "from":"2019-09-01 23:42:06",
+#     "to":"2019-12-30 23:42:06",
+#     "type":"coupon",
+#     "fixMoney":20000,
+#     "percent":0,
+#     "applyCategoryId":0,
+#     "applyBrandId":5,
+#     "applyProductId":0,
+#     "img":"",
+#     "coupon":"JP20"
+# }'
 
-curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
-  --data '{
-	"desc": "Nhan Dip Trung thu, PP tang 5000 PP5",
-    "from":"2019-09-01 23:42:06",
-    "to":"2019-12-30 23:42:06",
-    "type":"coupon",
-    "fixMoney":5000,
-    "percent":0,
-    "applyCategoryId":0,
-    "applyBrandId":0,
-    "applyProductId":0,
-    "img":"",
-    "coupon":"PP5"
-}'
+# curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+#   --data '{
+# 	"desc": "Nhan Dip Trung thu, PP tang 5000 PP5",
+#     "from":"2019-09-01 23:42:06",
+#     "to":"2019-12-30 23:42:06",
+#     "type":"coupon",
+#     "fixMoney":5000,
+#     "percent":0,
+#     "applyCategoryId":0,
+#     "applyBrandId":0,
+#     "applyProductId":0,
+#     "img":"",
+#     "coupon":"PP5"
+# }'
 
-curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
-  --data '{
-	"desc": "Mua Bia TIger duoc tang them 1 Lon",
-    "from":"2019-09-01 23:42:06",
-    "to":"2019-09-15 23:42:06",
-    "type":"gift",
-    "fixMoney":0,
-    "percent":0,
-    "applyCategoryId":0,
-    "applyBrandId":0,
-    "applyProductId":6,
-    "img":"",
-    "coupon":""
-}'
+# curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+#   --data '{
+# 	"desc": "Mua Bia TIger duoc tang them 1 Lon",
+#     "from":"2019-09-01 23:42:06",
+#     "to":"2019-09-15 23:42:06",
+#     "type":"gift",
+#     "fixMoney":0,
+#     "percent":0,
+#     "applyCategoryId":0,
+#     "applyBrandId":0,
+#     "applyProductId":6,
+#     "img":"",
+#     "coupon":""
+# }'
 
-curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
-  --data '{
-	"desc": "Tang 1 Hop Sua khi mua Banh Mem FUlio",
-    "from":"2019-09-01 23:42:06",
-    "to":"2019-09-09 23:42:06",
-    "type":"gift",
-    "fixMoney":0,
-    "percent":0,
-    "applyCategoryId":0,
-    "applyBrandId":0,
-    "applyProductId":2,
-    "img":"",
-    "coupon":""
-}'
+# curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+#   --data '{
+# 	"desc": "Tang 1 Hop Sua khi mua Banh Mem FUlio",
+#     "from":"2019-09-01 23:42:06",
+#     "to":"2019-09-09 23:42:06",
+#     "type":"gift",
+#     "fixMoney":0,
+#     "percent":0,
+#     "applyCategoryId":0,
+#     "applyBrandId":0,
+#     "applyProductId":2,
+#     "img":"",
+#     "coupon":""
+# }'
 
 
-curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
-  --data '{
-	"desc": "Nhan Hieu Calbee Giam 10%",
-    "from":"2019-09-01 23:42:06",
-    "to":"2019-11-30 23:42:06",
-    "type":"discount",
-    "fixMoney":0,
-    "percent":10,
-    "applyCategoryId":0,
-    "applyBrandId":5,
-    "applyProductId":0,
-    "img":"",
-    "coupon":""
-}'
+# curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+#   --data '{
+# 	"desc": "Nhan Hieu Calbee Giam 10%",
+#     "from":"2019-09-01 23:42:06",
+#     "to":"2019-11-30 23:42:06",
+#     "type":"discount",
+#     "fixMoney":0,
+#     "percent":10,
+#     "applyCategoryId":0,
+#     "applyBrandId":5,
+#     "applyProductId":0,
+#     "img":"",
+#     "coupon":""
+# }'
 
-curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
-  --data '{
-	"desc": "Tang 1 Goi Milo",
-    "from":"2019-09-01 23:42:06",
-    "to":"2019-10-30 23:42:06",
-    "type":"gift",
-    "fixMoney":0,
-    "percent":0,
-    "applyCategoryId":0,
-    "applyBrandId":0,
-    "applyProductId":1,
-    "img":"",
-    "coupon":""
-}'
+# curl --request POST --url http://localhost:5000/api/discounts --header 'content-type: application/json' \
+#   --data '{
+# 	"desc": "Tang 1 Goi Milo",
+#     "from":"2019-09-01 23:42:06",
+#     "to":"2019-10-30 23:42:06",
+#     "type":"gift",
+#     "fixMoney":0,
+#     "percent":0,
+#     "applyCategoryId":0,
+#     "applyBrandId":0,
+#     "applyProductId":1,
+#     "img":"",
+#     "coupon":""
+# }'

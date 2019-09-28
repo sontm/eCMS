@@ -1,5 +1,7 @@
 const LOCAL_RECENT_VIEWED = "LOCAL_RECENT_VIEWED";
 const LOCAL_CART_ADDED = "LOCAL_CART_ADDED";
+const LOCAL_JWT_TOKEN = "LOCAL_JWT_TOKEN";
+const LOCAL_CSRF_TOKEN = "LOCAL_CSRF_TOKEN";
 
 export default class AppConstants  {
     static get LOCAL_RECENT_VIEWED() {
@@ -7,6 +9,12 @@ export default class AppConstants  {
     }
     static get LOCAL_CART_ADDED() {
         return LOCAL_CART_ADDED;
+    }
+    static get LOCAL_JWT_TOKEN() {
+        return LOCAL_JWT_TOKEN;
+    }
+    static get LOCAL_CSRF_TOKEN() {
+        return LOCAL_CSRF_TOKEN;
     }
 
     static addProductToRecentView(id) {

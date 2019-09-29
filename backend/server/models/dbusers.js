@@ -27,6 +27,19 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'roleId',
       as: 'role'
     });
+
+    DBUsers.belongsToMany(models.DBProducts, {
+      through: 'DBRecentViews',
+      foreignKey: 'userId',
+      otherKey: 'productId',
+      as: 'recentViews'
+    });
+    DBUsers.belongsToMany(models.DBProducts, {
+      through: 'DBFavorites',
+      foreignKey: 'userId',
+      otherKey: 'productId',
+      as: 'favorites'
+    });
   };
   return DBUsers;
 };

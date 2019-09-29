@@ -138,7 +138,7 @@ class AppHeader extends Component {
       )
     }
     renderPopoverUser() {
-      if (this.props.user.isLogined && this.props.user.userProfile && this.props.user.userProfile.userId) {
+      if (this.props.user.isLogined && this.props.user.userProfile && this.props.user.userProfile.id) {
         return (
           <div style={{textAlign: "center", width: "200px"}}>
             <Row>

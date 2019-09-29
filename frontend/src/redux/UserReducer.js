@@ -10,12 +10,19 @@ const USER_PROFILE_START = 'USER_PROFILE_START';
 const USER_PROFILE_OK = 'USER_PROFILE_OK';
 const USER_PROFILE_ERR = 'USER_PROFILE_ERR';
 
+const USER_GET_RECENTVIEWS = 'USER_GET_RECENTVIEWS';
+const USER_GET_FAVORITES = 'USER_GET_FAVORITES';
+
 const USER_LOGOUT= 'USER_LOGOUT';
 
+// userProfile
+    // id, userId, email,phone,fullName,pictureUrl,userType(local, facebook, google),accessToken
 const initialState = {
     isLogined: false,
     isLoading: false,
-    userProfile: null
+    userProfile: null,
+    recentViews:[],
+    favorites: []
 };
 
 export const actUserLogout = () => (dispatch) => {
@@ -103,6 +110,61 @@ export const actUserGetProfile = () => (dispatch) => {
 }
 
 
+export const actUserAddRecentViews = (userId, productId) => (dispatch) => {
+    console.log("  actUserAddRecentViews:" + userId + ",productId:" + productId)
+    Backend.addUserRecentViews(userId, productId,
+        response => {
+            console.log("actUserAddRecentViews Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+        },
+        error => {
+            console.log("actUserAddRecentViews error")
+        }); 
+}
+export const actUserGetRecentViews = (userId) => (dispatch) => {
+    console.log("  actUserGetRecentViews")
+    Backend.getUserRecentViews(userId,
+        response => {
+            console.log("actUserGetRecentViews Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+            dispatch({
+                type: USER_GET_RECENTVIEWS,
+                payload:  response.data
+            });
+        },
+        error => {
+            console.log("actUserGetProfile error")
+        }); 
+}
+
+
+
+export const actUserAddFavorites = (userId, productId) => (dispatch) => {
+    console.log("  actUserAddFavorites:" + userId + ",productId:" + productId)
+    Backend.addUserFavorites(userId, productId,
+        response => {
+            console.log("actUserAddFavorites Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+        },
+        error => {
+            console.log("actUserAddFavorites error")
+        }); 
+}
+export const actUserGetFavorites = (userId) => (dispatch) => {
+    console.log("  actUserGetFavorites")
+    Backend.getUserFavorites(userId,
+        response => {
+            console.log("actUserGetFavorites Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+            dispatch({
+                type: USER_GET_FAVORITES,
+                payload:  response.data
+            });
+        },
+        error => {
+            console.log("actUserGetFavorites error")
+        }); 
+}
 // Note, in this Reducer, cannot Access state.user
 export default function(state = initialState, action) {
     switch (action.type) {
@@ -114,27 +176,42 @@ export default function(state = initialState, action) {
         };
     case USER_LOGIN_OK:
         return {
+            ...state,
             isLogined: true,
             isLoading: false,
             userProfile: action.payload.user
         };
     case USER_PROFILE_OK:
         return {
+            ...state,
             isLogined: true,
             isLoading: false,
             userProfile: action.payload
         };
     case USER_PROFILE_ERR:
         return {
+            ...state,
             isLogined: false,
             isLoading: false,
             userProfile: null
         }
     case USER_LOGOUT:
         return {
+            ...state,
             isLogined: false,
             isLoading: false,
             userProfile: null
+        }
+    
+    case USER_GET_RECENTVIEWS:
+        return {
+            ...state,
+            recentViews: action.payload
+        }
+    case USER_GET_FAVORITES:
+        return {
+            ...state,
+            favorites: action.payload
         }
     default:
         return state;

@@ -9,6 +9,7 @@ import ReactImageMagnify from 'react-image-magnify';
 
 import { actProductGetDetail } from '../../redux/ProductActions';
 import {actCartAddToCart} from '../../redux/CartReducer'
+import {actUserAddRecentViews, actUserAddFavorites} from '../../redux/UserReducer'
 import helpers from '../../util/Helpers';
 import { breakLineCRLF } from '../../util/Helpers';
 import AppTouchSpin from '../../common/AppTouchSpin'
@@ -68,7 +69,11 @@ class ProductDetailPage extends Component {
         this.prevProductDetail = null;
     }
     onAddToFav(e) {
-
+        if (this.props.user.isLogined) {
+            this.props.actUserAddFavorites(this.props.user.userProfile.id, this.props.match.params.id);
+        } else {
+            // TODO, Force to Login ???
+        }
     }
     onAddToCart(e) {
         console.log("onAddToCart:" + this.props.name)
@@ -86,7 +91,11 @@ class ProductDetailPage extends Component {
     componentDidMount() {
         console.log("  >>DID MOUNT ProductDetailPage:" + this.props.match.params.id)
         this.props.actProductGetDetail(this.props.match.params.id);
-        AppConstant.addProductToRecentView(this.props.match.params.id);
+        if (this.props.user.isLogined) {
+            this.props.actUserAddRecentViews(this.props.user.userProfile.id, this.props.match.params.id);
+        } else {
+            AppConstant.addProductToRecentView(this.props.match.params.id);
+        }
     }
     componentDidUpdate() {
         // When have just Receive Product Detail
@@ -298,13 +307,15 @@ class ProductDetailPage extends Component {
 
 
 const mapStateToProps = (state) => ({
-    //user: state.user
+    user: state.user,
     category: state.category,
     product: state.product
   });
   const mapActionsToProps = {
     actProductGetDetail,
-    actCartAddToCart
+    actCartAddToCart,
+    actUserAddRecentViews,
+    actUserAddFavorites
   };
   
   export default withRouter(connect(

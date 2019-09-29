@@ -60,6 +60,15 @@ $ sequelize model:create --name DBRoles --attributes rolename:string
 ### User, can be use for FB and Google also
 $ sequelize model:create --name DBUsers --attributes userId:string,email:string,phone:string,password:string,fullName:string,pictureUrl:string,accessToken:string,userType:string,roleId:integer
 
+
+### Cart (Lightweight cart, for simialr as LocalStorage)
+$ sequelize model:create --name DBCarts --attributes userId:string,productId:integer,quantity:smallint
+### RecentViews
+$ sequelize model:create --name DBRecentViews --attributes userId:integer,productId:integer
+### Favorites
+$ sequelize model:create --name DBFavorites --attributes userId:string,productId:integer
+
+
 ## Using in Sequilize
 sequelize init
 sequelize model:create --name TodoItem --attributes content:string,complete:boolean

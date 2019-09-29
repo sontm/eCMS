@@ -5,6 +5,7 @@ class AppUtils {
         //  accessToken:string,userType:string,roleId:integer
         if (userRecord) {
             let result = {
+                'id': userRecord.id,
                 'userId': userRecord.userId,
                 'email': userRecord.email,
                 'phone': userRecord.phone,

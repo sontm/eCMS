@@ -57,6 +57,37 @@ class Backend {
             .then((response) => {onOK(response);})
             .catch((error) => {onError(error);});
     }
+    // Recent Views, Favorite, Cart---------------------------------------
+    addUserRecentViews(userId, productId, onOK, onError) {
+        axios.post("/users/recentViews",
+            JSON.stringify({'userId': userId, 'productId': productId}),
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    getUserRecentViews(userId, onOK, onError) {
+        axios.get("/users/recentViews/" + userId,
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+
+    addUserFavorites(userId, productId, onOK, onError) {
+        axios.post("/users/favorites",
+            JSON.stringify({'userId': userId, 'productId': productId}),
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    getUserFavorites(userId, onOK, onError) {
+        axios.get("/users/favorites/" + userId,
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+
     // Category---------------------------------------
     getAllCategoriesName(onOK, onError) {
         axios.get("/categories",

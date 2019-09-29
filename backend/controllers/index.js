@@ -5,6 +5,7 @@ import category from './CategoryCtrl'
 import countryBrandAttribute from './CountryBrandAttributeCtrl'
 import auth from './AuthCtrl'
 import user from './UserCtrl'
+import userNproduct from './UserNProductCtrl'
 
 module.exports = (app) => {
 app.get('/api', (req, res) => res.status(200).send({
@@ -53,6 +54,8 @@ app.get('/api/categories', category.getAll); // Get category List only
 app.get('/api/categoriesFull', category.getAllWithProduct);
 app.get('/api/categoriesFull/:id', category.getOneWithProduct);
 
-
-
+app.post('/api/users/recentViews', userNproduct.addUserRecentViews);
+app.get('/api/users/recentViews/:userId', userNproduct.getRecentViewsOfUser);
+app.post('/api/users/favorites', userNproduct.addUserFavorite);
+app.get('/api/users/favorites/:userId', userNproduct.getFavoritesOfUser);
 };

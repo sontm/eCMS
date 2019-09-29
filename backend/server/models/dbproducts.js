@@ -42,6 +42,22 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'applyProductId',
       as: 'productDiscounts', // Must Have
     });
+
+    // Recent Views
+    DBProducts.belongsToMany(models.DBUsers, {
+      through: 'DBRecentViews',
+      foreignKey: 'productId',
+      otherKey: 'userId',
+      as: 'recentViews'
+    });
+
+    // Favorites of User
+    DBProducts.belongsToMany(models.DBUsers, {
+      through: 'DBFavorites',
+      foreignKey: 'productId',
+      otherKey: 'userId',
+      as: 'favorites'
+    });
   };
   return DBProducts;
 };

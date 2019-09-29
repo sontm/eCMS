@@ -31,8 +31,6 @@ export default class AppDropdownMenu extends Component {
     }
     render = () => {
       // If homepage, this.props.location.pathname is "/"
-      console.log(this.props.isHomePage)
-
         let {config} = this.props;
         let parentMenus = [];
         for (var prop in config) {
@@ -40,7 +38,7 @@ export default class AppDropdownMenu extends Component {
             // do stuff
             parentMenus.push(
                 <li onMouseOver={this.props.onParentMenuHover} onMouseLeave={this.props.onParentMenuOut}
-                    onClick={this.onClickParentMenuItem}
+                    onClick={this.onClickParentMenuItem} key={config["" +prop].id}
                   className={this.props.hoveredParent == prop ? "parent-menu-li-hovering" : ""}>
                   <Link to={"/category/" + config["" +prop].id + "?lvl=3"}>
                     <Icon type="account-book" /> {prop}

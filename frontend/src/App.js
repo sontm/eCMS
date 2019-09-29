@@ -10,6 +10,8 @@ import HomePage from './pages/home/HomePage'
 import ProductListPage from './pages/category/ProductListPage'
 import ProductDetailPage from './pages/product/ProductDetailPage'
 import CartPage from './pages/cart/CartPage'
+
+import CustomerPage from './pages/user/CustomerPage'
 import Login from './pages/user/Login'
 
 // Redux stuff
@@ -27,14 +29,14 @@ import PrivateRoute from './common/PrivateRoute';
 import { Layout, notification, Menu } from 'antd';
 import { Row, Col } from 'antd';
 import {actUserGetProfile} from './redux/UserReducer'
-
 require('dotenv').config()
+
 const { Content, Header, Sider, Footer } = Layout;
 const {SubMenu} = Menu;
 
-// console.log("URL:" + process.env.API_URL)
-// TODO: WHy process.env not work
-axios.defaults.baseURL = "http://localhost:5000/api";
+// Using env or any variable need have previx REACT_APP_
+console.log("APIURL:" + process.env.REACT_APP_API_URL)
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 // IMPORTANT: set this to send Cookie in request
 axios.defaults.withCredentials = true;
 
@@ -71,6 +73,7 @@ class App extends Component {
                 <Route path="/product/:id" component={ProductDetailPage} />
                 <Route path="/cart" component={CartPage} />
                 <Route path="/login" component={Login} />
+                <Route path="/customer/:info" component={CustomerPage} />
                 <Route component={NotFound}></Route>
               </Switch>
             </Content>

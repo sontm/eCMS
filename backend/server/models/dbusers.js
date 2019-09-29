@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const DBUsers = sequelize.define('DBUsers', {
-    username: {
+    userId: {
       type: DataTypes.STRING,
       allowNull: true,
       unique: true
@@ -15,8 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     password: DataTypes.STRING,
-    passwordRaw: DataTypes.STRING,
     fullName: DataTypes.STRING,
+    pictureUrl: DataTypes.STRING,
+    accessToken: DataTypes.STRING,
+    userType: DataTypes.STRING, // local, facebook, google
     roleId: DataTypes.INTEGER
   }, {});
   DBUsers.associate = function(models) {

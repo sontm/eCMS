@@ -1,10 +1,15 @@
+import AppUtil from '../components/AppUtil'
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require("passport-jwt");
 const JWTStrategy   = passportJWT.Strategy;
+const FacebookStrategy  =     require('passport-facebook').Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 const bcrypt = require('bcrypt')
 const uuidv4 = require('uuid/v4');
+
+const configFbAuth = require('../server/config/config-facebook-auth')
 
 const DBUsers = require('../server/models').DBUsers;
 const DBRoles = require('../server/models').DBRoles;
@@ -21,7 +26,7 @@ passport.use(new LocalStrategy({
         return DBUsers
             .findOne({
                 where: {
-                    'username': username,
+                    'userId': username,
                     [Op.or]: {
                         'email': username
                       }
@@ -31,17 +36,18 @@ passport.use(new LocalStrategy({
                     as: 'role',
                 }]
             })
-            .then(user => {
-                if (user) {
-                    console.log("    AppPassport Local Found User, checking PWD, raw:" + password + ",db:" + user.password)
+            .then(result => {
+                if (result) {
+                    console.log("    AppPassport Local Found User, checking PWD, raw:" + password + ",db:" + result.password)
                     // Found user with this user name, check Password
-                    bcrypt.compare(password, user.password)
+                    bcrypt.compare(password, result.password)
                     .then(isMatch => {
                         if (isMatch) {
                             console.log("      AppPassport Local PWD MATCHED")
                             // Match Username and Password
-                            if (user && user.role && user.role.rolename) {
-                                return done(null, {"id":user.username, "role": user.role.rolename}, 
+                            if (result) {
+                                let user = AppUtil.createUserFromRecordForJWT(result)
+                                return done(null, user, 
                                     {message: 'Logged In Successfully'});
                             } else {
                                 return done(null, false, {message: 'Incorrect User Role'});

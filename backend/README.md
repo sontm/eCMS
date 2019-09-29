@@ -57,8 +57,8 @@ $ sequelize model:create --name DBProductAttributes --attributes productId:integ
 ### Role
 $ sequelize model:create --name DBRoles --attributes rolename:string
 
-### User
-$ sequelize model:create --name DBUsers --attributes username:string,email:string,phone:string,password:string,passwordRaw:string,fullName:string,roleId:integer
+### User, can be use for FB and Google also
+$ sequelize model:create --name DBUsers --attributes userId:string,email:string,phone:string,password:string,fullName:string,pictureUrl:string,accessToken:string,userType:string,roleId:integer
 
 ## Using in Sequilize
 sequelize init

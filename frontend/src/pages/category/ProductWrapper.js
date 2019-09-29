@@ -35,11 +35,11 @@ class ProductWrapper extends Component {
             discounts.forEach(d => {
                 if (d.type == "coupon") {
                     resultViewCoupon.push(
-                        <li>{d.desc}</li>
+                        <li key={d.id}>{d.desc}</li>
                     )
                 } else if (d.type == "gift") {
                     resultViewGift.push(
-                        <li>{d.desc}</li>
+                        <li key={d.id}>{d.desc}</li>
                     )
                 }
             })
@@ -53,7 +53,6 @@ class ProductWrapper extends Component {
     render() {
         //{bestDiscount: 23, unit:"%|d", newPrice: 12, hasGift:true, coupon: null|"JP20", bestCoupon:"", couponUnit:"%|K",discounts[]}
         let discountInfo = helpers.parseDiscountInformation(this.props.product);
-        console.log(discountInfo)
         return (
             <Card className="product-wrapper" onClick={this.onClickProductDetail}>
                 {discountInfo.hasGift ? (

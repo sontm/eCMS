@@ -31,12 +31,12 @@
 
 curl --request POST --url http://localhost:5000/api/users --header 'content-type: application/json' \
   --data '{
-	"username": "admin",
+	"userId": "admin",
   "email": "admin",
   "phone": "admin",
   "password": "admin",
-  "passwordRaw": "admin",
   "fullName": "PP Admin",
+  "userType": "local",
   "roleId": 1
 }'
 curl --request POST --url http://localhost:5000/api/users --header 'content-type: application/json' \
@@ -45,8 +45,8 @@ curl --request POST --url http://localhost:5000/api/users --header 'content-type
   "email": "customer1@gmail.com",
   "phone": null,
   "password": "customer1",
-  "passwordRaw": "customer1",
   "fullName": "PP customer1",
+  "userType": "local",
   "roleId": 2
 }'
 curl --request POST --url http://localhost:5000/api/users --header 'content-type: application/json' \
@@ -55,8 +55,8 @@ curl --request POST --url http://localhost:5000/api/users --header 'content-type
   "email": "customer2@gmail.com",
   "phone": null,
   "password": "customer2",
-  "passwordRaw": "customer2",
   "fullName": "Customer2,Email Only",
+  "userType": "local",
   "roleId": 2
 }'
 

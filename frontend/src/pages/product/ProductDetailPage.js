@@ -189,7 +189,7 @@ class ProductDetailPage extends Component {
                             />
                     </Col>
                     <Col span={8}>
-                        <div onClick={this.onClickProductDetail}>
+                        <div onClick={this.onClickProductDetail} style={{paddingRight:"30px"}}>
                         <ReactImageMagnify {...{
                             smallImage: {
                                 alt: 'SmallImage',

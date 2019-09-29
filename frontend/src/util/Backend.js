@@ -18,12 +18,6 @@ class Backend {
                             'Access-Control-Allow-Credentials':true,
                             'Authorization': 'CSRF-TOKEN ' + localStorage.getItem(AppContant.LOCAL_CSRF_TOKEN)
                         };
-        } else if (localStorage.getItem(AppContant.LOCAL_JWT_TOKEN)) {
-            var headers = {
-                            'Content-Type': 'application/json',
-                            'Access-Control-Allow-Credentials':true,
-                            'Authorization': 'Bearer ' + localStorage.getItem(AppContant.LOCAL_JWT_TOKEN)
-                        };
         } else {
             var headers = {
                 'Content-Type': 'application/json',
@@ -42,13 +36,28 @@ class Backend {
             .then((response) => {onOK(response);})
             .catch((error) => {onError(error);});
     }
+    addLoginWithFacebook(values, onOK, onError) {
+        axios.post("/login/facebook",
+            JSON.stringify(values),
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    addLoginWithGoogle(values, onOK, onError) {
+        axios.post("/login/google",
+            JSON.stringify(values),
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+
     getUserProfile(onOK, onError) {
         axios.get("/users/profile",
             { headers: this.createHeader()})
             .then((response) => {onOK(response);})
             .catch((error) => {onError(error);});
     }
-
+    // Category---------------------------------------
     getAllCategoriesName(onOK, onError) {
         axios.get("/categories",
             { headers: this.createHeader()})

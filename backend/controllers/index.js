@@ -12,6 +12,8 @@ app.get('/api', (req, res) => res.status(200).send({
 }));
 
 app.post('/api/login', auth.login);
+app.post('/api/login/facebook', user.registerFacebookLogin);
+app.post('/api/login/google', user.registerGoogleLogin);
 
 
 
@@ -50,5 +52,7 @@ app.get('/api/categories', category.getAll); // Get category List only
 
 app.get('/api/categoriesFull', category.getAllWithProduct);
 app.get('/api/categoriesFull/:id', category.getOneWithProduct);
+
+
 
 };

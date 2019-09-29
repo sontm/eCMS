@@ -17,7 +17,6 @@ class RecentViewHome extends Component {
         }
     }
     render() {
-        console.log(AppContant.getProductRecentView());
         if (this.props.home.recentViews && this.props.home.recentViews.length > 0) {
             let producView = [];
             this.props.home.recentViews.forEach(element => {
@@ -25,7 +24,7 @@ class RecentViewHome extends Component {
                 if (element) {
                     // Force use 5 Columns here
                     producView.push(
-                        <Col xs={8} sm={8} md={8} lg={6} xl={4} xxl={4} style={{width:"20%"}}>
+                        <Col xs={8} sm={8} md={8} lg={6} xl={4} xxl={4} style={{width:"20%"}} key={element.id}>
                             <ProductWrapper product={element}/>
                         </Col>)
                 }

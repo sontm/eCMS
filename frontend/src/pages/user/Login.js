@@ -9,6 +9,7 @@ import { actUserLogin } from '../../redux/UserReducer';
 import { Form, Input, Button, Icon, notification } from 'antd';
 const FormItem = Form.Item;
 
+
 class Login extends Component {
     render() {
         const AntWrappedLoginForm = Form.create()(LoginForm)

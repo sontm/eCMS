@@ -4,15 +4,25 @@ import {
     withRouter
 } from 'react-router-dom';
 import { connect } from 'react-redux';
+
+import FacebookLogin from 'react-facebook-login';
+import { GoogleLogin } from 'react-google-login';
+
 import { actCategoryGet } from '../redux/CategoryActions';
+import {actUserAddLoginWithFaceBook, actUserAddLoginWithGoogle, actUserLogout} from '../redux/UserReducer'
 import AppDropdownMenu from './AppDropdownMenu'
 
 import './AppHeader.css';
 import { Layout, Menu, Dropdown, Icon, Input, Popover } from 'antd';
 import { Row, Col, Button,Badge } from 'antd';
+
+require('dotenv').config()
+
 const { Search } = Input;
 const Header = Layout.Header;
 const {SubMenu} = Menu;
+
+
 
 class AppHeader extends Component {
     constructor(props) {
@@ -27,8 +37,15 @@ class AppHeader extends Component {
         this.onMenuContainerOut = this.onMenuContainerOut.bind(this); 
         this.onParentMenuClick = this.onParentMenuClick.bind(this); 
         
-    }
+        this.facebookResponse = this.facebookResponse.bind(this)
+        this.googleResponse = this.googleResponse.bind(this)
 
+        this.handleLogout = this.handleLogout.bind(this)
+    }
+    handleLogout() {
+      console.log(" USER handleLogout")
+      this.props.actUserLogout();
+    }
     // WHen mouse over DanhMucSanPham
     onMenuListHover() {
       if (!this.isHomePage) {
@@ -121,25 +138,60 @@ class AppHeader extends Component {
       )
     }
     renderPopoverUser() {
-      if (this.props.user.isLogined && this.props.user.userid) {
+      if (this.props.user.isLogined && this.props.user.userProfile && this.props.user.userProfile.userId) {
         return (
           <div style={{textAlign: "center", width: "200px"}}>
             <Row>
-            <Link to={"/login"}>
+            <Link to={"/customer/orders"}>
               <Button type="link" style={{width: "100%", marginBottom: "10px"}}>
                 <span style={{width: "100%", textAlign: "left"}}>
-                Profile
+                Đơn Hàng Của Tôi
                 </span>
               </Button></Link>
             </Row>
             <Row>
-            <Link to={"/login"}>
+            <Link to={"/customer/profile"}>
               <Button type="link" style={{width: "100%", marginBottom: "10px"}}>
                 <span style={{width: "100%", textAlign: "left"}}>
-                Thong Tin
+                Tài Khoản
                 </span>
               </Button>
             </Link>
+            </Row>
+            <Row>
+            <Link to={"/customer/addressbook"}>
+              <Button type="link" style={{width: "100%", marginBottom: "10px"}}>
+                <span style={{width: "100%", textAlign: "left"}}>
+                Địa Chỉ
+                </span>
+              </Button>
+            </Link>
+            </Row>
+            <Row>
+            <Link to={"/customer/favorites"}>
+              <Button type="link" style={{width: "100%", marginBottom: "10px"}}>
+                <span style={{width: "100%", textAlign: "left"}}>
+                Sản Phẩm Yêu Thích
+                </span>
+              </Button>
+            </Link>
+            </Row>
+            <Row>
+            <Link to={"/customer/recentviews"}>
+              <Button type="link" style={{width: "100%", marginBottom: "10px"}}>
+                <span style={{width: "100%", textAlign: "left"}}>
+                Sản Phẩm Xem Gần Đây
+                </span>
+              </Button>
+            </Link>
+            </Row>
+
+            <Row>
+              <Button type="link" style={{width: "100%", marginBottom: "10px"}} onClick={this.handleLogout}>
+                <span style={{width: "100%", textAlign: "left"}}>
+                Đăng Xuất
+                </span>
+              </Button>
             </Row>
           </div>
         )
@@ -155,6 +207,23 @@ class AppHeader extends Component {
           <Link to={"/register"}>
             <Button type="primary" size="large" style={{width: "100%", marginBottom: "10px"}}>Đăng Ký Tài Khoản</Button>
           </Link>
+
+          <Row>
+            <FacebookLogin
+              appId={process.env.REACT_APP_FB_APPID}
+              autoLoad={false}
+              fields="name,email,picture"
+              callback={this.facebookResponse} />
+          </Row>
+
+          <Row>
+            <GoogleLogin
+                clientId={process.env.REACT_APP_GOOGLE_CLIENTID}
+                buttonText="Login With Google"
+                onSuccess={this.googleResponse}
+                onFailure={this.onGoogleFailure}
+            />
+          </Row>
           </Row>
         </div>
         );
@@ -208,7 +277,7 @@ class AppHeader extends Component {
                   <Button type="link" ghost size="large">
                     <Icon type="user" style={{fontSize:"1.2em"}} className="show-only-in-md"/>
                     <span className="hidden-in-md">
-                      {this.props.user.userid ? this.props.user.userid : "Tài Khoản"}
+                      {this.props.user.userProfile ? this.props.user.userProfile.fullName : "Tài Khoản"}
                     </span>
                   </Button>
                 </Popover>
@@ -250,6 +319,81 @@ class AppHeader extends Component {
         </React.Fragment>
       );
     }
+
+    // accessToken: "EAAF5BlgorvYBAAAFQbZBQpmZAWC0Q6ZCTPHo8fr8H8PrpcjsEZCkG46yp6WDT9UFVO2nVHLyFcViPaU15N3XUx6XH2g0vUkHGvVSeSXKIZCy9Vegi9MUZBaQ2zIzLv4Drb3wfrcVbzRKSQJlC8lzw4tqxZBsEsQpjEcwZAKAUr4lVXZCMsXONGFjIyZCy8gKZCZA84ZCak2hS8xGk7aad1ZBVtAbgN6PXjFgpx9zcZD"
+    // data_access_expiration_time: 1577460547
+    // email: "son.tranminh.vn@gmail.com"
+    // expiresIn: 5452
+    // id: "2591119204279824"
+    // name: "Son Tran Minh"
+    // picture: {data: {…}}
+    // signedRequest: "0ycLAlPXDnc8ayYtMcpC1S6zAd9mzUhFCYZDKMxuyAA.eyJ1c2VyX2lkIjoiMjU5MTExOTIwNDI3OTgyNCIsImNvZGUiOiJBUUJXMlNnZ3Z6bkpOU3RzbUN6OVcyTzV3TWpUX0NLWmpwU3NUa2FMNnRmTFNVbjgtTEl4MU11Tld0cDFzcTlkRVpJUDNZVkVxNDZSQ1pWM2N0YU9SMktqLWtvWUxjaWU4ZzJyUjJIanhMTXZhZjZYZXhQNjRPUVlvSWM5eVNMWWlrejhjMklGS3NvdjRveld1d3FrRlRNWGJLMTRPOG55RXhrek9ad051Q1BlTTFZWjlNUm5DdjJieV9ydzRYRGR3Ym5qNU85eV9WM1NmdHNuUE12MmxianZBLWpSMjdSWk5GRGE5SmJVZ1FhWEJqb242c1hfM0N5d3JsaS16U3JIVUU0TFVnTDNzdHB2LXBaSGZSd1Bubjc0NXhfUDNFTmVzdm1wUEdqS3IwZkZqS3RBeVVYdnM2eEJHZTN2cVFjSEU3UEx2QWRmcVZFREN1Q1AzTXlEeFFndzR6OFp4YVdyT2k3VG5icTQ2Q3d2U1lXZzBhYldRN1J5cEdkMnFEUWN4aXMiLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTU2OTY4NDU0OH0"
+    // userID: "2591119204279824"
+    facebookResponse = (response) => {
+      console.log("facebookResponse")
+      console.log(response)
+      this.props.actUserAddLoginWithFaceBook({
+        userId: response.id ? response.id : response.userID,
+        email: response.email,
+        phone: null,
+        password: null,
+        fullName: response.name,
+        pictureUrl: response.picture.data.url, // TODO
+        accessToken: response.accessToken,
+        userType: "facebook",
+        roleId: 2 // Customer
+      }, this.props.history);
+    };
+
+    // El: "100647700980982997517"
+    // accessToken: "ya29.Il-RBwQ9KgB4CxJ4f9qeAaPM5OK2XZzNDxLyKSx6St0j_mg7QZwTGlNT3vMsI-eTlAdLGNSjf_x7tS1jCizh761O_FxtE0CPjuUvoNqcvQD0zkN8rlBP0gSDwYiVppj87g"
+    // googleId: "100647700980982997517"
+    // tokenId: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjhjNThlMTM4NjE0YmQ1ODc0MjE3MmJkNTA4MGQxOTdkMmIyZGQyZjMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODUzMDc1Mzc2ODk2LTZnMDhhbXBrY2RnbDBhMGoyZ3M0dW02a2tkMGRmMGNjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODUzMDc1Mzc2ODk2LTZnMDhhbXBrY2RnbDBhMGoyZ3M0dW02a2tkMGRmMGNjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAwNjQ3NzAwOTgwOTgyOTk3NTE3IiwiZW1haWwiOiJzb250bS51ZXQudm51QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiR2JHeXVVMFZ6Ri1JcTNPbnJsZElGUSIsIm5hbWUiOiJTb24gVHJhbiBtaW5oIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hLS9BQXVFN21BNERGX3NxMnMzYXlDNXdUS1cwZnV0OXJsVXVKdXU1cFJGNU5hV193PXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IlNvbiIsImZhbWlseV9uYW1lIjoiVHJhbiBtaW5oIiwibG9jYWxlIjoiZW4iLCJpYXQiOjE1Njk2ODkyODIsImV4cCI6MTU2OTY5Mjg4MiwianRpIjoiYjhhNmVmZjNkNGVjZjMyMDllODRhZjBkN2IwZWMzYzQ4NzMwYmYxOSJ9.AMOhTSZACE8dkK5mRC-UZ1CajCW2mXWw4XjTl5-fJ8caHarndoQo-nHH8pwfk9k4lPmoQp78PmzJs_sdn5JUuYGa1JJMGoWemxt2Qw1q6gjgKupIO2nlH2f6NVhWRepAxdeiTHxqMqrjQ_iiulPyoYOizd2v44NvGCnKVMvAktWiKzuFMILdnMS008Xl7RWd6ZeLXf2yHsLXjA1xyik91CVmCY5g64i5A2dtv7GexUGJYvLTvbUpwsrKnIaDy4Ck4UmzERXW2y-aBov1O2xpW4XNk_yoVhOXvc6MVHnpNiNvn-00E163yuzgwgfeQ_IsZO4_XgQd1stgsV505XbWbQ"
+    //----Profile Obj
+        // email: "sontm.uet.vnu@gmail.com"
+        // familyName: "Tran minh"
+        // givenName: "Son"
+        // googleId: "100647700980982997517"
+        // imageUrl: "https://lh3.googleusercontent.com/a-/AAuE7mA4DF_sq2s3ayC5wTKW0fut9rlUuJuu5pRF5NaW_w=s96-c"
+        // name: "Son Tran minh"
+    // Decode Token ID token ----https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=
+        // "iss": "accounts.google.com",
+        // "azp": "853075376896-6g08ampkcdgl0a0j2gs4um6kkd0df0cc.apps.googleusercontent.com",
+        // "aud": "853075376896-6g08ampkcdgl0a0j2gs4um6kkd0df0cc.apps.googleusercontent.com",
+        // "sub": "100647700980982997517",
+        // "email": "sontm.uet.vnu@gmail.com",
+        // "email_verified": "true",
+        // "at_hash": "GbGyuU0VzF-Iq3OnrldIFQ",
+        // "name": "Son Tran minh",
+        // "picture": "https://lh3.googleusercontent.com/a-/AAuE7mA4DF_sq2s3ayC5wTKW0fut9rlUuJuu5pRF5NaW_w=s96-c",
+        // "given_name": "Son",
+        // "family_name": "Tran minh",
+        // "locale": "en",
+        // "iat": "1569689282",
+        // "exp": "1569692882",
+        // "jti": "b8a6eff3d4ecf3209e84af0d7b0ec3c48730bf19",
+        // "alg": "RS256",
+        // "kid": "8c58e138614bd58742172bd5080d197d2b2dd2f3",
+        // "typ": "JWT"
+    googleResponse = (response) => {
+      console.log("googleResponse")
+      console.log(response)
+      this.props.actUserAddLoginWithGoogle({
+        userId: response.googleId,
+        email: response.profileObj.email,
+        phone: null,
+        password: null,
+        fullName: response.profileObj.name,
+        pictureUrl: response.profileObj.imageUrl,
+        accessToken: response.accessToken,
+        userType: "google",
+        roleId: 2 // Customer
+      }, this.props.history);
+    };
+    onGoogleFailure = (e) => {
+      console.log("onGoogleFailure")
+      console.log(e)
+    };
 }
 
 
@@ -259,7 +403,10 @@ const mapStateToProps = (state) => ({
   cart: state.cart
 });
 const mapActionsToProps = {
-  actCategoryGet
+  actCategoryGet,
+  actUserAddLoginWithFaceBook,
+  actUserAddLoginWithGoogle,
+  actUserLogout
 };
 
 export default withRouter(connect(

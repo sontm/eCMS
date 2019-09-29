@@ -30,13 +30,16 @@ export default class AppConstants  {
     }
     static getProductRecentView() {
         let v = localStorage.getItem(LOCAL_RECENT_VIEWED);
-        let vArr = v.split(":")
         let result = [];
-        vArr.forEach(e => {
-            if (e && e != "") {
-                result.push(e);
-            }
-        });
+        if (v) {
+            let vArr = v.split(":")
+            
+            vArr.forEach(e => {
+                if (e && e != "") {
+                    result.push(e);
+                }
+            });
+        }
         return result;
     }
 }

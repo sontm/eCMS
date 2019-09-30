@@ -58,4 +58,8 @@ app.post('/api/users/recentViews', userNproduct.addUserRecentViews);
 app.get('/api/users/recentViews/:userId', userNproduct.getRecentViewsOfUser);
 app.post('/api/users/favorites', userNproduct.addUserFavorite);
 app.get('/api/users/favorites/:userId', userNproduct.getFavoritesOfUser);
+app.post('/api/users/cart', userNproduct.addUserCartItem);
+app.get('/api/users/cart/:userId', userNproduct.getUserCartItems);
+app.post('/api/users/cart/removeItem', userNproduct.removeUserCartItem);
+
 };

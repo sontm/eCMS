@@ -12,17 +12,20 @@ const USER_PROFILE_ERR = 'USER_PROFILE_ERR';
 
 const USER_GET_RECENTVIEWS = 'USER_GET_RECENTVIEWS';
 const USER_GET_FAVORITES = 'USER_GET_FAVORITES';
+const USER_GET_CARTITEMS = 'USER_GET_CARTITEMS';
+const USER_UPDATE_CARTITEM = 'USER_UPDATE_CARTITEM';
 
 const USER_LOGOUT= 'USER_LOGOUT';
 
 // userProfile
-    // id, userId, email,phone,fullName,pictureUrl,userType(local, facebook, google),accessToken
+    // id, userId(FB, Google, username), email,phone,fullName,pictureUrl,userType(local, facebook, google),accessToken
 const initialState = {
     isLogined: false,
     isLoading: false,
     userProfile: null,
     recentViews:[],
-    favorites: []
+    favorites: [],
+    cartItems: []
 };
 
 export const actUserLogout = () => (dispatch) => {
@@ -165,6 +168,58 @@ export const actUserGetFavorites = (userId) => (dispatch) => {
             console.log("actUserGetFavorites error")
         }); 
 }
+
+
+
+
+export const actUserUpdateCartItem = (userId, productId, quantity, isRemoved = false) => (dispatch) => {
+    console.log("  actUserUpdateCartItem:" + userId + ",productId:" + productId, ",quantity:" + quantity)
+    if (!isRemoved) {
+        Backend.addUserCartItem(userId, productId,quantity,
+            response => {
+                console.log("addUserCartItem Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+                console.log(response.data)
+                dispatch({
+                    type: USER_UPDATE_CARTITEM,
+                    payload:  response.data
+                });
+            },
+            error => {
+                console.log("addUserCartItem error")
+            }); 
+    } else {
+        Backend.deleteUserCartItem(userId, productId,
+            response => {
+                console.log("deleteUserCartItem Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+                console.log(response.data)
+                dispatch({
+                    type: USER_UPDATE_CARTITEM,
+                    payload:  response.data
+                });
+            },
+            error => {
+                console.log("deleteUserCartItem error")
+            }); 
+    }
+}
+export const actUserGetCartItems = (userId) => (dispatch) => {
+    console.log("  actUserGetCartItems")
+    Backend.getUserCartItems(userId,
+        response => {
+            console.log("actUserGetCartItems Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+            dispatch({
+                type: USER_GET_CARTITEMS,
+                payload:  response.data
+            });
+        },
+        error => {
+            console.log("actUserGetCartItems error")
+        }); 
+}
+
+
+
 // Note, in this Reducer, cannot Access state.user
 export default function(state = initialState, action) {
     switch (action.type) {
@@ -212,6 +267,12 @@ export default function(state = initialState, action) {
         return {
             ...state,
             favorites: action.payload
+        }
+    case USER_GET_CARTITEMS:
+    case USER_UPDATE_CARTITEM:
+        return {
+            ...state,
+            cartItems: action.payload
         }
     default:
         return state;

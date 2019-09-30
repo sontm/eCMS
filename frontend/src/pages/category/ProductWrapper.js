@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {actCartAddToCart} from '../../redux/CartReducer'
+import {actUserUpdateCartItem} from '../../redux/UserReducer'
+
 import './ProductWrapper.css'
 import helpers from '../../util/Helpers';
 
@@ -18,7 +20,11 @@ class ProductWrapper extends Component {
         console.log("onAddToCart:" + this.props.product.name)
         // Stop onLick of parent to go Product Detail
         e.stopPropagation()
-        this.props.actCartAddToCart(this.props.product.id)
+        if (this.props.user.isLogined) {
+            this.props.actUserUpdateCartItem(this.props.user.userProfile.id ,this.props.product.id, 1)
+        } else {
+            this.props.actCartAddToCart(this.props.product.id)
+        }
     }
     onClickProductDetail() {
         console.log("onClickProductDetail:" + this.props.product.name)
@@ -95,10 +101,11 @@ class ProductWrapper extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    
+    user: state.user
 });
 const mapActionsToProps = {
-    actCartAddToCart
+    actCartAddToCart, // WHen user Not Login
+    actUserUpdateCartItem // When User Logined
 };
 
 export default withRouter(connect(

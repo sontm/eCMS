@@ -240,6 +240,12 @@ class AppHeader extends Component {
           isHomePage={isHomePage}
           />;
 
+      let cartNum = 0;
+      if (this.props.user.isLogined) {
+        cartNum = this.props.user.cartItems ? this.props.user.cartItems.length : 0;
+      } else {
+        cartNum = this.props.cart.savedProductsId ? this.props.cart.savedProductsId.length : 0;
+      }
       //xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl	≥1600px
       return (
         <React.Fragment>
@@ -290,7 +296,7 @@ class AppHeader extends Component {
                   <Button  ghost size="large">
                     <Icon type="shopping-cart" style={{fontSize:"1.2em"}} className="show-only-in-md"/>
                     <span className="hidden-in-md">Giỏ Hàng</span>
-                    <Badge showZero count={this.props.cart.savedProductsId ? this.props.cart.savedProductsId.length : 0} 
+                    <Badge showZero count={cartNum} 
                       className="cart-badge"/>
                   </Button>
                   </Link>

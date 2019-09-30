@@ -58,6 +58,14 @@ module.exports = (sequelize, DataTypes) => {
       otherKey: 'userId',
       as: 'favorites'
     });
+
+    // Carts Item of User
+    DBProducts.belongsToMany(models.DBUsers, {
+      through: 'DBCarts',
+      foreignKey: 'productId',
+      otherKey: 'userId',
+      as: 'cartItems'
+    });
   };
   return DBProducts;
 };

@@ -8,7 +8,10 @@ import { Card, Row, Col, Button, Icon } from 'antd';
 import ReactImageMagnify from 'react-image-magnify';
 
 import { actProductGetDetail } from '../../redux/ProductActions';
+
 import {actCartAddToCart} from '../../redux/CartReducer'
+import {actUserUpdateCartItem} from '../../redux/UserReducer'
+
 import {actUserAddRecentViews, actUserAddFavorites} from '../../redux/UserReducer'
 import helpers from '../../util/Helpers';
 import { breakLineCRLF } from '../../util/Helpers';
@@ -79,7 +82,11 @@ class ProductDetailPage extends Component {
         console.log("onAddToCart:" + this.props.name)
         // Stop onLick of parent to go Product Detail
         e.stopPropagation()
-        this.props.actCartAddToCart(this.props.product.productDetail.id)
+        if (this.props.user.isLogined) {
+            this.props.actUserUpdateCartItem(this.props.user.userProfile.id,this.props.product.productDetail.id, 1)
+        } else {
+            this.props.actCartAddToCart(this.props.product.productDetail.id)
+        }
     }
     
     
@@ -315,7 +322,8 @@ const mapStateToProps = (state) => ({
     actProductGetDetail,
     actCartAddToCart,
     actUserAddRecentViews,
-    actUserAddFavorites
+    actUserAddFavorites,
+    actUserUpdateCartItem
   };
   
   export default withRouter(connect(

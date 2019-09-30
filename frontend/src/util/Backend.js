@@ -88,6 +88,29 @@ class Backend {
             .catch((error) => {onError(error);});
     }
 
+    addUserCartItem(userId, productId, quantity, onOK, onError) {
+        axios.post("/users/cart",
+            JSON.stringify({'userId': userId, 'productId': productId, 'quantity': quantity}),
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    getUserCartItems(userId, onOK, onError) {
+        axios.get("/users/cart/" + userId,
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    deleteUserCartItem(userId, productId, onOK, onError) {
+        axios.post("/users/cart/removeItem",
+            JSON.stringify({'userId': userId, 'productId': productId}),
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+
     // Category---------------------------------------
     getAllCategoriesName(onOK, onError) {
         axios.get("/categories",

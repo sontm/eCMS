@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import {STORAGE_CART_PROD} from '../../constants'
 import './CartPage.css'
 
+import {actUserGetCartItems, actUserUpdateCartItem} from '../../redux/UserReducer'
 import {actProductGetProductsInCart} from '../../redux/ProductActions'
 import AppTouchSpin from '../../common/AppTouchSpin'
 
@@ -41,15 +42,40 @@ const IconText = ({ type, text }) => (
 
 // from "1,2,3" to [1,2,3]
 function parseStringToArrayProductID(text) {
-    return text.split(',');
+    if (text) {
+        return text.split(',');
+    }
+    return [];
 }
 class CartPage extends Component {
+    constructor(props) {
+        super(props)
+
+        this.handleRemoveCartItem = this.handleRemoveCartItem.bind(this)
+    }
     componentDidMount() {
-        console.log("STORAGE CART---------")
-        console.log(localStorage.getItem(STORAGE_CART_PROD))
-        let idArray = parseStringToArrayProductID(localStorage.getItem(STORAGE_CART_PROD))
-        console.log(idArray)
-        this.props.actProductGetProductsInCart(idArray)
+        if (this.props.user.isLogined) {
+            console.log("USER CART---------")
+            this.props.actUserGetCartItems(this.props.user.userProfile.id)
+        } else {
+            console.log("STORAGE CART---------")
+            console.log(localStorage.getItem(STORAGE_CART_PROD))
+            let idArray = parseStringToArrayProductID(localStorage.getItem(STORAGE_CART_PROD))
+            console.log(idArray)
+            this.props.actProductGetProductsInCart(idArray)
+        }
+    }
+
+    handleRemoveCartItem(itemId) {
+        console.log("handleRemoveCartItem:" + itemId)
+        if (this.props.user.isLogined) {
+            console.log("USER CART---------")
+            this.props.actUserUpdateCartItem(this.props.user.userProfile.id,
+                itemId, 0, true)
+        } else {
+            console.log("STORAGE CART---------")
+            // TODO
+        }
     }
     render() {
         
@@ -59,12 +85,15 @@ class CartPage extends Component {
                 <Col span={18}>
                 <List
                     itemLayout="vertical"
-                    dataSource={this.props.cart.products}
+                    dataSource={
+                        this.props.user.isLogined ? this.props.user.cartItems: this.props.cart.products}
                     renderItem={item => (
                     <List.Item
                         key={item.id}
                         actions={[
-                            <Button type="link">Xoá</Button>,
+                            <Button type="link" onClick={e => {
+                                this.handleRemoveCartItem(item.id)
+                            }}>Xoá</Button>,
                             <Button type="link">Để Dành Mua Sau</Button>,
                             <div className="product-quantity">
                                 <span>&nbsp;&nbsp;Số Lượng (Hộp):&nbsp;&nbsp;</span>
@@ -135,10 +164,13 @@ class CartPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    cart: state.cart
+    cart: state.cart,
+    user: state.user
 });
 const mapActionsToProps = {
-    actProductGetProductsInCart
+    actProductGetProductsInCart,
+    actUserGetCartItems,
+    actUserUpdateCartItem
 };
 
 export default withRouter(connect(

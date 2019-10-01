@@ -2,37 +2,26 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import {actHomeGetRecentView} from '../../redux/HomeReducer'
-import {actUserGetRecentViews} from '../../redux/UserReducer'
+import {actUserGetFavorites} from '../../redux/UserReducer'
 
 import AppContant from '../../util/AppConstant'
 import ProductWrapper from '../category/ProductWrapper'
-import { Row, Col, Radio, Button, Icon, Input, Select } from 'antd';
+import { Row, Col, Radio, Button, Icon, Input, Select, Card } from 'antd';
 import './HomePage.css';
 
-class RecentViewHome extends Component {
+class FavoriteHome extends Component {
     constructor(props) {
         super(props)
     }
     componentDidMount() {
         if (this.props.user.isLogined) {
-            this.props.actUserGetRecentViews(this.props.user.userProfile.id)
-        } else {
-            if (!this.props.home.recentViews || this.props.home.recentViews.length <= 0) {
-                this.props.actHomeGetRecentView(AppContant.getProductRecentView());
-            }
+            this.props.actUserGetFavorites(this.props.user.userProfile.id)
         }
     }
     render() {
-        let viewData = [];
-        if (this.props.user.isLogined && this.props.user.recentViews.length > 0) {
-            viewData = this.props.user.recentViews;
-        } else if (this.props.home.recentViews && this.props.home.recentViews.length > 0) {
-            viewData = this.props.home.recentViews;
-        }
-        if (viewData.length > 0) {
+        if (this.props.user.isLogined && this.props.user.favorites.length > 0) {
             let producView = [];
-            viewData.forEach(element => {
+            this.props.user.favorites.forEach(element => {
                 //ViewPort: xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl≥1600px
                 if (element) {
                     // Force use 5 Columns here
@@ -43,31 +32,26 @@ class RecentViewHome extends Component {
                 }
             });
             return (
-                <div>
+                <Card title="San Pham Yeu Thich" bordered={false}>
                 <Row type="flex">
                     {producView}
                 </Row>
-                </div>
+                </Card>
             )
         } else {
-            return (
-                <div>
-                    None!
-                </div>
-            )
+            return null;
         }
     }
 }
 
 const mapStateToProps = (state) => ({
-    home: state.home,
     user: state.user
 });
 const mapActionsToProps = {
-    actHomeGetRecentView,
-    actUserGetRecentViews
+    actUserGetFavorites
 };
 
 export default withRouter(connect(
     mapStateToProps,mapActionsToProps
-)(RecentViewHome));
+)(FavoriteHome));
+

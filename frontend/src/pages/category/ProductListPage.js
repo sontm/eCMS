@@ -23,19 +23,15 @@ class ProductListPage extends Component {
         
     }
     componentDidMount() {
-        console.log("  >>DID MOUNT ProductListPage:" + this.props.match.params.id)
         var parsedQuery = queryString.parse(this.props.location.search);
         if (this.props.product.productsQuery.length <= 0 ) {
-            console.log("    >>>> actProductGetOfCategory")
             //this.props.actProductGetOfCategory(this.props.match.params.id, parsedQuery.lvl);
             this.props.actQueryChangeCategory(this.props.query, this.props.match.params.id, parsedQuery.lvl);
         }
     }
     componentDidUpdate() {
-        console.log("  >>DID UPdate ProductListPage:" + this.props.match.params.id)
         var parsedQuery = queryString.parse(this.props.location.search);
         if (this.previousCategoryId != this.props.match.params.id) {
-            console.log("    >>>> actProductGetOfCategory")
             //this.props.actProductGetOfCategory(this.props.match.params.id, parsedQuery.lvl);
             this.props.actQueryChangeCategory(this.props.query, this.props.match.params.id, parsedQuery.lvl);
         }
@@ -123,14 +119,13 @@ class ProductListPage extends Component {
         );
     }
     render() {
-        console.log("  >>render ProductListPage:" + this.props.match.params.id)
         var parsedQuery = queryString.parse(this.props.location.search);
         let producView = [];
         if (this.props.product.productsQueryFiltered.length > 0) {
             this.props.product.productsQueryFiltered.forEach(element => {
                 //ViewPort: xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl≥1600px
                 producView.push(
-                    <Col xs={12} sm={12} md={12} lg={8} xl={6} xxl={6}>
+                    <Col xs={12} sm={12} md={12} lg={8} xl={6} xxl={6} key={element.id}>
                         <ProductWrapper product={element}/>
                     </Col>)
             });

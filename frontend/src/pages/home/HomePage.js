@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
-import { Carousel, Row, Col, Card} from 'antd';
+import { Row, Col, Card} from 'antd';
 
 import HotDiscountHome from './HotDiscountHome';
 import RecentViewHome from './RecentViewHome';
-
+import FavoriteHome from './FavoriteHome';
 import './HomePage.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+//https://www.npmjs.com/package/react-responsive-carousel
+var Carousel = require('react-responsive-carousel').Carousel;
+
+
 
 export default class HomePage extends Component {
     render() {
@@ -15,7 +20,9 @@ export default class HomePage extends Component {
                 <Row>
                 <Col span={4}></Col>
                 <Col span={20}>
-                    <Carousel autoplay>
+                    <Carousel showArrows={true} infiniteLoop={true} autoPlay={true} 
+                            showThumbs={false} showStatus={false} stopOnHover={false}
+                            swipeable={true} useKeyboardArrows={true}>
                         <div>
                             <img src="/images/home/carousel/carousel-1.jpg" style={{maxWidth: "100%",height:"100%"}}/>
                         </div>
@@ -39,9 +46,7 @@ export default class HomePage extends Component {
                 </Card>
 
                 <div className="empty-space-20px" />
-                <Card title="San Pham Yeu Thich" bordered={false}>
-                    <p>Hot Deals Here</p>
-                </Card>
+                <FavoriteHome />
 
                 <div className="empty-space-20px" />
                 <Card title="San Pham Ban Da Xem" bordered={false}>

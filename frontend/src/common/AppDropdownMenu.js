@@ -71,7 +71,7 @@ export default class AppDropdownMenu extends Component {
                     )
                   });
                 }
-                allCols.push (<Col span={6}>
+                allCols.push (<Col span={6} key={curSubmenuItems["" +propSub].id}>
                   <span style={{fontWeight:"bold"}}>
                   <div onClick={this.onClickParentMenuItem} className="sub-menu-top-li">
                     <Link to={"/category/" + curSubmenuItems["" +propSub].id + "?lvl=2"}>

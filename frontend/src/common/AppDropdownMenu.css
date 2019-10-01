@@ -7,7 +7,6 @@
 .flyout-container-display-home {
     display: block;
     margin-top: 0px;
-    z-index: 100;
     width: 96%;
     /* background: rgb(240, 240, 240); */
 
@@ -42,7 +41,7 @@
     /* background: #189eff; */
     background: white;
     text-align: center;
-
+    z-index: 100;
     /* This is for same height on a Row, parent need overflow: hidden; */
     /* margin-bottom: -99999px;
     padding-bottom: 99999px; */
@@ -55,7 +54,7 @@
 .parent-menu-container-right {
     background: white;
     border: 1px solid #e8e8e8;
-
+    z-index: 100;
     /* This is for same height on a Row, parent need  */
     /* margin-bottom: -99999px;
     padding-bottom: 99999px; */

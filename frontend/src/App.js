@@ -28,7 +28,7 @@ import PrivateRoute from './common/PrivateRoute';
 
 import { Layout, notification, Menu } from 'antd';
 import { Row, Col } from 'antd';
-import {actUserGetProfile} from './redux/UserReducer'
+import {actUserGetProfile, actUserGetCartItems} from './redux/UserReducer'
 require('dotenv').config()
 
 const { Content, Header, Sider, Footer } = Layout;
@@ -55,11 +55,40 @@ class App extends Component {
 
   componentDidMount() {
   }
+  componentDidUpdate() {
+    // If user have just Logined and not Inital Fetch data, Fetch
+    console.log("-------------Loaded Module, ThisLocation:" + this.props.location.pathname)
+    if (!this.mHasJustLogin && this.props.user.isLogined) {
+      console.log("&&&&&&&&&& Have just login, PRev:" + this.mPrevLocationPath)
+      // TODO, Copy Cart from LocalStorage to DB here
+      this.props.actUserGetCartItems(this.props.user.userProfile.id)
+
+      // Reload Previous Path
+      this.props.history.push(this.mPrevLocationPath)
+      this.mHasJustLogin = true
+    }
+    
+    if (this.mHasJustLogin && !this.props.user.isLogined) {
+      // User have just LogOut
+      this.mHasJustLogin = false
+      console.log("&&&&&&&&&& User Have just LogOut")
+    }
+  }
+
+  // To Remember History, Back when User Login
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.pathname != "/login" && this.props.location.pathname != "/register" &&
+        nextProps.location !== this.props.location) {
+      console.log("---------------LastLocation:" + this.props.location.pathname)
+      // if location is not Logiin or Register
+      this.mPrevLocationPath = this.props.location.pathname
+    }
+  }
 
   render() {
     if(this.props.user.isLoading) {
       console.log("****** User is NOT READY");
-      //return <LoadingIndicator />
+      return <LoadingIndicator />
     }
     return (
         <Layout>
@@ -92,6 +121,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
   //actGetCurrentUser
+  actUserGetCartItems
 };
 
 export default withRouter(connect(

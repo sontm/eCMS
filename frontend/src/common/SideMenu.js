@@ -231,10 +231,10 @@ class SideMenu extends Component {
             for (var prop in this.props.product.brandsQuery) {
                 if (Object.prototype.hasOwnProperty.call(this.props.product.brandsQuery, prop)) {
                     content.push(
-                        <React.Fragment>
+                        <React.Fragment key={this.props.product.brandsQuery[""+prop].value.id + 1000}>
                         <Checkbox
                             key={this.props.product.brandsQuery[""+prop].value.id}
-                            name={this.props.product.brandsQuery[""+prop].value.id}
+                            name={""+this.props.product.brandsQuery[""+prop].value.id}
                             onChange={this.onChangeBrand}
                         >
                             {this.props.product.brandsQuery[""+prop].value.name + 
@@ -263,10 +263,10 @@ class SideMenu extends Component {
             for (var prop in this.props.product.brandCountriesQuery) {
                 if (Object.prototype.hasOwnProperty.call(this.props.product.brandCountriesQuery, prop)) {
                     content.push(
-                        <React.Fragment>
+                        <React.Fragment key={this.props.product.brandCountriesQuery[""+prop].value.id + 1000}>
                         <Checkbox
                             key={this.props.product.brandCountriesQuery[""+prop].value.id}
-                            name={this.props.product.brandCountriesQuery[""+prop].value.id}
+                            name={""+this.props.product.brandCountriesQuery[""+prop].value.id}
                             onChange={this.onChangeBrandCountry}
                         >
                             {this.props.product.brandCountriesQuery[""+prop].value.name + 
@@ -345,7 +345,7 @@ class SideMenu extends Component {
                 }
 
                 radioViews.push(
-                    <Radio value={item.name}>
+                    <Radio value={item.name} key={index}>
                         {item.from + "-" + item.to}
                     </Radio>
                 )
@@ -473,10 +473,10 @@ class SideMenu extends Component {
                     if (attributes && attributes.length > 0) {
                         attributes.forEach(attribute => {
                             subValue.push(
-                                <React.Fragment>
+                                <React.Fragment key={attribute.id+1000}>
                                 <Checkbox
                                     key={attribute.id}
-                                    name={attribute.id}
+                                    name={""+attribute.id}
                                     onChange={this.onChangeAttribute}
                                 >
                                     {attribute.name+"(" + attribute.count + ")"}
@@ -487,7 +487,7 @@ class SideMenu extends Component {
                         })
                     }
                     content.push(
-                        <Card size="small" title={prop} style={{marginTop: "10px"}}>
+                        <Card size="small" title={prop} style={{marginTop: "10px"}} key={prop}>
                             {subValue}
                         </Card>
                     )

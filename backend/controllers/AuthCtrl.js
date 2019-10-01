@@ -3,6 +3,8 @@ const passport = require('passport');
 const uuidv4 = require('uuid/v4');
 const bcrypt = require('bcrypt')
 
+require('dotenv').config()
+
 // 1 If username and password are correct, proceed with the following listing.
 // 2 Create a new JWT and include a generated CSRF token in the payload as a claim, 
 //     then sign the JWT.
@@ -51,9 +53,10 @@ module.exports = {
                 // generate a signed son web token with the contents of user object and return it in the response
                 const jwttoken = jwt.sign(user, 'your_jwt_secret', { expiresIn: '30d' });
                 console.log("      Auth, ReqLogin OK, jwttoken:" + jwttoken)
+                // maxAge is Milisecond
                 return res
                     .status(200)
-                    .cookie('jwt',jwttoken, { maxAge: 9000000, httpOnly: true, path:"/" })
+                    .cookie('jwt',jwttoken, { maxAge: process.env.MAX_AGE_LOGIN_COOKIE_ms, httpOnly: true, path:"/" })
                     .send({user, csrf})
                 //return res.json({user, token});
             });

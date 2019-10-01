@@ -32,7 +32,7 @@ export default class ProductDetailImageList extends Component {
         this.props.images.forEach((item, idx) => {
             if (idx < this.props.visibleNum) {
                 imageViews.push(
-                    <li onClick={() => {this.onClick(item)}} 
+                    <li onClick={() => {this.onClick(item)}} key={idx}
                         className={this.state.selectedImgPath==item.thumb ? "product-image-list-selected" :
                             "product-image-list"}>
                         <img src={item.thumb} style={{width:this.props.thumbnailHeight ?

@@ -22,6 +22,7 @@ const USER_LOGOUT= 'USER_LOGOUT';
 const initialState = {
     isLogined: false,
     isLoading: false,
+    isFirstFetched: false,
     userProfile: null,
     recentViews:[],
     favorites: [],
@@ -109,7 +110,10 @@ export const actUserGetProfile = () => (dispatch) => {
         },
         error => {
             console.log("actUserGetProfile error")
-        }); 
+            dispatch({
+                type: USER_PROFILE_ERR
+            });
+        });
 }
 
 

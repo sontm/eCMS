@@ -10,15 +10,36 @@
     top: -400px; */
     height: 400px;
 }
-
-.ant-carousel .slick-slide {
-    text-align: center;
-    height: 400px;
-    line-height: 400px;
-    background: #364d79;
-    overflow: hidden;
+/* 
+.left-carousel-arrow {
+    position: relative;
+    top: 200;
+    left: 0;
+    z-index: 99;
+    font-size: 40px;
 }
+.right-carousel-arrow {
+    position: relative;
+    top: -200px;
+    right: 0;
+    z-index: 50;
+    font-size: 40px;
+}
+.ant-carousel .slick-slide {
+    text-align: center !important;
+    height: 400px !important;
+    line-height: 400px !important;
+    background: #364d79 !important;
+    overflow: hidden !important;
+} */
 
+.carousel.carousel-slider {
+    /* text-align: center !important; */
+    height: 400px !important;
+    /* line-height: 400px !important; */
+    background: #364d79 !important;
+    overflow: hidden !important;
+}
 .empty-space-20px {
     height: 20px;
     width: 100%;

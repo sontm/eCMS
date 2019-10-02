@@ -98,7 +98,7 @@ class App extends Component {
             <Content>
               <Switch>      
                 <Route exact path="/" component={HomePage} />
-                <Route path="/category/:id" component={ProductListPage} />
+                <Route path="/category/:id/:lvl" component={ProductListPage} />
                 <Route path="/product/:id" component={ProductDetailPage} />
                 <Route path="/cart" component={CartPage} />
                 <Route path="/login" component={Login} />

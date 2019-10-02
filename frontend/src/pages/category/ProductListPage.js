@@ -22,18 +22,19 @@ class ProductListPage extends Component {
         this.onSearchFilter = this.onSearchFilter.bind(this);
         
     }
+
+    // Note when Refresh by URL, there is no parsedQuery.lvl
     componentDidMount() {
-        var parsedQuery = queryString.parse(this.props.location.search);
+        //var parsedQuery = queryString.parse(this.props.location.search);
         if (this.props.product.productsQuery.length <= 0 ) {
             //this.props.actProductGetOfCategory(this.props.match.params.id, parsedQuery.lvl);
-            this.props.actQueryChangeCategory(this.props.query, this.props.match.params.id, parsedQuery.lvl);
+            this.props.actQueryChangeCategory(this.props.query, this.props.match.params.id, this.props.match.params.lvl);
         }
     }
     componentDidUpdate() {
-        var parsedQuery = queryString.parse(this.props.location.search);
         if (this.previousCategoryId != this.props.match.params.id) {
             //this.props.actProductGetOfCategory(this.props.match.params.id, parsedQuery.lvl);
-            this.props.actQueryChangeCategory(this.props.query, this.props.match.params.id, parsedQuery.lvl);
+            this.props.actQueryChangeCategory(this.props.query, this.props.match.params.id, this.props.match.params.lvl);
         }
         this.previousCategoryId = this.props.match.params.id;
     }

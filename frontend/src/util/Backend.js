@@ -119,13 +119,6 @@ class Backend {
             .catch((error) => {onError(error);});
     }
 
-    getAllProductOfCategory(cateId, level, onOK, onError) {
-        axios.get("/products/OfCategory/" + cateId + "?lvl=" + level,
-            { headers: this.createHeader()})
-            .then((response) => {onOK(response);})
-            .catch((error) => {onError(error);});
-    }
-
     getProductDetail(prodId, onOK, onError) {
         axios.get("/products/" + prodId,
             { headers: this.createHeader()})

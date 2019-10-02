@@ -5,7 +5,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { actCategoryGet } from '../redux/CategoryActions';
-import {actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry} from '../redux/ProductQueryReducer'
+import {actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry, actQueryChangePriceRange} from '../redux/ProductQueryReducer'
 
 import { Card } from 'antd';
 import { Checkbox, Slider, InputNumber, Radio } from 'antd';
@@ -25,10 +25,14 @@ class SideMenu extends Component {
         this.onChangePriceRangeRadio = this.onChangePriceRangeRadio.bind(this);
         this.onChangePriceRangeSliderFrom = this.onChangePriceRangeSliderFrom.bind(this);
         this.onChangePriceRangeSliderTo = this.onChangePriceRangeSliderTo.bind(this);
-        this.onSubmitPriceRange = this.onSubmitPriceRange.bind(this)
+        this.onSubmitPriceRange = this.onSubmitPriceRange.bind(this);
+        this.clearPriceRange = this.clearPriceRange.bind(this);
+        this.clearBrandQuery = this.clearBrandQuery.bind(this);
+        this.clearBrandCountryQuery = this.clearBrandCountryQuery.bind(this);
+        this.clearAttributeQuery = this.clearAttributeQuery.bind(this);
 
         this.state = {
-            curPriceName: 0,
+            curPriceName: -1,
             curPriceFrom: 0,
             curPriceTo: 1000000000,
             curPriceSliderFrom: 0,
@@ -143,7 +147,7 @@ class SideMenu extends Component {
                                                 subMenuItems.push(
                                                     <Menu.Item key={element.id} 
                                                     className={element.id==curID ? "sidemenu-cate-selected" : ""}>
-                                                        <Link to={"/category/" + element.id + "?lvl=1"}>
+                                                        <Link to={"/category/" + element.id + "/1"}>
                                                         {element.name + "-" + element.id}
                                                         </Link>
                                                     </Menu.Item>
@@ -155,7 +159,7 @@ class SideMenu extends Component {
                                             key={curMenuLvl.id}
                                             className={curMenuLvl.id==curID ? "sidemenu-cate-selected" : ""}
                                             title={
-                                                <Link to={"/category/" + curMenuLvl.id + "?lvl=2"}>
+                                                <Link to={"/category/" + curMenuLvl.id + "/2"}>
                                                 {propD2 + "-" + curMenuLvl.id}
                                                 </Link>
                                             }>
@@ -171,7 +175,7 @@ class SideMenu extends Component {
                                 key={curItem.id}
                                 className={curItem.id==curID ? "sidemenu-cate-selected" : ""}
                                 title={
-                                    <Link to={"/category/" + curItem.id + "?lvl=3"}>
+                                    <Link to={"/category/" + curItem.id + "/3"}>
                                     {propD + "-" + curItem.id}
                                     </Link>
                                 }>
@@ -224,6 +228,12 @@ class SideMenu extends Component {
         console.log("BrandID:" + e.target.name + ":" + e.target.checked);
         this.props.actQuerySetBrand(this.props.query, e.target.name, e.target.checked)
     }
+    clearBrandQuery() {
+        // name -1 mean Clear
+        if (this.props.query.brands.length > 0) {
+            this.props.actQuerySetBrand(this.props.query, -1, false)
+        }
+    }
     // this.props.product.brandsQuery: {id1: {count:10, value:DBBrand}, id2:{}}
     renderBrand() {
         if (this.props.product.brandsQuery) {
@@ -236,6 +246,9 @@ class SideMenu extends Component {
                             key={this.props.product.brandsQuery[""+prop].value.id}
                             name={""+this.props.product.brandsQuery[""+prop].value.id}
                             onChange={this.onChangeBrand}
+                            checked={(this.props.query.brands.length > 0 && 
+                                this.props.query.brands.indexOf(
+                                    (""+this.props.product.brandsQuery[""+prop].value.id)) >= 0)}
                         >
                             {this.props.product.brandsQuery[""+prop].value.name + 
                                 "(" + this.props.product.brandsQuery[""+prop].count + ")"}
@@ -246,7 +259,10 @@ class SideMenu extends Component {
                 }
             }
             return (
-                <Card size="small" title="Thuong Hieu" style={{marginTop: "10px"}}>
+                <Card size="small" title="Thuong Hieu" style={{marginTop: "10px"}}
+                extra={<Button shape="circle" type="primary"  size="small" onClick={this.clearBrandQuery}>
+                    <Icon type="undo" style={{fontSize:"20px", color:"white"}}/>
+                </Button>}>
                     {content}
                 </Card>
             )
@@ -256,6 +272,11 @@ class SideMenu extends Component {
     onChangeBrandCountry(e) {
         console.log("BrandCountryID:" + e.target.name + ":" + e.target.checked);
         this.props.actQuerySetBrandCountry(this.props.query, e.target.name, e.target.checked)
+    }
+    clearBrandCountryQuery() {
+        if (this.props.query.brandCountries.length > 0) {
+            this.props.actQuerySetBrandCountry(this.props.query,  -1, false)
+        }
     }
     renderBrandCountry() {
         if (this.props.product.brandCountriesQuery) {
@@ -268,6 +289,9 @@ class SideMenu extends Component {
                             key={this.props.product.brandCountriesQuery[""+prop].value.id}
                             name={""+this.props.product.brandCountriesQuery[""+prop].value.id}
                             onChange={this.onChangeBrandCountry}
+                            checked={(this.props.query.brandCountries.length > 0 && 
+                                this.props.query.brandCountries.indexOf(
+                                    (""+this.props.product.brandCountriesQuery[""+prop].value.id)) >= 0)}
                         >
                             {this.props.product.brandCountriesQuery[""+prop].value.name + 
                                 "(" + this.props.product.brandCountriesQuery[""+prop].count + ")"}
@@ -278,7 +302,10 @@ class SideMenu extends Component {
                 }
             }
             return (
-                <Card size="small" title="Xuat Xu Thuong Hieu" style={{marginTop: "10px"}}>
+                <Card size="small" title="Xuat Xu Thuong Hieu" style={{marginTop: "10px"}}
+                extra={<Button shape="circle" type="primary"  size="small" onClick={this.clearBrandCountryQuery}>
+                    <Icon type="undo" style={{fontSize:"20px", color:"white"}}/>
+                </Button>}>
                     {content}
                 </Card>
             )
@@ -288,7 +315,23 @@ class SideMenu extends Component {
 
     onSubmitPriceRange() {
         console.log("onSubmitPriceRange......")
+        //curPriceName=-1 mean is using Slider
         console.log(this.state)
+        let from = 0;
+        let to = 0;
+        if (this.state.curPriceName >= 0) {
+            // using value from radio
+            from = this.state.curPriceFrom;
+            to = this.state.curPriceTo;
+        } else {
+            from = this.state.curPriceSliderFrom;
+            to = this.state.curPriceSliderTo;
+        }
+        if (to >= from && to > 0) {
+            // ONly query when To > From
+            this.props.actQueryChangePriceRange(this.props.query, from, to)
+        }
+        
     }
     onChangePriceRangeRadio(e) {
         console.log("onChangePriceRangeRadio:" + e.target.value)
@@ -304,6 +347,10 @@ class SideMenu extends Component {
                         curPriceSliderFrom: 0,
                         curPriceSliderTo: 0
                     })
+                    if (item.to >= item.from && item.to > 0) {
+                        // ONly query when To > From
+                        this.props.actQueryChangePriceRange(this.props.query, item.from, item.to)
+                    }
                 }
             })
         }
@@ -312,7 +359,7 @@ class SideMenu extends Component {
     onChangePriceRangeSliderFrom(value) {
         this.setState({
             curPriceSliderFrom: value,
-            curPriceName: 0,
+            curPriceName: -1,
             curPriceFrom: 0,
             curPriceTo: 1000000000,
         })
@@ -320,10 +367,20 @@ class SideMenu extends Component {
     onChangePriceRangeSliderTo(value) {
         this.setState({
             curPriceSliderTo: value,
-            curPriceName: 0,
+            curPriceName: -1,
             curPriceFrom: 0,
             curPriceTo: 1000000000,
         })
+    }
+    clearPriceRange() {
+        this.setState({
+            curPriceName: -1,
+            curPriceFrom: 0,
+            curPriceTo: 1000000000,
+            curPriceSliderFrom: 0,
+            curPriceSliderTo: 0
+        })
+        this.props.actQueryChangePriceRange(this.props.query, 0, 0)
     }
     renderPriceRange() {
         let radioViews = [];
@@ -354,10 +411,14 @@ class SideMenu extends Component {
             sliderToStep = Math.floor((sliderToMax - sliderToMin) / 20);
         }
         return (
-            <Card size="small" title="Gia" style={{marginTop: "10px"}}>
+            <Card size="small" title="Gia" style={{marginTop: "10px"}} 
+            extra={<Button shape="circle" type="primary"  size="small" onClick={this.clearPriceRange}>
+                    <Icon type="undo" style={{fontSize:"20px", color:"white"}}/>
+            </Button>}>
                 <Radio.Group onChange={this.onChangePriceRangeRadio} value={this.state.curPriceName}>
                     {radioViews}
                 </Radio.Group>
+                <br />
                 <Row>
                     <Col span={8}>
                         <hr style={{marginTop: "12px"}}/>
@@ -441,7 +502,6 @@ class SideMenu extends Component {
                         />
                     </Col>
                 </Row>
-                <hr/>
                 <div style={{textAlign:"center"}}>
                     <Button type="primary" onClick={this.onSubmitPriceRange}>Tìm Kiếm</Button>
                 </div>
@@ -452,6 +512,16 @@ class SideMenu extends Component {
     onChangeAttribute(e) {
         console.log("AttributeID:" + e.target.name + ":" + e.target.checked);
         this.props.actQuerySetAttribute(this.props.query, e.target.name, e.target.checked)
+    }
+    clearAttributeQuery(name) {
+        var attributes = this.props.product.attributesQuery[""+name].attributes;
+        var attIds = attributes.map (element => {
+            return element.id;
+        });
+        // target.name = -1 mean clear all the arrays in third parameter
+        if (attIds && attIds.length > 0) {
+            this.props.actQuerySetAttribute(this.props.query, -1, attIds)
+        }
     }
     // Input
     // {
@@ -478,6 +548,8 @@ class SideMenu extends Component {
                                     key={attribute.id}
                                     name={""+attribute.id}
                                     onChange={this.onChangeAttribute}
+                                    checked={(this.props.query.attributes.length > 0 && 
+                                        this.props.query.attributes.indexOf((""+attribute.id)) >= 0)}
                                 >
                                     {attribute.name+"(" + attribute.count + ")"}
                                 </Checkbox>
@@ -487,7 +559,11 @@ class SideMenu extends Component {
                         })
                     }
                     content.push(
-                        <Card size="small" title={prop} style={{marginTop: "10px"}} key={prop}>
+                        <Card size="small" title={prop} style={{marginTop: "10px"}} key={prop}
+                        extra={<Button shape="circle" type="primary"  size="small" key={prop}
+                        onClick={this.clearAttributeQuery.bind(this, prop)}>
+                            <Icon type="undo" style={{fontSize:"20px", color:"white"}}/>
+                        </Button>}>
                             {subValue}
                         </Card>
                     )
@@ -516,7 +592,7 @@ const mapStateToProps = (state) => ({
 });
 const mapActionsToProps = {
     actCategoryGet,
-    actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry
+    actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry,actQueryChangePriceRange
 };
 
 export default withRouter(connect(

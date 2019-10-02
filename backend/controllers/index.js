@@ -46,7 +46,6 @@ app.post('/api/products/query', product.queryProducts);
 app.post('/api/products/get', product.getSomeProducts); // Get some products
 app.get('/api/products', product.getAll);
 app.get('/api/products/:productId', product.getProductDetail);
-app.get('/api/products/OfCategory/:categoryId', product.getAllOfCategory);
 
 app.post('/api/categories', category.create);
 app.get('/api/categories', category.getAll); // Get category List only

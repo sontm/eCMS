@@ -11,7 +11,7 @@ export const PROD_BRANDCOUNTRYLIST_OK = 'PROD_BRANDCOUNTRYLIST_OK';
 export const PROD_ATTRIBUTE_QUERY_OK = 'PROD_ATTRIBUTE_QUERY_OK';
 export const PROD_PRICERANGE_QUERY_OK = 'PROD_PRICERANGE_QUERY_OK';
 
-// level = 1 mean THirst Menu, 2 mean Second Menu, 3 mean Parent menu
+// level = 1 mean THirst Menu (Child), 2 mean Second Menu, 3 mean Parent menu
 
 // Example of Result Product
 // [
@@ -25,6 +25,8 @@ export const PROD_PRICERANGE_QUERY_OK = 'PROD_PRICERANGE_QUERY_OK';
     //     "attributes":[{"id":2,"name":"Trắng","value":null,"attributeGroupId":1,"createdAt":"","updatedAt":"2019-09-07T02:25:51.137Z",
     //         "attributeGroups":{"id":1,"name":"Màu Sắc","createdAt":"2019-09-07T02:24:00.454Z","updatedAt":""}}],
     //     "productDiscounts":[]}]
+
+// queryParams: {"category":{id:1, level:2}, "brands":[1],"brandCountries":[],"attributes":[],"priceRange":{from, to}}
 export const actProductGetOfCategory = ({isFirstQuery=false} = {}, queryParams, dispatch) => {
     Backend.queryProducts(queryParams,
     response => {
@@ -35,7 +37,7 @@ export const actProductGetOfCategory = ({isFirstQuery=false} = {}, queryParams, 
             payload:  response.data
         });
 
-        // Only Change Attribute List for First Query
+        // Only Change Attribute List for First Query, mean first time Get from Product List
         if (isFirstQuery) {
             let brandList = Helpers.getBrandsQuery(response.data)
             dispatch({

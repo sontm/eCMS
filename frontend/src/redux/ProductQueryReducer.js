@@ -6,6 +6,7 @@ const QUERY_CHANGE_CATEGORY = 'QUERY_CHANGE_CATEGORY';
 const QUERY_CHANGE_BRAND = 'QUERY_CHANGE_BRAND';
 const QUERY_CHANGE_BRANDCOUNTRY = 'QUERY_CHANGE_BRANDCOUNTRY';
 const QUERY_CHANGE_ATTRIBUTE = 'QUERY_CHANGE_ATTRIBUTE';
+const QUERY_CHANGE_PRICE = 'QUERY_CHANGE_PRICE';
 
 const initialState = {
     category:{}, // {id, level}
@@ -17,21 +18,37 @@ const initialState = {
 
 // level 1,2,3 for First Second and Third Level
 export const actQueryChangeCategory = (prevQueryProps, id, level) => (dispatch) => {
-    console.log("actQueryChangeCategory:" + id)
-
+    console.log("%%%%%%%%%%%%%%%%actQueryChangeCategory:" + id)
+    
     dispatch({
         type: QUERY_CHANGE_CATEGORY,
         payload:  {id:id, level: level}
     });
     prevQueryProps.category = {id:id, level: level};
-
+    console.log(prevQueryProps)
     actProductGetOfCategory({isFirstQuery:true}, prevQueryProps, dispatch);
 }
 
+export const actQueryChangePriceRange = (prevQueryProps, from, to) => (dispatch) => {
+    console.log("%%%%%%%%%%%%%%%%actQueryChangePriceRange:" + from + "->" + to)
+
+    dispatch({
+        type: QUERY_CHANGE_PRICE,
+        payload:  {from:from, to: to}
+    });
+    prevQueryProps.priceRange = {from:from, to: to};
+    console.log(prevQueryProps)
+    actProductGetOfCategory({}, prevQueryProps, dispatch);
+}
+
+// id -1 mean Clear
 export const actQuerySetBrand = (prevQueryProps, id, isCheck) => (dispatch) => {
+    console.log("%%%%%%%%%%%%%%%% actQuerySetBrand:")
     let newBrands = [...prevQueryProps.brands];
 
-    if (isCheck) {
+    if (id == -1) {
+        newBrands = [];
+    } else if (isCheck) {
         // Include Brand
         if (newBrands.indexOf(id) <= -1) {
             newBrands.push(id);
@@ -46,18 +63,25 @@ export const actQuerySetBrand = (prevQueryProps, id, isCheck) => (dispatch) => {
         type: QUERY_CHANGE_BRAND,
         payload:  newBrands
     });
-    console.log("  ENd Dispatch QUERY_CHANGE_BRAND")
 
     // Then Start Query Here
-    console.log("Start   Query Product with BrandCOuntry:")
     prevQueryProps.brands = newBrands;
     console.log(prevQueryProps)
     actProductGetOfCategory({}, prevQueryProps, dispatch);
 }
+
+// id = -1 mean isCHeck is array of ID, need to remove all
 export const actQuerySetAttribute = (prevQueryProps, id, isCheck) => (dispatch) => {
+    console.log("%%%%%%%%%%%%%%%% actQuerySetAttribute:")
     let newAttributes = [...prevQueryProps.attributes];
 
-    if (isCheck) {
+    if (id == -1) {
+        isCheck.forEach(id => {
+            if (newAttributes.indexOf(""+id) > -1) {
+                newAttributes.splice(newAttributes.indexOf(""+id), 1);
+            }
+        })
+    } else if (isCheck) {
         // Include
         if (newAttributes.indexOf(id) <= -1) {
             newAttributes.push(id);
@@ -72,19 +96,20 @@ export const actQuerySetAttribute = (prevQueryProps, id, isCheck) => (dispatch) 
         type: QUERY_CHANGE_ATTRIBUTE,
         payload:  newAttributes
     });
-    console.log("  ENd Dispatch QUERY_CHANGE_BRANDCOUNTRY")
 
-    // Then Start Query Here
-    console.log("Start   Query Product with Attribute:")
     prevQueryProps.attributes = newAttributes;
     console.log(prevQueryProps)
     actProductGetOfCategory({}, prevQueryProps, dispatch);
 }
 
+// id -1 mean clear
 export const actQuerySetBrandCountry = (prevQueryProps, id, isCheck) => (dispatch) => {
+    console.log("%%%%%%%%%%%%%%%% actQuerySetBrandCountry:")
     let newBrandCountriess = [...prevQueryProps.brandCountries];
 
-    if (isCheck) {
+    if (id == -1) {
+        newBrandCountriess = [];
+    } else if (isCheck) {
         // Include Brand
         if (newBrandCountriess.indexOf(id) <= -1) {
             newBrandCountriess.push(id);
@@ -99,10 +124,7 @@ export const actQuerySetBrandCountry = (prevQueryProps, id, isCheck) => (dispatc
         type: QUERY_CHANGE_BRANDCOUNTRY,
         payload:  newBrandCountriess
     });
-    console.log("  ENd Dispatch QUERY_CHANGE_BRANDCOUNTRY")
 
-    // Then Start Query Here
-    console.log("Start   Query Product:")
     prevQueryProps.brandCountries = newBrandCountriess;
     console.log(prevQueryProps)
     actProductGetOfCategory({}, prevQueryProps, dispatch);

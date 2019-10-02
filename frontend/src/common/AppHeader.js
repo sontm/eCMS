@@ -280,12 +280,14 @@ class AppHeader extends Component {
                 <Col md={7} lg={7} xl={7} xxl={7}>
                 <div className="top-header-menu-item">
                 <Popover content={this.renderPopoverUser()} placement="bottom">
+                <Link to={"/customer/profile"}>
                   <Button type="link" ghost size="large">
                     <Icon type="user" style={{fontSize:"1.2em"}} className="show-only-in-md"/>
                     <span className="hidden-in-md">
                       {this.props.user.userProfile ? this.props.user.userProfile.fullName : "Tài Khoản"}
                     </span>
                   </Button>
+                </Link>
                 </Popover>
                 </div>
                 </Col>

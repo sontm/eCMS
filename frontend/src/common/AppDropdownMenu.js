@@ -40,7 +40,7 @@ export default class AppDropdownMenu extends Component {
                 <li onMouseOver={this.props.onParentMenuHover} onMouseLeave={this.props.onParentMenuOut}
                     onClick={this.onClickParentMenuItem} key={config["" +prop].id}
                   className={this.props.hoveredParent == prop ? "parent-menu-li-hovering" : ""}>
-                  <Link to={"/category/" + config["" +prop].id + "?lvl=3"}>
+                  <Link to={"/category/" + config["" +prop].id + "/3"}>
                     <Icon type="account-book" /> {prop}
                     <span style={{float: "right", marginRight: "5px", fontSize:"12px", pointerEvents:"none"}}>
                       <Icon type="right" />
@@ -64,7 +64,7 @@ export default class AppDropdownMenu extends Component {
                     // Each Childrent Sub Menus
                     subMenus.push(
                       <li key={item.id} onClick={this.onClickParentMenuItem}>
-                      <Link to={"/category/" + item.id + "?lvl=1"}>
+                      <Link to={"/category/" + item.id + "/1"}>
                         {item.name}
                       </Link>
                       </li>           
@@ -74,7 +74,7 @@ export default class AppDropdownMenu extends Component {
                 allCols.push (<Col span={6} key={curSubmenuItems["" +propSub].id}>
                   <span style={{fontWeight:"bold"}}>
                   <div onClick={this.onClickParentMenuItem} className="sub-menu-top-li">
-                    <Link to={"/category/" + curSubmenuItems["" +propSub].id + "?lvl=2"}>
+                    <Link to={"/category/" + curSubmenuItems["" +propSub].id + "/2"}>
                     {propSub}
                     </Link>
                   </div>

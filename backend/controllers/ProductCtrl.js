@@ -24,44 +24,6 @@ module.exports = {
       .then(result => res.status(200).send(result))
       .catch(error => res.status(400).send(error));
   },
-  getAllOfCategory(req, res) {
-    console.log("getAllOfCategory")
-    console.log(req.body);
-    console.log("  Query:")
-    console.log(req.query.lvl)
-    var wherObj = {firstCategoryId: req.params.categoryId};
-    if (req.query.lvl == 2) {
-      wherObj = {secondCategoryId: req.params.categoryId};
-    } else if (req.query.lvl == 3) {
-      wherObj = {thirdCategoryId: req.params.categoryId};
-    }
-    console.log(wherObj)
-      return DBProducts
-      .findAll({
-          where: wherObj,
-          include: [{
-            model: DBBrands,
-            as: 'brands',
-            include: [{
-              model:DBCountries,
-              as: 'countries'
-            }] 
-            },{
-            model: DBAttributes,
-            as: 'attributes',
-            through: {attributes: []},
-            include: [{
-              model:DBAttributeGroups,
-              as: 'attributeGroups'
-            }] 
-          }]
-      })
-      .then(result => {
-        console.log(result)
-        res.status(200).send(result)
-      })
-      .catch(error => res.status(400).send(error));
-  },
   getProductDetail(req, res) {
     console.log("getProductDetail........")
     console.log(req.body);
@@ -124,10 +86,11 @@ module.exports = {
       .then(result => res.status(200).send(result))
       .catch(error => res.status(400).send(error));
   },
-  // POST params: {"category":{id:1, level:2}, "brands":[1],"brandCountries":[],"attributes":[]}
+  // POST params: {"category":{id:1, level:2}, "brands":[1],"brandCountries":[],"attributes":[],"priceRange":{from, to}}
   queryProducts(req, res) {
     console.log("queryProducts.............")
     console.log(req.body)
+
     var wherObj = {firstCategoryId: req.body.category.id};
     if (req.body.category.level == 2) {
       wherObj = {secondCategoryId: req.body.category.id};
@@ -135,6 +98,12 @@ module.exports = {
       wherObj = {thirdCategoryId: req.body.category.id};
     }
     
+    // PriceRange query here
+    if (req.body.priceRange && req.body.priceRange.to > req.body.priceRange.from) {
+      wherObj.unitPrice = {[Op.between]: [req.body.priceRange.from, req.body.priceRange.to]};
+    }
+
+    console.log(wherObj)
     // Include Brands if have
     var wherObjBrand={};
     if (req.body.brands && req.body.brands.length > 0) {
@@ -150,6 +119,7 @@ module.exports = {
     if (req.body.attributes && req.body.attributes.length > 0) {
       wherObjAtt = {id: {[Op.in]: req.body.attributes}};
     }
+
     let nowDateTime = new Date(); // TODO: careful with this Now TImeZone
     console.log("Where OBJ ......., Now:" + nowDateTime)
     console.log(wherObj)

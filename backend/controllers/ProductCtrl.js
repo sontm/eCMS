@@ -24,6 +24,7 @@ module.exports = {
       .then(result => res.status(200).send(result))
       .catch(error => res.status(400).send(error));
   },
+  //  product/:productId: req.params.productId
   getProductDetail(req, res) {
     console.log("getProductDetail........")
     console.log(req.body);
@@ -235,6 +236,76 @@ module.exports = {
             required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
           }
         ]
+    })
+    .then(result => {
+      res.status(200).send(result)
+    })
+    .catch(error => res.status(400).send(error));
+  },
+  getProductsOfBrand(req, res) {
+    console.log("getProductsOfBrand.............")
+    console.log(req.params.brandId)
+    
+    // Include Brands if have
+    var wherObjBrand={};
+    if (req.params.brandId) {
+        wherObjBrand = {id: req.params.brandId};
+    }
+    
+    let nowDateTime = new Date(); // TODO: careful with this Now TImeZone
+    return DBProducts
+    .findAll({
+        include: [{
+          model: DBCategories,
+          as: 'categories',
+          include: [{
+              model:DBDiscounts, // Query Discount also
+              as:'cateDiscounts',
+              where: {
+            from: {[Op.lte]: nowDateTime},
+            [Op.and]: {
+              to: {[Op.gte]: nowDateTime}
+            }
+          },
+          required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+          }]
+        },{
+          model: DBBrands,
+          as: 'brands',
+          where: wherObjBrand,
+          include: [{
+            model:DBCountries,
+            as: 'countries'
+          },{
+              model:DBDiscounts, // Query Discount also
+              as:'brandDiscounts',
+              where: {
+                from: {[Op.lte]: nowDateTime},
+                [Op.and]: {
+                  to: {[Op.gte]: nowDateTime}
+                }
+              },
+              required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+          }] 
+        },{
+          model: DBAttributes,
+          as: 'attributes',
+          through: {attributes: []},
+          include: [{
+            model:DBAttributeGroups,
+            as: 'attributeGroups'
+          }] 
+        },{
+          model: DBDiscounts,// Get Discounts of Product
+          as: 'productDiscounts',// Must Have
+          where: {
+            from: {[Op.lte]: nowDateTime},
+            [Op.and]: {
+              to: {[Op.gte]: nowDateTime}
+            }
+          },
+          required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+        }]
     })
     .then(result => {
       res.status(200).send(result)

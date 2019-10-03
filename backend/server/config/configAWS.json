@@ -1,25 +1,25 @@
 {
   "development": {
     "username": "sontm",
-    "password": null,
+    "password": "phuphuong2019",
     "database": "phuphuong",
-    "host": "localhost",
+    "host": "phuphuong-1.cayozjduw50s.ap-southeast-1.rds.amazonaws.com",
     "dialect": "postgres",
     "operatorsAliases": false
   },
   "test": {
     "username": "sontm",
-    "password": null,
+    "password": "phuphuong2019",
     "database": "phuphuong",
-    "host": "127.0.0.1",
+    "host": "phuphuong-1.cayozjduw50s.ap-southeast-1.rds.amazonaws.com",
     "dialect": "postgres",
     "operatorsAliases": false
   },
   "production": {
     "username": "sontm",
-    "password": null,
-    "database": "phuphuongtest",
-    "host": "127.0.0.1",
+    "password": "phuphuong2019",
+    "database": "phuphuong",
+    "host": "phuphuong-1.cayozjduw50s.ap-southeast-1.rds.amazonaws.com",
     "port": 5432,
     "dialect": "postgres",
     "operatorsAliases": false

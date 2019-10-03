@@ -10,6 +10,7 @@ import HomePage from './pages/home/HomePage'
 import ProductListPage from './pages/category/ProductListPage'
 import ProductDetailPage from './pages/product/ProductDetailPage'
 import CartPage from './pages/cart/CartPage'
+import BrandPage from './pages/brand/BrandPage'
 
 import CustomerPage from './pages/user/CustomerPage'
 import Login from './pages/user/Login'
@@ -100,6 +101,7 @@ class App extends Component {
                 <Route exact path="/" component={HomePage} />
                 <Route path="/category/:id/:lvl" component={ProductListPage} />
                 <Route path="/product/:id" component={ProductDetailPage} />
+                <Route path="/brand/:id" component={BrandPage} />
                 <Route path="/cart" component={CartPage} />
                 <Route path="/login" component={Login} />
                 <Route path="/customer/:info" component={CustomerPage} />

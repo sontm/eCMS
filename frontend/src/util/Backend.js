@@ -152,6 +152,14 @@ class Backend {
             .then((response) => {onOK(response);})
             .catch((error) => {onError(error);});
     }
+
+    // Brand-------------
+    getProductsOfBrand(id, onOK, onError) {
+        axios.get("/brand/" + id,
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
 }
 
 const backend = new Backend();

@@ -38,24 +38,26 @@ require('./components/AppPassPort');
 // Log requests to the console.
 //app.use(logger('dev'));
 //app.use(cors());
-app.use(cors({origin: 'http://localhost:3000'}));
+//app.use(cors({origin: 'http://localhost:3000'}));
+//app.use(cors({origin: 'http://localhost:3000'}));
 
 // CORS check for specific ORIGIN because we use Cookie
 var allowedOrigins = ['http://localhost:3000',
                       'http://localhost:5000'];
-// app.use(cors({
-//   origin: function(origin, callback){
-//     // allow requests with no origin 
-//     // (like mobile apps or curl requests)
-//     if(!origin) return callback(null, true);
-//     if(allowedOrigins.indexOf(origin) === -1){
-//       var msg = 'The CORS policy for this site does not ' +
-//                 'allow access from the specified Origin.';
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-//   }
-// }));
+app.use(cors({
+  origin: function(origin, callback){
+    // allow requests with no origin 
+    // (like mobile apps or curl requests)
+    if(!origin) return callback(null, true);
+    console.log("origin:" + origin)
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));
 
 // Require our routes into the application.
 require('./controllers')(app);

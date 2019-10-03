@@ -47,11 +47,14 @@ app.post('/api/products/get', product.getSomeProducts); // Get some products
 app.get('/api/products', product.getAll);
 app.get('/api/products/:productId', product.getProductDetail);
 
+app.get('/api/brand/:brandId', product.getProductsOfBrand);
+
 app.post('/api/categories', category.create);
 app.get('/api/categories', category.getAll); // Get category List only
 
 app.get('/api/categoriesFull', category.getAllWithProduct);
 app.get('/api/categoriesFull/:id', category.getOneWithProduct);
+
 
 app.post('/api/users/recentViews', userNproduct.addUserRecentViews);
 app.get('/api/users/recentViews/:userId', userNproduct.getRecentViewsOfUser);

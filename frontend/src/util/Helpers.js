@@ -1,4 +1,6 @@
 import React from 'react'
+import cloneDeep from 'lodash/cloneDeep';
+
 import {DISCOUNT_TYPE_DISCOUNT, DISCOUNT_TYPE_COUPON, DISCOUNT_TYPE_GIFT} from '../constants'
 if (!String.prototype.trim) {
     (function() {
@@ -241,6 +243,143 @@ class Helpers {
         return price + "%";
     }
 
+    // Input data is:
+    // [
+    // [{
+    //     "id":2,"name":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) Trang","descShort":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) desc Short","descMedium":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk)","descLong":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk)","unitPrice":10000,"stockNum":1000,"active":true,"imgThump":"images/products/BanhKeo/p2_1.jpg","img1":"images/products/BanhKeo/p2_1.jpg","img2":null,"img3":null,"img4":null,"img5":null,"img6":null,"firstCategoryId":11,"secondCategoryId":4,"thirdCategoryId":1,"brandId":3,"parentProductId":null,"productAttributeId":null,"createdAt":"","updatedAt":"",
+    //     "categories":{"id":11,"name":"Bánh Mềm","desc":null,"active":true,"order":null,"parentCategoryId":4,"createdAt":"","updatedAt":"",
+    //         "cateDiscounts":[]},
+    //     "brands":{"id":3,"name":"Orang Tua","imgLogo":null,"countryId":5,"active":true,"createdAt":"","updatedAt":"",
+    //         "countries":{"id":5,"name":"Trung Quốc","code":"cn","createdAt":"","updatedAt":""},
+    //         "brandDiscounts":[]},
+    //     "attributes":[{"id":2,"name":"Trắng","value":null,"attributeGroupId":1,"createdAt":"","updatedAt":"2019-09-07T02:25:51.137Z",
+    //         "attributeGroups":{"id":1,"name":"Màu Sắc","createdAt":"2019-09-07T02:24:00.454Z","updatedAt":""}}],
+    //     "productDiscounts":[]}]
+    //---------------------------
+    //category:[id1: {count:10, value:DBCategories}, id2:{}] (Child Level only)
+    //brandsQuery: {id1: {count:10, value:DBBrand}, id2:{}}
+    //brandCountriesQuery:{},
+    //attributesQuery:{},
+    //priceRangeQuery:[],  // [{name: 1, from:1000, to: 2000},{name: 2, from:2000, to: 4000},]
+    extractInfoFromProductList(products) {
+        let categoryQuery = {};
+        let brandsQuery = {};
+        let brandCountriesQuery = {};
+        let attributesQuery = {};
+        let priceRangeQuery = [];
+
+        if (products && products.length > 0) {
+            const COUNT_EACH_RANGE = Math.floor(products.length/5);
+            let countP = -1
+            let countRange = 1;
+            // Sort Products by LowPrice First
+
+            let productSorted = cloneDeep(products);
+            productSorted.sort((a, b) =>
+                (a.unitPrice > b.unitPrice) ? 1 : -1
+            );
+            let prevPriceRange = 0;
+            let curPriceRange = 0;
+            productSorted.forEach((item, idx) => {
+                // Min Price
+                if (countP == -1) {
+                    // Always 0 for First Range
+                    //prevPriceRange = this.getFinalPriceOfProduct(p);
+                    prevPriceRange = 0;
+                    countP = 0;
+                }
+                countP++;
+                if (countP >= COUNT_EACH_RANGE) {
+                    // Finish a Range, get this price Round Up to 50K
+                    curPriceRange = this.getFinalPriceOfProduct(item);
+                    let roundDivider = Math.ceil(curPriceRange/50000); // 50K
+                    curPriceRange = roundDivider * 50000;
+                    priceRangeQuery.push({name:countRange, from: prevPriceRange, to: curPriceRange})
+                    countRange++;
+                    prevPriceRange = curPriceRange;
+                    countP = 0;
+                }
+
+                if (item.categories) {
+                    if (categoryQuery[""+item.categories.id]) {
+                        // Existed, increase count
+                        categoryQuery[""+item.categories.id].count++;
+                    } else {
+                        categoryQuery[""+item.categories.id] = {count: 1, value: item.categories}
+                    }
+                }
+
+                if (item.brands) {
+                    if (brandsQuery[""+item.brands.id]) {
+                        // Existed, increase count
+                        brandsQuery[""+item.brands.id].count++;
+                    } else {
+                        brandsQuery[""+item.brands.id] = {count: 1, value: item.brands}
+                    }
+                }
+
+                if (item.attributes && item.attributes.length > 0) {
+                    item.attributes.forEach(attribute => {
+                        let curAttributeGroups = attribute.attributeGroups;
+                        if (attributesQuery[""+curAttributeGroups.name]) {
+                            // Exist Attribute Group
+
+                            // CHeck if Attribute exist
+                            let isExistAttr = false;
+                            for (let l = 0 ; l < attributesQuery[""+curAttributeGroups.name].attributes.length; l++) {
+                                let aVal = attributesQuery[""+curAttributeGroups.name].attributes[l];
+                                if (attribute.id == aVal.id) {
+                                    // Exist attribute, increase count
+                                    aVal.count++;
+                                    isExistAttr = true;
+                                    break;
+                                }
+                            }
+                            if (isExistAttr == false) {
+                                attributesQuery[""+curAttributeGroups.name].attributes.push({
+                                    id: attribute.id,
+                                    name: attribute.name,
+                                    count: 1
+                                });
+                            }
+                            
+                        } else {
+                            // Not Exist Group, create new
+                            attributesQuery[""+curAttributeGroups.name] = {
+                                id:curAttributeGroups.id,
+                                attributes:[{
+                                    id: attribute.id,
+                                    name: attribute.name,
+                                    count: 1
+                                }]
+                            }
+                        }
+                    })
+                }
+            })
+        }
+        // brandCountry
+        for (var prop in brandsQuery) {
+            if (Object.prototype.hasOwnProperty.call(brandsQuery, prop)) {
+                let curBrand = brandsQuery[""+prop].value;
+                if (brandCountriesQuery[""+curBrand.countries.id]) {
+                    // Existed, increase count
+                    brandCountriesQuery[""+curBrand.countries.id].count += brandsQuery[""+prop].count;
+                } else {
+                    brandCountriesQuery[""+curBrand.countries.id] = 
+                        {count: brandsQuery[""+prop].count,
+                        value: curBrand.countries}
+                }
+            }
+        }
+        return {
+            categoryQuery:categoryQuery,
+            brandsQuery: brandsQuery,
+            brandCountriesQuery: brandCountriesQuery,
+            attributesQuery: attributesQuery,
+            priceRangeQuery:priceRangeQuery
+        };
+    }
     // Get the Not Duplicate DBBrand from List Products: [{xxx, brands:{id, name, countryId}}]
     // Result: {id1: {count:10, value:DBBrand}, id2:{}}
     getBrandsQuery(products) {
@@ -356,14 +495,72 @@ class Helpers {
         return result;
     }
 
-    // popular, new, discount, lowprice, highprice and searchname
-    filterProduct (filter, searchname, products) {
+    // Input Product is:
+    // [
+    // [{
+    //     "id":2,"name":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) Trang","descShort":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk) desc Short","descMedium":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk)","descLong":"Bánh xốp Fullo Vani Sữa (Fullo Stick Wafer Vanilla Milk)","unitPrice":10000,"stockNum":1000,"active":true,"imgThump":"images/products/BanhKeo/p2_1.jpg","img1":"images/products/BanhKeo/p2_1.jpg","img2":null,"img3":null,"img4":null,"img5":null,"img6":null,"firstCategoryId":11,"secondCategoryId":4,"thirdCategoryId":1,"brandId":3,"parentProductId":null,"productAttributeId":null,"createdAt":"","updatedAt":"",
+    //     "categories":{"id":11,"name":"Bánh Mềm","desc":null,"active":true,"order":null,"parentCategoryId":4,"createdAt":"","updatedAt":"",
+    //         "cateDiscounts":[]},
+    //     "brands":{"id":3,"name":"Orang Tua","imgLogo":null,"countryId":5,"active":true,"createdAt":"","updatedAt":"",
+    //         "countries":{"id":5,"name":"Trung Quốc","code":"cn","createdAt":"","updatedAt":""},
+    //         "brandDiscounts":[]},
+    //     "attributes":[{"id":2,"name":"Trắng","value":null,"attributeGroupId":1,"createdAt":"","updatedAt":"2019-09-07T02:25:51.137Z",
+    //         "attributeGroups":{"id":1,"name":"Màu Sắc","createdAt":"2019-09-07T02:24:00.454Z","updatedAt":""}}],
+    //     "productDiscounts":[]}]
+    //--------------------
+    // sorting: popular, new, discount, lowprice, highprice and searchname
+    // queryCriteria: { // Current Query which user select on sidemenu
+    //     categories: [] list of ID
+    //     brands:[], // list of brand ID, if empty mean All
+    //     brandCountries:[], // list of ID
+    //     attributes:[], // list of ID,
+    //     priceRange:{}, // {from: m to:};
+    //     filter: {filterType: "popular", searchTerm: ""}
+    // }
+    filterProduct (sorting, searchname, products, queryCriteria) {
         let productFilters = [...products];
-        if (filter == "lowprice") {
+
+        // First, return product satisfy query only
+        productFilters = productFilters.filter(item => {
+            if (queryCriteria.categories.length > 0 && queryCriteria.categories.indexOf(""+item.categories.id) < 0) {
+                //this Cate ID not in list, not INCLUDE
+                return false;
+            }
+            if (queryCriteria.brands.length > 0 && queryCriteria.brands.indexOf(""+item.brands.id) < 0) {
+                //this Brand ID not in list, not INCLUDE
+                return false;
+            }
+            if (queryCriteria.brandCountries.length > 0 && queryCriteria.brandCountries.indexOf(""+item.brands.countries.id) < 0) {
+                //this BrandCountry ID not in list, not INCLUDE
+                return false;
+            }
+            if (queryCriteria.attributes.length > 0) {
+                let ret = false;
+                for (let l = 0; l < item.attributes.length; l++) {
+                    // If any attribute of this product in query, true
+                    if (queryCriteria.attributes.indexOf(""+item.attributes[l].id) >= 0) {
+                        ret = true;
+                        break;
+                    }
+                }
+                //this attribute not in list, not INCLUDE
+                return ret;
+            }
+            if (queryCriteria.priceRange.to >= queryCriteria.priceRange.from 
+                    && (item.unitPrice < queryCriteria.priceRange.from || item.unitPrice > queryCriteria.priceRange.to)) {
+                //this Price not valid
+                return false;
+            }
+
+            return true;
+        })
+ 
+        // Second, Sorting based on filter
+        if (sorting == "lowprice") {
             productFilters.sort((a, b) =>
                 (a.unitPrice > b.unitPrice) ? 1 : -1
             );
-        } else if (filter == "highprice") {
+        } else if (sorting == "highprice") {
             productFilters.sort((a, b) =>
                 (a.unitPrice < b.unitPrice) ? 1 : -1
             );

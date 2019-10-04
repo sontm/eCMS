@@ -6,6 +6,10 @@ import {actQueryChangeCategory} from '../../redux/ProductQueryReducer'
 import ProductWrapper from './ProductWrapper'
 import SideMenu from '../../common/SideMenu';
 
+import { actCategoryGet } from '../../redux/CategoryActions';
+import {actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry, actQueryChangePriceRange} from '../../redux/ProductQueryReducer'
+
+
 import { actProductGetOfCategory, actProductFilter } from '../../redux/ProductActions';
 import './ProductListPage.css';
 
@@ -135,7 +139,15 @@ class ProductListPage extends Component {
             <React.Fragment>
                 <Row>
                     <Col xs={0} sm={0} md={6} lg={5} xl={4} xxl={4}>
-                    <SideMenu />
+                    <SideMenu category={this.props.category} product={this.props.product}
+                        query={this.props.query}
+                        actCategoryGet={this.props.actCategoryGet}
+                        actCategoryGet={this.props.actCategoryGet}
+                        actQuerySetBrand={this.props.actQuerySetBrand}
+                        actQuerySetAttribute={this.props.actQuerySetAttribute}
+                        actQuerySetBrandCountry={this.props.actQuerySetBrandCountry}
+                        actQueryChangePriceRange={this.props.actQueryChangePriceRange}
+                    />
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={19} xl={20} xxl={20}>
                         {this.renderFilterBar()}
@@ -157,7 +169,9 @@ const mapStateToProps = (state) => ({
 const mapActionsToProps = {
     actProductGetOfCategory,
     actQueryChangeCategory,
-    actProductFilter
+    actProductFilter,
+
+    actCategoryGet,actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry,actQueryChangePriceRange
 };
 
 export default withRouter(connect(

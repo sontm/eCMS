@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import SideMenu from '../../common/SideMenu';
 import Backend from '../../util/Backend'
 import ProductWrapper from '../category/ProductWrapper'
 import './BrandPage.css';
@@ -22,9 +23,32 @@ class BrandPage extends Component {
         this.state = {
             products: [],
             productsFilter: [],
-            filterType: "popular",
-            searchTerm: ""
+            product: {
+                categoryQuery:{},
+                brandsQuery:{},
+                brandCountriesQuery:{},
+                attributesQuery:{},
+                priceRangeQuery:[]
+            },
+            query: { // Current Query which user select on sidemenu
+                category:{}, // {id, level} TODO
+                categories:[], // list of ID
+                brands:[], // list of brand ID, if empty mean All
+                brandCountries:[], // list of ID
+                attributes:[], // list of ID,
+                priceRange:{}, // {from: m to:};
+                filter: {filterType: "popular", searchTerm: ""}
+            }
         }
+
+        this.actQuerySetBrand = this.actQuerySetBrand.bind(this);
+        this.actQuerySetAttribute = this.actQuerySetAttribute.bind(this);
+        this.actQuerySetBrandCountry = this.actQuerySetBrandCountry.bind(this);
+        this.actQueryChangePriceRange = this.actQueryChangePriceRange.bind(this);
+        this.actQuerySetCategory = this.actQuerySetCategory.bind(this);
+
+        // Class Variale
+        //shouldReExtract products
     }
 
     // Note when Refresh by URL, there is no parsedQuery.lvl
@@ -55,9 +79,17 @@ class BrandPage extends Component {
             response => {
                 console.log("getProductsOfBrand Done&&&&&&&&&&&&&&&&&&&&&&&&6")
                 console.log(response.data)
+                let {categoryQuery, brandsQuery,brandCountriesQuery,
+                    attributesQuery,priceRangeQuery} = Helpers.extractInfoFromProductList(response.data);
                 this.setState({
                     products: response.data,
-                    productsFilter: response.data
+                    productsFilter: response.data,
+                    product: {
+                        categoryQuery:categoryQuery,
+                        brandsQuery:brandsQuery,
+                        brandCountriesQuery:brandCountriesQuery,
+                        attributesQuery:attributesQuery,
+                        priceRangeQuery:priceRangeQuery}
                 })
             },
             error => {
@@ -70,10 +102,18 @@ class BrandPage extends Component {
 
     onChangeFilter (e) {
         console.log('Name:' + e.target.name);
-        let productFilters = Helpers.filterProduct(e.target.name, this.state.searchTerm, this.state.products);
+        let productFilters = Helpers.filterProduct(e.target.name, 
+            this.state.query.filter.searchTerm, 
+            this.state.products, this.state.query);
         this.setState({
-            productsFilter: productFilters,
-            filterType: e.target.name
+            query:{
+                ...this.state.query,
+                filter: {
+                    filterType: e.target.name,
+                    searchTerm: this.state.query.filter.searchTerm
+                }
+            },
+            productsFilter: productFilters
         })
     };
     onSearchFilter (value) {
@@ -92,10 +132,17 @@ class BrandPage extends Component {
         }
         this.timeout = setTimeout(() => {
             console.log("END of TIMEOUT")
-            let productFilters = Helpers.filterProduct(this.state.filterType, currentSearch, this.state.products);
+            let productFilters = Helpers.filterProduct(this.state.query.filter.filterType, currentSearch, 
+                this.state.products, this.state.query);
             this.setState({
-                productsFilter: productFilters,
-                searchTerm: currentSearch
+                query:{
+                    ...this.state.query,
+                    filter: {
+                        filterType: this.state.query.filter.filterType,
+                        searchTerm: currentSearch
+                    }
+                },
+                productsFilter: productFilters
             })
         },500);
     }
@@ -177,9 +224,9 @@ class BrandPage extends Component {
                             <span>{element.brands.brandDiscounts.length > 0 ? 
                                 "Khuyến Mại:" : ""}</span>
                             <ul>
-                            {element.brands.brandDiscounts.map(element => {
+                            {element.brands.brandDiscounts.map((element, idx) => {
                                 return (
-                                    <li>{element.desc}</li>
+                                    <li key={idx}>{element.desc}</li>
                                 )
                             })}
                             </ul>
@@ -192,15 +239,172 @@ class BrandPage extends Component {
         return (
             <React.Fragment>
                 <Row>
-                    {infoView}
-                </Row>
-                <br/>
-                {this.renderFilterBar()}
-                <Row type="flex">
-                {producView}
+                    <Col xs={0} sm={0} md={6} lg={5} xl={4} xxl={4}>
+                    <SideMenu product={this.state.product} query={this.state.query}
+                        actQuerySetCategory={this.actQuerySetCategory}
+                        actQuerySetBrand={this.actQuerySetBrand}
+                        actQuerySetAttribute={this.actQuerySetAttribute}
+                        actQuerySetBrandCountry={this.actQuerySetBrandCountry}
+                        actQueryChangePriceRange={this.actQueryChangePriceRange}
+                    />
+                    </Col>
+                    <Col xs={24} sm={24} md={18} lg={19} xl={20} xxl={20}>
+                        <Row>
+                            {infoView}
+                        </Row>
+                        <br/>
+                        {this.renderFilterBar()}
+                        <Row type="flex">
+                            {producView}
+                        </Row>
+                    </Col>
                 </Row>
             </React.Fragment>
         )
+    }
+    actQueryChangePriceRange(prevQueryProps, from, to) {
+        console.log("LOCAL actQueryChangePriceRange:" + from + "->" + to)
+        let newQuery = {
+            ...this.state.query,
+            priceRange: {from: from, to:to}
+        }
+
+        let productFilters = Helpers.filterProduct(this.state.query.filter.filterType, 
+            this.state.query.filter.searchTerm, 
+            this.state.products, newQuery);
+        this.setState({
+            query:newQuery,
+            productsFilter: productFilters
+        })
+    }
+    
+    // id -1 mean Clear
+    actQuerySetCategory(prevQueryProps, id, isCheck) {
+        console.log("LOCAL actQuerySetCategory:")
+        let newCate = [...this.state.query.categories];
+    
+        if (id == -1) {
+            newCate = [];
+        } else if (isCheck) {
+            // Include Cate
+            if (newCate.indexOf(id) <= -1) {
+                newCate.push(id);
+            }
+        } else {
+            // Exclude Cate
+            if (newCate.indexOf(id) > -1) {
+                newCate.splice(newCate.indexOf(id), 1);
+            }
+        }
+        let newQuery = {
+            ...this.state.query,
+            categories: newCate
+        }
+        let productFilters = Helpers.filterProduct(this.state.query.filter.filterType, 
+            this.state.query.filter.searchTerm, 
+            this.state.products, newQuery);
+        this.setState({
+            query: newQuery,
+            productsFilter:productFilters
+        })
+    }
+
+    // id -1 mean Clear
+    actQuerySetBrand(prevQueryProps, id, isCheck) {
+        console.log("LOCAL actQuerySetBrand:")
+        let newBrands = [...this.state.query.brands];
+    
+        if (id == -1) {
+            newBrands = [];
+        } else if (isCheck) {
+            // Include Brand
+            if (newBrands.indexOf(id) <= -1) {
+                newBrands.push(id);
+            }
+        } else {
+            // Exclude Brand
+            if (newBrands.indexOf(id) > -1) {
+                newBrands.splice(newBrands.indexOf(id), 1);
+            }
+        }
+        let newQuery = {
+            ...this.state.query,
+            brands: newBrands
+        }
+        let productFilters = Helpers.filterProduct(this.state.query.filter.filterType, 
+            this.state.query.filter.searchTerm, 
+            this.state.products, newQuery);
+        this.setState({
+            query: newQuery,
+            productsFilter:productFilters
+        })
+    }
+    
+    // id = -1 mean isCHeck is array of ID, need to remove all
+    actQuerySetAttribute(prevQueryProps, id, isCheck) {
+        console.log("LOCAL actQuerySetAttribute:")
+        let newAttributes = [...this.state.query.attributes];
+    
+        if (id == -1) {
+            isCheck.forEach(id => {
+                if (newAttributes.indexOf(""+id) > -1) {
+                    newAttributes.splice(newAttributes.indexOf(""+id), 1);
+                }
+            })
+        } else if (isCheck) {
+            // Include
+            if (newAttributes.indexOf(id) <= -1) {
+                newAttributes.push(id);
+            }
+        } else {
+            // Exclude
+            if (newAttributes.indexOf(id) > -1) {
+                newAttributes.splice(newAttributes.indexOf(id), 1);
+            }
+        }
+        let newQuery = {
+            ...this.state.query,
+            attributes: newAttributes
+        }
+        let productFilters = Helpers.filterProduct(this.state.query.filter.filterType, 
+            this.state.query.filter.searchTerm, 
+            this.state.products, newQuery);
+
+        this.setState({
+            query:newQuery,
+            productsFilter:productFilters
+        })
+    }
+    
+    // id -1 mean clear
+    actQuerySetBrandCountry(prevQueryProps, id, isCheck) {
+        console.log("Local actQuerySetBrandCountry:")
+        let newBrandCountriess = [...this.state.query.brandCountries];
+    
+        if (id == -1) {
+            newBrandCountriess = [];
+        } else if (isCheck) {
+            // Include Brand
+            if (newBrandCountriess.indexOf(id) <= -1) {
+                newBrandCountriess.push(id);
+            }
+        } else {
+            // Exclude Brand
+            if (newBrandCountriess.indexOf(id) > -1) {
+                newBrandCountriess.splice(newBrandCountriess.indexOf(id), 1);
+            }
+        }
+        let newQuery = {
+            ...this.state.query,
+            brandCountries: newBrandCountriess
+        }
+        let productFilters = Helpers.filterProduct(this.state.query.filter.filterType, 
+            this.state.query.filter.searchTerm, 
+            this.state.products, newQuery);
+        this.setState({
+            query: newQuery,
+            productsFilter:productFilters
+        })
     }
 }
 

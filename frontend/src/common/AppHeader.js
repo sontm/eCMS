@@ -63,7 +63,6 @@ class AppHeader extends Component {
 
     // WHen mouse over ThuongHieu
     onBrandMenuHover() {
-      if (!this.isHomePage) {
         // Below timeout to prevent when Mouse only Move through ThuongHieu-menu shown
         // wait 300ms to show Menu list
         this.timeoutBrand = setTimeout(() => {
@@ -71,11 +70,8 @@ class AppHeader extends Component {
             hoveredBrandMenu: true
           })
         },300);
-        
-      }
     }
     onBrandMenuOut() {
-      if (!this.isHomePage) {
         if(this.timeoutBrand) {
           clearTimeout(this.timeoutBrand);
         }
@@ -89,7 +85,6 @@ class AppHeader extends Component {
             })
           }
         }, 100);
-      }
     }
     onBrandContainerHover(){
       this.setState({
@@ -358,7 +353,8 @@ class AppHeader extends Component {
       //xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl	≥1600px
       return (
         <React.Fragment>
-          <div className={(this.state.hoveredMenuList || this.state.hoveredBrandMenu) ? "flyout-outside-mask" : ""}></div>
+          <div className={this.state.hoveredMenuList ? "flyout-outside-mask" : 
+            (this.state.hoveredBrandMenu ? "flyout-outside-mask-brand" : "")}></div>
           <Header>
           <div className="app-header">
           <Row>

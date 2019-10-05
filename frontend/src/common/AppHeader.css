@@ -80,7 +80,7 @@
 }
 
 .ant-layout-header{
-  z-index: 100 !important;
+  z-index: 150 !important;
 }
 
 /* Override Weird Heigh 64px of antd */
@@ -157,6 +157,16 @@
   z-index: 50;
 }
 
+.flyout-outside-mask-brand {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 101;
+  pointer-events: none;
+}
 
 /* THis contaiin Menu such as Danh Muc San Pham, Hot .. */
 .header-options {

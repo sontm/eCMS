@@ -14,7 +14,7 @@
     overflow: hidden;
     position: absolute;
     margin-top: 0px;
-    z-index: 100;
+    z-index: 200;
     width: 90%;
     /* background: rgb(240, 240, 240); */
     min-height: 200px;
@@ -23,7 +23,7 @@
 .brand-menu-container-right {
     background: white;
     border: 1px solid #e8e8e8;
-    z-index: 100;
+    z-index: 200;
     /* This is for same height on a Row, parent need  */
     /* margin-bottom: -99999px;
     padding-bottom: 99999px; */
@@ -31,7 +31,7 @@
 
     padding-left: 34px;
 
-    height: 300px;
+    height: 400px;
 }
 
 .brand-menu-container-right-hidden {

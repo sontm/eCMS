@@ -1,5 +1,6 @@
 import React from 'react'
 import cloneDeep from 'lodash/cloneDeep';
+import AppConstant from './AppConstant'
 
 import {DISCOUNT_TYPE_DISCOUNT, DISCOUNT_TYPE_COUPON, DISCOUNT_TYPE_GIFT} from '../constants'
 if (!String.prototype.trim) {
@@ -269,7 +270,7 @@ class Helpers {
         let priceRangeQuery = [];
 
         if (products && products.length > 0) {
-            const COUNT_EACH_RANGE = Math.floor(products.length/5);
+            const COUNT_EACH_RANGE = Math.floor(products.length/AppConstant.CONFIG_PRICE_DIVIDED_RANGE);
             let countP = -1
             let countRange = 1;
             // Sort Products by LowPrice First
@@ -280,6 +281,7 @@ class Helpers {
             );
             let prevPriceRange = 0;
             let curPriceRange = 0;
+            
             productSorted.forEach((item, idx) => {
                 // Min Price
                 if (countP == -1) {
@@ -292,11 +294,13 @@ class Helpers {
                 if (countP >= COUNT_EACH_RANGE) {
                     // Finish a Range, get this price Round Up to 50K
                     curPriceRange = this.getFinalPriceOfProduct(item);
-                    let roundDivider = Math.ceil(curPriceRange/50000); // 50K
-                    curPriceRange = roundDivider * 50000;
-                    priceRangeQuery.push({name:countRange, from: prevPriceRange, to: curPriceRange})
+                    let roundDivider = Math.ceil(curPriceRange/AppConstant.CONFIG_PRICE_ROUNDUP_TO); // 50K
+                    curPriceRange = roundDivider * AppConstant.CONFIG_PRICE_ROUNDUP_TO;
+                    if (prevPriceRange != curPriceRange) {
+                        priceRangeQuery.push({name:countRange, from: prevPriceRange, to: curPriceRange})
+                        prevPriceRange = curPriceRange;
+                    }
                     countRange++;
-                    prevPriceRange = curPriceRange;
                     countP = 0;
                 }
 
@@ -546,7 +550,7 @@ class Helpers {
                 //this attribute not in list, not INCLUDE
                 return ret;
             }
-            if (queryCriteria.priceRange.to >= queryCriteria.priceRange.from 
+            if (queryCriteria.priceRange.to > 0 && queryCriteria.priceRange.to >= queryCriteria.priceRange.from 
                     && (item.unitPrice < queryCriteria.priceRange.from || item.unitPrice > queryCriteria.priceRange.to)) {
                 //this Price not valid
                 return false;
@@ -629,7 +633,7 @@ class Helpers {
     getPriceRanges(products) {
         let result = []
         if (products && products.length > 0) {
-            const COUNT_EACH_RANGE = Math.floor(products.length/5);
+            const COUNT_EACH_RANGE = Math.floor(products.length/AppConstant.CONFIG_PRICE_DIVIDED_RANGE);
             let countP = -1
             let countRange = 1;
             // Sort Products by LowPrice First
@@ -639,6 +643,7 @@ class Helpers {
             );
             let prevPriceRange = 0;
             let curPriceRange = 0;
+            
             products.forEach((p, idx) => {
                 // Min Price
                 if (countP == -1) {
@@ -651,11 +656,13 @@ class Helpers {
                 if (countP >= COUNT_EACH_RANGE) {
                     // Finish a Range, get this price Round Up to 50K
                     curPriceRange = this.getFinalPriceOfProduct(p);
-                    let roundDivider = Math.ceil(curPriceRange/50000); // 50K
-                    curPriceRange = roundDivider * 50000;
-                    result.push({name:countRange, from: prevPriceRange, to: curPriceRange})
+                    let roundDivider = Math.ceil(curPriceRange/AppConstant.CONFIG_PRICE_ROUNDUP_TO); // 50K
+                    curPriceRange = roundDivider * AppConstant.CONFIG_PRICE_ROUNDUP_TO;
+                    if (prevPriceRange != curPriceRange) {
+                        result.push({name:countRange, from: prevPriceRange, to: curPriceRange})
+                        prevPriceRange = curPriceRange;
+                    }
                     countRange++;
-                    prevPriceRange = curPriceRange;
                     countP = 0;
                 }
 

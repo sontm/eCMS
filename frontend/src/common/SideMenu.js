@@ -5,7 +5,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { Card } from 'antd';
-import { Checkbox, Slider, InputNumber, Radio } from 'antd';
+import { Checkbox, Slider, InputNumber, Radio, Tooltip } from 'antd';
 import './SideMenu.css'
 
 const { Search } = Input;
@@ -230,6 +230,7 @@ class SideMenu extends Component {
                 </div>
             );
         } else if (this.props.product.categoryQuery) {
+            // Use content self from Query (Search, ...)
             const content = [];
             for (var prop in this.props.product.categoryQuery) {
                 if (Object.prototype.hasOwnProperty.call(this.props.product.categoryQuery, prop)) {
@@ -239,8 +240,8 @@ class SideMenu extends Component {
                             key={this.props.product.categoryQuery[""+prop].value.id}
                             name={""+this.props.product.categoryQuery[""+prop].value.id}
                             onChange={this.onChangeCategoryQuery}
-                            checked={(this.props.query.brands.length > 0 && 
-                                this.props.query.brands.indexOf(
+                            checked={(this.props.query.categories.length > 0 && 
+                                this.props.query.categories.indexOf(
                                     (""+this.props.product.categoryQuery[""+prop].value.id)) >= 0)}
                         >
                             {this.props.product.categoryQuery[""+prop].value.name + 
@@ -253,9 +254,9 @@ class SideMenu extends Component {
             }
             return (
                 <Card size="small" title="Danh Muc San Pham" style={{marginTop: "10px"}}
-                extra={<Button shape="circle" type="primary"  size="small" onClick={this.clearCategoryQuery}>
+                extra={<Tooltip title="Xoá Lọc"><Button shape="circle" type="primary"  size="small" onClick={this.clearCategoryQuery}>
                     <Icon type="undo" style={{fontSize:"20px", color:"white"}}/>
-                </Button>}>
+                </Button></Tooltip>}>
                     {content}
                 </Card>
             )
@@ -300,9 +301,9 @@ class SideMenu extends Component {
             }
             return (
                 <Card size="small" title="Thuong Hieu" style={{marginTop: "10px"}}
-                extra={<Button shape="circle" type="primary"  size="small" onClick={this.clearBrandQuery}>
+                extra={<Tooltip title="Xoá Lọc"><Button shape="circle" type="primary"  size="small" onClick={this.clearBrandQuery}>
                     <Icon type="undo" style={{fontSize:"20px", color:"white"}}/>
-                </Button>}>
+                </Button></Tooltip>}>
                     {content}
                 </Card>
             )
@@ -345,9 +346,9 @@ class SideMenu extends Component {
             }
             return (
                 <Card size="small" title="Xuat Xu Thuong Hieu" style={{marginTop: "10px"}}
-                extra={<Button shape="circle" type="primary"  size="small" onClick={this.clearBrandCountryQuery}>
+                extra={<Tooltip title="Xoá Lọc"><Button shape="circle" type="primary"  size="small" onClick={this.clearBrandCountryQuery}>
                     <Icon type="undo" style={{fontSize:"20px", color:"white"}}/>
-                </Button>}>
+                </Button></Tooltip>}>
                     {content}
                 </Card>
             )
@@ -454,9 +455,9 @@ class SideMenu extends Component {
         }
         return (
             <Card size="small" title="Gia" style={{marginTop: "10px"}} 
-            extra={<Button shape="circle" type="primary"  size="small" onClick={this.clearPriceRange}>
+            extra={<Tooltip title="Xoá Lọc"><Button shape="circle" type="primary"  size="small" onClick={this.clearPriceRange}>
                     <Icon type="undo" style={{fontSize:"20px", color:"white"}}/>
-            </Button>}>
+            </Button></Tooltip>}>
                 <Radio.Group onChange={this.onChangePriceRangeRadio} value={this.state.curPriceName}>
                     {radioViews}
                 </Radio.Group>
@@ -604,10 +605,10 @@ class SideMenu extends Component {
                         })
                         content.push(
                             <Card size="small" title={prop} style={{marginTop: "10px"}} key={prop}
-                            extra={<Button shape="circle" type="primary"  size="small" key={prop}
+                            extra={<Tooltip title="Xoá Lọc"><Button shape="circle" type="primary"  size="small" key={prop}
                             onClick={this.clearAttributeQuery.bind(this, prop)}>
                                 <Icon type="undo" style={{fontSize:"20px", color:"white"}}/>
-                            </Button>}>
+                            </Button></Tooltip>}>
                                 {subValue}
                             </Card>
                         )

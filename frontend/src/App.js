@@ -28,7 +28,7 @@ import NotFound from './common/NotFound';
 import LoadingIndicator from './common/LoadingIndicator';
 import PrivateRoute from './common/PrivateRoute';
 
-import { Layout, notification, Menu } from 'antd';
+import { Layout, notification, Menu, BackTop } from 'antd';
 import { Row, Col } from 'antd';
 import {actUserGetProfile, actUserGetCartItems} from './redux/UserReducer'
 require('dotenv').config()
@@ -115,6 +115,7 @@ class App extends Component {
           <Footer style={{ textAlign: 'center', minHeight:"200px", marginTop:"20px"}}>
             <AppFooter />
           </Footer>
+          <BackTop />
         </Layout>
     );
   }

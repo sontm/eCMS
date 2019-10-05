@@ -120,7 +120,7 @@ class SearchPage extends Component {
                 }); 
         }
     }
-
+    
     onChangeFilter (e) {
         console.log('Name:' + e.target.name);
         let productFilters = Helpers.filterProduct(e.target.name, 
@@ -238,19 +238,10 @@ class SearchPage extends Component {
                 if (index == 0) {
                     infoView = (
                         <Card>
-                            <span>{"Thương Hiệu: " + element.brands.name}</span>
+                            <span>{"Kết quả tìm kiếm cho '" + this.props.match.params.keyword + "'"}</span>
                             <br/>
-                            <span>{"Số Sản Phẩm: " + this.state.productsFilter.length}</span>
+                            <span>{this.state.productsFilter.length + " kết quả"}</span>
                             <br/>
-                            <span>{element.brands.brandDiscounts.length > 0 ? 
-                                "Khuyến Mại:" : ""}</span>
-                            <ul>
-                            {element.brands.brandDiscounts.map((element, idx) => {
-                                return (
-                                    <li key={idx}>{element.desc}</li>
-                                )
-                            })}
-                            </ul>
                         </Card>
                     )
                 }

@@ -44,7 +44,8 @@ class AppHeader extends Component {
         this.onMenuContainerOut = this.onMenuContainerOut.bind(this); 
         this.onParentMenuClick = this.onParentMenuClick.bind(this); 
         this.onBrandMenuClick = this.onBrandMenuClick.bind(this)
-
+        this.onChangeSearch = this.onChangeSearch.bind(this)
+        
         this.onBrandMenuHover = this.onBrandMenuHover.bind(this);
         this.onBrandMenuOut = this.onBrandMenuOut.bind(this);
         this.onBrandContainerHover = this.onBrandContainerHover.bind(this);
@@ -160,10 +161,17 @@ class AppHeader extends Component {
       })
     }
 
-
+    onChangeSearch(e) {
+      console.log(e.target.value)
+      this.setState({
+        searchTerm: e.target.value
+      })
+    }
     onSearchTerm(value) {
       console.log("onSearchTerm:" + value)
-      this.props.history.push("/search/" + value);
+      if (value.trim().length > 0) {
+        this.props.history.push("/search/" + value);
+      }
     }
     componentDidMount() {
       console.log("  >>DID MOUNT AppHeader")
@@ -173,6 +181,15 @@ class AppHeader extends Component {
       if (this.props.siteInfo.brands.length <= 0 ) {
         this.props.actBrandsGet();
       }
+
+      // If User Refresh Search page with Search Term, set it
+      if (this.props.location.pathname.indexOf("/search") >= 0) {
+        let searchTerm =   this.props.location.pathname.substring(8);
+        
+        this.setState({
+            searchTerm: searchTerm
+        })
+      }
     }
     componentDidUpdate() {
       if (this.props.siteInfo.categories.length <= 0 ) {
@@ -181,6 +198,17 @@ class AppHeader extends Component {
           this.props.actCategoryGet();
       }
       
+    }
+    componentWillReceiveProps(nextProps) {
+      // console.log("Next PROPS PATH:" + nextProps.location.pathname)
+      // console.log("  Current PROPS PATH:" + this.props.location.pathname)
+      // If user from Search Page to another page, will clear Search Term
+      if (nextProps.location.pathname.indexOf("/search") < 0 && 
+        this.props.location.pathname.indexOf("/search") >= 0) {
+          this.setState({
+            searchTerm: ""
+          })
+      }
     }
 
     renderBottomMenuMobile () {
@@ -346,6 +374,8 @@ class AppHeader extends Component {
                 placeholder="Search product, category..."
                 enterButton="Tìm Kiếm"
                 size="large"
+                value={this.state.searchTerm}
+                onChange={this.onChangeSearch}
                 onSearch={value => this.onSearchTerm(value)}
             /></Col>
 

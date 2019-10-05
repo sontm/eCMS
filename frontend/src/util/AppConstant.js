@@ -3,6 +3,9 @@ const LOCAL_CART_ADDED = "LOCAL_CART_ADDED";
 const LOCAL_JWT_TOKEN = "LOCAL_JWT_TOKEN";
 const LOCAL_CSRF_TOKEN = "LOCAL_CSRF_TOKEN";
 
+const CONFIG_PRICE_DIVIDED_RANGE = 5;
+const CONFIG_PRICE_ROUNDUP_TO = 10000;
+
 export default class AppConstants  {
     static get LOCAL_RECENT_VIEWED() {
         return LOCAL_RECENT_VIEWED;
@@ -15,6 +18,12 @@ export default class AppConstants  {
     }
     static get LOCAL_CSRF_TOKEN() {
         return LOCAL_CSRF_TOKEN;
+    }
+    static get CONFIG_PRICE_DIVIDED_RANGE() {
+        return CONFIG_PRICE_DIVIDED_RANGE;
+    }
+    static get CONFIG_PRICE_ROUNDUP_TO() {
+        return CONFIG_PRICE_ROUNDUP_TO;
     }
 
     static addProductToRecentView(id) {

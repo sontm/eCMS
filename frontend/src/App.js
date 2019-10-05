@@ -11,6 +11,7 @@ import ProductListPage from './pages/category/ProductListPage'
 import ProductDetailPage from './pages/product/ProductDetailPage'
 import CartPage from './pages/cart/CartPage'
 import BrandPage from './pages/brand/BrandPage'
+import SearchPage from './pages/search/SearchPage'
 
 import CustomerPage from './pages/user/CustomerPage'
 import Login from './pages/user/Login'
@@ -105,6 +106,8 @@ class App extends Component {
                 <Route path="/cart" component={CartPage} />
                 <Route path="/login" component={Login} />
                 <Route path="/customer/:info" component={CustomerPage} />
+                <Route path="/search/:keyword" component={SearchPage} />
+                
                 <Route component={NotFound}></Route>
               </Switch>
             </Content>

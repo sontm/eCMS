@@ -315,7 +315,7 @@ class ProductDetailPage extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    category: state.category,
+    siteInfo: state.siteInfo,
     product: state.product
   });
   const mapActionsToProps = {

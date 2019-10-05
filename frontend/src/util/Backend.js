@@ -111,13 +111,20 @@ class Backend {
             .catch((error) => {onError(error);});
     }
 
-    // Category---------------------------------------
+    // Category-Brands---------------------------------------
     getAllCategoriesName(onOK, onError) {
         axios.get("/categories",
             { headers: this.createHeader()})
             .then((response) => {onOK(response);})
             .catch((error) => {onError(error);});
     }
+    getAllBrandsName(onOK, onError) {
+        axios.get("/brands",
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+
 
     getProductDetail(prodId, onOK, onError) {
         axios.get("/products/" + prodId,
@@ -156,6 +163,14 @@ class Backend {
     // Brand-------------
     getProductsOfBrand(id, onOK, onError) {
         axios.get("/brand/" + id,
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+
+    // Search-------------
+    searchProduct(keyword, onOK, onError) {
+        axios.get("/search/" + keyword,
             { headers: this.createHeader()})
             .then((response) => {onOK(response);})
             .catch((error) => {onError(error);});

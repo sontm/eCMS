@@ -8,9 +8,10 @@ import { connect } from 'react-redux';
 import FacebookLogin from 'react-facebook-login';
 import { GoogleLogin } from 'react-google-login';
 
-import { actCategoryGet } from '../redux/CategoryActions';
+import { actCategoryGet, actBrandsGet } from '../redux/SiteInfoReducer';
 import {actUserAddLoginWithFaceBook, actUserAddLoginWithGoogle, actUserLogout} from '../redux/UserReducer'
 import AppDropdownMenu from './AppDropdownMenu'
+import AppDropdownBrand from './AppDropdownBrand'
 
 import './AppHeader.css';
 import { Layout, Menu, Dropdown, Icon, Input, Popover } from 'antd';
@@ -29,13 +30,25 @@ class AppHeader extends Component {
         super(props); 
         this.state = {
           hoveredMenuList: false,
-          hoveredParent: ""
+          hoveredParent: "",
+
+          hoveredBrandMenu: false,
+          hoveredBrandContainer:false,
+
+          searchTerm:""
+          
         };
         this.onMenuListHover = this.onMenuListHover.bind(this);   
         this.onMenuListOut = this.onMenuListOut.bind(this);
         this.onParentMenuHover = this.onParentMenuHover.bind(this);   
         this.onMenuContainerOut = this.onMenuContainerOut.bind(this); 
         this.onParentMenuClick = this.onParentMenuClick.bind(this); 
+        this.onBrandMenuClick = this.onBrandMenuClick.bind(this)
+
+        this.onBrandMenuHover = this.onBrandMenuHover.bind(this);
+        this.onBrandMenuOut = this.onBrandMenuOut.bind(this);
+        this.onBrandContainerHover = this.onBrandContainerHover.bind(this);
+        this.onBrandContainerOut = this.onBrandContainerOut.bind(this);
         
         this.facebookResponse = this.facebookResponse.bind(this)
         this.googleResponse = this.googleResponse.bind(this)
@@ -46,6 +59,57 @@ class AppHeader extends Component {
       console.log(" USER handleLogout")
       this.props.actUserLogout();
     }
+
+    // WHen mouse over ThuongHieu
+    onBrandMenuHover() {
+      if (!this.isHomePage) {
+        // Below timeout to prevent when Mouse only Move through ThuongHieu-menu shown
+        // wait 300ms to show Menu list
+        this.timeoutBrand = setTimeout(() => {
+          this.setState({
+            hoveredBrandMenu: true
+          })
+        },300);
+        
+      }
+    }
+    onBrandMenuOut() {
+      if (!this.isHomePage) {
+        if(this.timeoutBrand) {
+          clearTimeout(this.timeoutBrand);
+        }
+
+        // Below Timeout to make Time for Mouse move from DanhMucSanPham to the shown menu below
+        // If is not SET any more, mean hover then right after that, will disappear
+        setTimeout(() => {
+          if (this.state.hoveredBrandContainer == false) {
+            this.setState({
+              hoveredBrandMenu: false,
+            })
+          }
+        }, 100);
+      }
+    }
+    onBrandContainerHover(){
+      this.setState({
+        hoveredBrandContainer: true,
+      })
+    }
+    onBrandContainerOut(){
+      this.setState({
+        hoveredBrandContainer: false,
+        hoveredBrandMenu: false
+      })
+    }
+    // When click on Brand item, close the PopOut menu
+    onBrandMenuClick() {
+      this.setState({
+        hoveredBrandContainer: false,
+        hoveredBrandMenu: false
+      })
+    }
+
+
     // WHen mouse over DanhMucSanPham
     onMenuListHover() {
       if (!this.isHomePage) {
@@ -96,19 +160,27 @@ class AppHeader extends Component {
       })
     }
 
+
+    onSearchTerm(value) {
+      console.log("onSearchTerm:" + value)
+      this.props.history.push("/search/" + value);
+    }
     componentDidMount() {
       console.log("  >>DID MOUNT AppHeader")
-      if (this.props.category.categories.length <= 0 ) {
-          console.log("    >>>> actCategoryGet")
+      if (this.props.siteInfo.categories.length <= 0 ) {
           this.props.actCategoryGet();
+      }
+      if (this.props.siteInfo.brands.length <= 0 ) {
+        this.props.actBrandsGet();
       }
     }
     componentDidUpdate() {
-        if (this.props.category.categories.length <= 0 ) {
-            console.log("  >>DID UPDATE AppHeader")
-            console.log("    >>>> actCategoryGet")
-            this.props.actCategoryGet();
-        }
+      if (this.props.siteInfo.categories.length <= 0 ) {
+          console.log("  >>DID UPDATE AppHeader")
+          console.log("    >>>> actCategoryGet")
+          this.props.actCategoryGet();
+      }
+      
     }
 
     renderBottomMenuMobile () {
@@ -233,11 +305,20 @@ class AppHeader extends Component {
       let isHomePage = this.props.location.pathname == "/" ? true : false;
       this.isHomePage = isHomePage;
       let appDropDownMenu = 
-        <AppDropdownMenu config={this.props.category.categoriesLevel} onParentMenuOut={this.onParentMenuOut} onMenuContainerOut={this.onMenuContainerOut}
+        <AppDropdownMenu config={this.props.siteInfo.categoriesLevel} 
+          onParentMenuOut={this.onParentMenuOut} onMenuContainerOut={this.onMenuContainerOut}
           onParentMenuHover={this.onParentMenuHover} hoveredParent={this.state.hoveredParent}
           onParentMenuClick={this.onParentMenuClick}
           hoveredMenuList={this.state.hoveredMenuList}
           isHomePage={isHomePage}
+          />;
+
+      let appDropDownBrandMenu = 
+        <AppDropdownBrand brands={this.props.siteInfo.brandsColumnize} 
+          onBrandContainerHover={this.onBrandContainerHover}
+          onBrandContainerOut={this.onBrandContainerOut}
+          hoveredBrandMenu={this.state.hoveredBrandMenu}
+          onBrandMenuClick={this.onBrandMenuClick}
           />;
 
       let cartNum = 0;
@@ -249,7 +330,7 @@ class AppHeader extends Component {
       //xs <576px,sm	≥576px, md	≥768px, lg	≥992px, xl	≥1200px, xxl	≥1600px
       return (
         <React.Fragment>
-          <div className={(this.state.hoveredMenuList) ? "flyout-outside-mask" : ""}></div>
+          <div className={(this.state.hoveredMenuList || this.state.hoveredBrandMenu) ? "flyout-outside-mask" : ""}></div>
           <Header>
           <div className="app-header">
           <Row>
@@ -260,11 +341,12 @@ class AppHeader extends Component {
             </div>
             </Col>
 
-            <Col xs={24} sm={24} md={12} lg={10} xl={10} xxl={10}><Search
-              placeholder="Search product, category..."
-              enterButton="Tìm Kiếm"
-              size="large"
-              onSearch={value => console.log(value)}
+            <Col xs={24} sm={24} md={12} lg={10} xl={10} xxl={10}>
+              <Search
+                placeholder="Search product, category..."
+                enterButton="Tìm Kiếm"
+                size="large"
+                onSearch={value => this.onSearchTerm(value)}
             /></Col>
 
             <Col xs={0} sm={0} md={8} lg={10} xl={10} xxl={10}>
@@ -308,6 +390,7 @@ class AppHeader extends Component {
               </Col>
             </div>
           </Row>
+
           <Row>
           <div className="header-options">
           <Col xs={0} sm={0} md={12} lg={6} xl={6} xxl={4}>
@@ -317,9 +400,21 @@ class AppHeader extends Component {
               <span className="category-menu-text" >Danh Mục Sản Phẩm</span>
             </div>
           </Col>
+
+          <Col xs={0} sm={0} md={12} lg={6} xl={6} xxl={4}>
+            <div onMouseEnter={this.onBrandMenuHover} onMouseLeave={this.onBrandMenuOut}
+              style={{marginLeft:"15px"}} className="hamburger-category-menu">
+              <Icon type="shop" />
+              <span className="category-menu-text" >Thương Hiệu</span>
+            </div>
+          </Col>
+
           </div>
           </Row>
+
           {isHomePage ? null : appDropDownMenu}
+
+          {appDropDownBrandMenu}
         </div>
         </Header>
         {isHomePage ? appDropDownMenu: null}
@@ -407,11 +502,11 @@ class AppHeader extends Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  category: state.category,
+  siteInfo: state.siteInfo,
   cart: state.cart
 });
 const mapActionsToProps = {
-  actCategoryGet,
+  actCategoryGet,actBrandsGet,
   actUserAddLoginWithFaceBook,
   actUserAddLoginWithGoogle,
   actUserLogout

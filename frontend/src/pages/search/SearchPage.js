@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import SideMenu from '../../common/SideMenu';
 import Backend from '../../util/Backend'
 import ProductWrapper from '../category/ProductWrapper'
-import './BrandPage.css';
+import './SearchPage.css';
 
 import Helpers from '../../util/Helpers'
 import { Row, Col, Radio, Button, Icon, Input, Select, Card } from 'antd';
@@ -14,7 +14,7 @@ const { Search } = Input;
 const { Option } = Select;
 
 // This Class using State to Display, not Redux
-class BrandPage extends Component {
+class SearchPage extends Component {
     constructor(props) {
         super(props)
 
@@ -75,9 +75,9 @@ class BrandPage extends Component {
     //"attributeGroups":{"id":1,"name":"Màu Sắc",}}],"productDiscounts":[]},
     componentDidMount() {
         //var parsedQuery = queryString.parse(this.props.location.search);
-        Backend.getProductsOfBrand(this.props.match.params.id, 
+        Backend.searchProduct(this.props.match.params.keyword, 
             response => {
-                console.log("getProductsOfBrand Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+                console.log("searchProduct Done:" + this.props.match.params.keyword)
                 console.log(response.data)
                 let {categoryQuery, brandsQuery,brandCountriesQuery,
                     attributesQuery,priceRangeQuery} = Helpers.extractInfoFromProductList(response.data);
@@ -93,14 +93,14 @@ class BrandPage extends Component {
                 })
             },
             error => {
-                console.log("getProductsOfBrand error")
+                console.log("searchProduct error")
             }); 
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.match.params.id != nextProps.match.params.id) {
-            Backend.getProductsOfBrand(nextProps.match.params.id, 
+        if (this.props.match.params.keyword != nextProps.match.params.keyword) {
+            Backend.searchProduct(nextProps.match.params.keyword, 
                 response => {
-                    console.log("componentWillReceiveProps getProductsOfBrand Done")
+                    console.log("searchProduct Done:" + this.props.match.params.keyword)
                     console.log(response.data)
                     let {categoryQuery, brandsQuery,brandCountriesQuery,
                         attributesQuery,priceRangeQuery} = Helpers.extractInfoFromProductList(response.data);
@@ -116,7 +116,7 @@ class BrandPage extends Component {
                     })
                 },
                 error => {
-                    console.log("getProductsOfBrand error")
+                    console.log("searchProduct error")
                 }); 
         }
     }
@@ -438,4 +438,4 @@ const mapActionsToProps = {
 
 export default withRouter(connect(
     mapStateToProps,mapActionsToProps
-)(BrandPage));
+)(SearchPage));

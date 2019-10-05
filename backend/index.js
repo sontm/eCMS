@@ -43,13 +43,12 @@ require('./components/AppPassPort');
 
 // CORS check for specific ORIGIN because we use Cookie
 var allowedOrigins = ['http://localhost:3000',
-                      'http://localhost:5000'];
+                      'http://phuphuong.s3-website-ap-southeast-1.amazonaws.com'];
 app.use(cors({
   origin: function(origin, callback){
     // allow requests with no origin 
     // (like mobile apps or curl requests)
     if(!origin) return callback(null, true);
-    console.log("origin:" + origin)
     if(allowedOrigins.indexOf(origin) === -1){
       var msg = 'The CORS policy for this site does not ' +
                 'allow access from the specified Origin.';

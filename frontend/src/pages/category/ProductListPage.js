@@ -6,7 +6,7 @@ import {actQueryChangeCategory} from '../../redux/ProductQueryReducer'
 import ProductWrapper from './ProductWrapper'
 import SideMenu from '../../common/SideMenu';
 
-import { actCategoryGet } from '../../redux/CategoryActions';
+import { actCategoryGet } from '../../redux/SiteInfoReducer';
 import {actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry, actQueryChangePriceRange} from '../../redux/ProductQueryReducer'
 
 
@@ -139,7 +139,7 @@ class ProductListPage extends Component {
             <React.Fragment>
                 <Row>
                     <Col xs={0} sm={0} md={6} lg={5} xl={4} xxl={4}>
-                    <SideMenu category={this.props.category} product={this.props.product}
+                    <SideMenu category={this.props.siteInfo} product={this.props.product}
                         query={this.props.query}
                         actCategoryGet={this.props.actCategoryGet}
                         actCategoryGet={this.props.actCategoryGet}
@@ -162,7 +162,7 @@ class ProductListPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    category: state.category,
+    siteInfo: state.siteInfo,
     product: state.product,
     query: state.query
 });

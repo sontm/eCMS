@@ -1,3 +1,6 @@
+import AppUtils from '../components/AppUtil'
+const models = require('../server/models');
+
 const DBProducts = require('../server/models').DBProducts;
 const DBBrands = require('../server/models').DBBrands;
 const DBCategories = require('../server/models').DBCategories;
@@ -290,6 +293,122 @@ module.exports = {
         },{
           model: DBAttributes,
           as: 'attributes',
+          through: {attributes: []},
+          include: [{
+            model:DBAttributeGroups,
+            as: 'attributeGroups'
+          }] 
+        },{
+          model: DBDiscounts,// Get Discounts of Product
+          as: 'productDiscounts',// Must Have
+          where: {
+            from: {[Op.lte]: nowDateTime},
+            [Op.and]: {
+              to: {[Op.gte]: nowDateTime}
+            }
+          },
+          required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+        }]
+    })
+    .then(result => {
+      res.status(200).send(result)
+    })
+    .catch(error => res.status(400).send(error));
+  },
+  // Search case Insensitive
+  searchProduct(req, res) {
+    console.log("searchProduct.............:" +req.params.keyword)
+    
+    let keyword = AppUtils.changeVietnameseToNonSymbol(req.params.keyword.trim())
+    keyword = keyword.toLowerCase();
+    var wherObj = {};
+    // Search when not empty in name, medium description
+    if (keyword != "") {
+      // wherObj = {
+      //   [Op.or]: [
+      //     {name: {[Op.iLike]: "%"+keyword + "%"}},
+      //     {descShort: {[Op.iLike]: "%"+keyword + "%"}},
+      //     {descMedium: {[Op.iLike]: "%"+keyword + "%"}}
+      //   ]
+      // }
+      wherObj = {
+        [Op.or]: [
+          {name: Sequelize.where(
+            Sequelize.fn('unaccent', Sequelize.col('DBProducts.name')), {
+                [Op.iLike]:`%${keyword}%`
+          })},
+          {descShort: Sequelize.where(
+            Sequelize.fn('unaccent', Sequelize.col('DBProducts.descShort')), {
+                [Op.iLike]:`%${keyword}%`
+          })},
+          {descMedium: Sequelize.where(
+            Sequelize.fn('unaccent', Sequelize.col('DBProducts.descMedium')), {
+                [Op.iLike]:`%${keyword}%`
+          })}
+        ]
+      }
+    }    
+
+    // Include Brands if have
+    var wherObjBrand={};
+    // if (req.body.brands && req.body.brands.length > 0) {
+    //     wherObjBrand = {id: {[Op.in]: req.body.brands}};
+    // }
+    // Include Brand COuntrys if have
+    var wherObjBrandCountry={};
+    // if (req.body.brandCountries && req.body.brandCountries.length > 0) {
+    //   wherObjBrandCountry = {id: {[Op.in]: req.body.brandCountries}};
+    // }
+    // Include Attribute if have
+    var wherObjAtt={};
+    // if (req.body.attributes && req.body.attributes.length > 0) {
+    //   wherObjAtt = {id: {[Op.in]: req.body.attributes}};
+    // }
+
+    let nowDateTime = new Date(); // TODO: careful with this Now TImeZone
+    console.log("Where OBJ ......., Now:" + nowDateTime)
+    console.log(wherObj)
+    console.log(wherObjBrand)
+    return DBProducts
+    .findAll({
+        where: wherObj,
+        include: [{
+          model: DBCategories,
+          as: 'categories',
+          include: [{
+              model:DBDiscounts, // Query Discount also
+              as:'cateDiscounts',
+              where: {
+            from: {[Op.lte]: nowDateTime},
+            [Op.and]: {
+              to: {[Op.gte]: nowDateTime}
+            }
+          },
+          required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+          }]
+        },{
+          model: DBBrands,
+          as: 'brands',
+          where: wherObjBrand,
+          include: [{
+            model:DBCountries,
+            as: 'countries',
+            where:wherObjBrandCountry
+          },{
+              model:DBDiscounts, // Query Discount also
+              as:'brandDiscounts',
+              where: {
+                from: {[Op.lte]: nowDateTime},
+                [Op.and]: {
+                  to: {[Op.gte]: nowDateTime}
+                }
+              },
+              required:false // Set false to use Left Outer Join (if NOT, only Product with Discount Valid is chosen)
+          }] 
+        },{
+          model: DBAttributes,
+          as: 'attributes',
+          where: wherObjAtt,
           through: {attributes: []},
           include: [{
             model:DBAttributeGroups,

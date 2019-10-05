@@ -1,0 +1,66 @@
+ /* OVerride COlor a of Link  */
+ .flyout-container-display-brand a {
+    display: block;
+    color: rgb(5, 5, 5);
+}
+
+
+
+.flyout-container-hidden-brand {
+    display: none;
+}
+.flyout-container-display-brand {
+    display: block;
+    overflow: hidden;
+    position: absolute;
+    margin-top: 0px;
+    z-index: 100;
+    width: 90%;
+    /* background: rgb(240, 240, 240); */
+    min-height: 200px;
+}
+
+.brand-menu-container-right {
+    background: white;
+    border: 1px solid #e8e8e8;
+    z-index: 100;
+    /* This is for same height on a Row, parent need  */
+    /* margin-bottom: -99999px;
+    padding-bottom: 99999px; */
+    box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.1);
+
+    padding-left: 34px;
+
+    height: 300px;
+}
+
+.brand-menu-container-right-hidden {
+    display: none;
+}
+
+.sub-menu-brand {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.sub-menu-brand li {
+    display: block;
+    position: relative;
+    float: left;
+    clear: left;
+    line-height: 30px;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+.sub-menu-brand li:hover {
+    display: block;
+    position: relative;
+    float: left;
+    clear: left;
+    line-height: 30px;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+  

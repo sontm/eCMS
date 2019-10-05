@@ -37,7 +37,6 @@ class SideMenu extends Component {
             curPriceSliderTo: 0
         }
     }
-    
 
     componentDidMount() {
         console.log("  >>DID MOUNT SideMenu")
@@ -277,7 +276,7 @@ class SideMenu extends Component {
     // this.props.product.brandsQuery: {id1: {count:10, value:DBBrand}, id2:{}}
     renderBrand() {
         if (this.props.product.brandsQuery && 
-                Object.keys(this.props.product.brandsQuery).length > 1) {
+                Object.keys(this.props.product.brandsQuery).length > 0) {
             const content = [];
             for (var prop in this.props.product.brandsQuery) {
                 if (Object.prototype.hasOwnProperty.call(this.props.product.brandsQuery, prop)) {
@@ -322,7 +321,7 @@ class SideMenu extends Component {
     renderBrandCountry() {
         // Only display if > 1 value
         if (this.props.product.brandCountriesQuery && 
-                Object.keys(this.props.product.brandCountriesQuery).length > 1) {
+                Object.keys(this.props.product.brandCountriesQuery).length > 0) {
             const content = [];
             for (var prop in this.props.product.brandCountriesQuery) {
                 if (Object.prototype.hasOwnProperty.call(this.props.product.brandCountriesQuery, prop)) {
@@ -585,8 +584,8 @@ class SideMenu extends Component {
                     let subValue = [];
 
                     // Only display if more than 1 attribute values
-                    //if (attributes && attributes.length > 0) {
-                    if (attributes && attributes.length > 1) {
+                    if (attributes && attributes.length > 0) {
+                    //if (attributes && attributes.length > 1) {
                         attributes.forEach(attribute => {
                             subValue.push(
                                 <React.Fragment key={attribute.id+1000}>

@@ -89,7 +89,6 @@ export default class AppDropdownMenu extends Component {
         }
         return (
           <React.Fragment>
-            
             <Row className={this.props.isHomePage ? "flyout-container-display-home" : 
               (this.props.hoveredMenuList ? "flyout-container-display" : "flyout-container-hidden")}
               onMouseLeave={this.props.onMenuContainerOut}>

@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
-import CategoryReducer from './CategoryReducer';
+import SiteInfoReducer from './SiteInfoReducer';
 import ProductReducer from './ProductReducer';
 import ProductQueryReducer from './ProductQueryReducer';
 import CartReducer from './CartReducer';
@@ -14,7 +14,7 @@ const initialState = {};
 const middleware = [thunk];
 
 const reducers = combineReducers({
-  category: CategoryReducer,
+  siteInfo: SiteInfoReducer,
   product: ProductReducer,
   query: ProductQueryReducer, // Product Query options
   cart: CartReducer,

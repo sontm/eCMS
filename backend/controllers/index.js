@@ -49,6 +49,8 @@ app.get('/api/products/:productId', product.getProductDetail);
 
 app.get('/api/brand/:brandId', product.getProductsOfBrand);
 
+app.get('/api/search/:keyword', product.searchProduct);
+
 app.post('/api/categories', category.create);
 app.get('/api/categories', category.getAll); // Get category List only
 

@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import './CustomerPage.css';
 import { Link,withRouter } from 'react-router-dom';
-
+import Backend from '../../util/Backend'
 // Redux stuff
 import { connect } from 'react-redux';
-
+import {actUserGetOrders} from '../../redux/UserReducer'
 import { Form, Input, Button, Icon, notification, Row, Col} from 'antd';
 const FormItem = Form.Item;
 
 class CustomerOrder extends Component {
     componentDidMount() {
         console.log("CustomerOrder DidMount")
+        if (this.props.user.userProfile) {
+            this.props.actUserGetOrders(this.props.user.userProfile.id)
+        }
+    }
+    componentDidUpdate() {
+
     }
     render() {
         console.log("CustomerOrder Render")
@@ -27,7 +33,7 @@ const mapStateToProps = (state) => ({
 });
   
 const mapActionsToProps = {
-
+    actUserGetOrders
 };
   
 export default withRouter(connect(

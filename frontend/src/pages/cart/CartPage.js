@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import {STORAGE_CART_PROD} from '../../constants'
 import './CartPage.css'
 
-import {actUserGetCartItems, actUserUpdateCartItem} from '../../redux/UserReducer'
+import {actUserGetCartItems, actUserUpdateCartItem, actUserPlaceOrder} from '../../redux/UserReducer'
 import {actProductGetProductsInCart} from '../../redux/ProductActions'
 import AppTouchSpin from '../../common/AppTouchSpin'
 
@@ -52,10 +52,12 @@ class CartPage extends Component {
         super(props)
 
         this.handleRemoveCartItem = this.handleRemoveCartItem.bind(this)
+        this.placeOrder = this.placeOrder.bind(this)
     }
     componentDidMount() {
         if (this.props.user.isLogined) {
             console.log("USER CART---------")
+            // TOdo for item total
             this.props.actUserGetCartItems(this.props.user.userProfile.id)
         } else {
             console.log("STORAGE CART---------")
@@ -66,6 +68,14 @@ class CartPage extends Component {
         }
     }
 
+    placeOrder() {
+        if (this.props.user.isLogined) {
+            console.log(this.props.user.cartItems)
+            this.props.actUserPlaceOrder(this.props.user.cartItems, this.props.user.userProfile)
+        } else {
+            alert("please login")
+        }
+    }
     handleRemoveCartItem(itemId) {
         console.log("handleRemoveCartItem:" + itemId)
         if (this.props.user.isLogined) {
@@ -153,7 +163,7 @@ class CartPage extends Component {
                         <p>VAT: 0%</p>
                         <p>Points to be earned: 50pt</p>
                         <div style={{textAlign: "center"}}>
-                            <Button type="primary" size="large">Tiến Hành Đặt Hàng</Button>
+                            <Button type="primary" size="large" onClick={this.placeOrder}>Tiến Hành Đặt Hàng</Button>
                         </div>
                     </Card>
                 </Col>
@@ -170,7 +180,8 @@ const mapStateToProps = (state) => ({
 const mapActionsToProps = {
     actProductGetProductsInCart,
     actUserGetCartItems,
-    actUserUpdateCartItem
+    actUserUpdateCartItem,
+    actUserPlaceOrder
 };
 
 export default withRouter(connect(

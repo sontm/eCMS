@@ -69,6 +69,28 @@ $ sequelize model:create --name DBRecentViews --attributes userId:integer,produc
 $ sequelize model:create --name DBFavorites --attributes userId:string,productId:integer
 
 
+### Shipment  (for each Order Item). Status: prepare|delivering|delivered
+$ sequelize model:create --name DBShipments --attributes orderId:integer,trackingNumber:string,receiveName:string,receivePhone:string,receivePhone2:string,province:string,district:string,address:text,expectedDate:date,startDate:date,finishDate:date,status:string
+
+
+### OrderItemAttribute  copied value from product attribute
+$ sequelize model:create --name DBOrderItemAttributes --attributes name:string,value:string,attributeGroupName:string,productId:integer,orderItemId:integer
+
+
+### OrderItem
+$ sequelize model:create --name DBOrderItemss --attributes name:string,descShort:string,descMedium:text,unitPrice:float,imgThump:string,quantity:smallint,unitDiscountMoney:float,finalTotal:float,firstCategoryId:integer,brandId:integer,productId:integer,orderId:integer,shipmentId:integer
+
+
+### Order  (orderNumber:250-9295911-1640601,status:pending, reject,confirmed, canceled, delivering, delivered,denied)
+Customer order -> pending for checking status, address -> confirmed when available product (reject when not accept) -> canceled when Customer Cancel before packaging & delivering -> if customer deny When Delevring to them, -> denied.
+custId is id such as Google, Facebook or User name
+Order contain several shipments. Each shipmen can link to orderItem
+$ sequelize model:create --name DBOrders --attributes customerIdFK:integer,custId:string,custFullName:string,custProvince:string,custDistrict:string,custAddress:text,custPhone:string,custEmail:string,itemTotal:float,shipTotal:float,finalTotal:float,orderNumber:string,placeDate:date,confirmedDate:date,cancelDate:date,deliveringDate:date,completedDate:date,status:string
+
+
+
+
+
 ## Using in Sequilize
 sequelize init
 sequelize model:create --name TodoItem --attributes content:string,complete:boolean

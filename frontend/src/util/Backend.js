@@ -111,6 +111,23 @@ class Backend {
             .catch((error) => {onError(error);});
     }
 
+
+
+    placeOrder(products, userProfile, onOK, onError) {
+        axios.post("/users/order/place",
+            JSON.stringify({'products': products, 'customer': userProfile}),
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    getUserOrders(userId, onOK, onError) {
+        axios.get("/users/order/" + userId,
+            { headers: this.createHeader()})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+
     // Category-Brands---------------------------------------
     getAllCategoriesName(onOK, onError) {
         axios.get("/categories",

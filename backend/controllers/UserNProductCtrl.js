@@ -13,7 +13,12 @@ const DBCountries = require('../server/models').DBCountries;
 const DBAttributes = require('../server/models').DBAttributes;
 const DBAttributeGroups = require('../server/models').DBAttributeGroups;
 const DBDiscounts = require('../server/models').DBDiscounts;
+const DBOrders = require('../server/models').DBOrders;
+const DBOrderItemss = require('../server/models').DBOrderItemss;
+const DBOrderItemAttributes = require('../server/models').DBOrderItemAttributes;
+const DBShipments = require('../server/models').DBShipments;
 
+const models = require('../server/models');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
 
@@ -451,5 +456,143 @@ module.exports = {
               console.log(error)
               res.status(400).send(error)
           });
+    },
+
+    placeOrder(req, res) {
+      console.log("Server, placeOrder")
+      console.log(req.body)
+      let orderItemRecords = [];
+      
+      let itemTotalPrice = 0;
+      req.body.products.forEach(item => {
+        itemTotalPrice += item.unitPrice * 1;
+        orderItemRecords.push({
+          name:item.name,
+          descShort:item.descShort,
+          descMedium:item.descMedium,
+          unitPrice:item.unitPrice,
+          imgThump:item.imgThump,
+          quantity:1, // TODO for actual quantity
+          unitDiscountMoney:0, // TODO for discount
+          finalTotal:item.unitPrice * 1,
+          firstCategoryId:item.firstCategoryId,
+          brandId:item.brandId,
+          productId:item.id,
+          orderId:0,
+          shipmentId:0
+        })
+      });
+
+      let orderNumberSuccess = AppUtil.makeRandomAlphaNumeric(12);
+      let orderRecord = {
+        customerIdFK: req.body.customer.id,
+        custId:req.body.customer.userId,
+        custFullName:req.body.customer.fullName,
+        custProvince:"",
+        custDistrict:"",
+        custAddress:"",
+        custPhone:req.body.customer.phone,
+        custEmail:req.body.customer.email,
+        itemTotal:itemTotalPrice,
+        shipTotal:0,
+        finalTotal:itemTotalPrice - 0,
+        orderNumber:orderNumberSuccess,
+        placeDate: new Date(),
+        status:"pending"
+      }
+      let tmpHihi;
+      return models.sequelize.transaction(t => {
+        // chain all your queries here. make sure you return them.
+        return DBOrders.create(orderRecord, {transaction: t})
+        .then(order => {
+          console.log("   Result of Order:")
+          console.log(order)
+          let orderId = order.id;
+          orderItemRecords.forEach(oir => {
+            oir.orderId =orderId;
+          })
+          return DBOrderItemss.bulkCreate(orderItemRecords, {transaction: t})
+          .then (orderItems => {
+            console.log("     Result of OrderItems:")
+            console.log(orderItems)
+            
+            let orderItemAttributes = [];
+            orderItems.forEach(ite => {
+              for (let l = 0; l < req.body.products.length; l++) {
+                if (req.body.products[l].id == ite.productId) {
+                  let thisOrderItemId = ite.id;
+                  
+                  req.body.products[l].attributes.forEach(att => {
+                    orderItemAttributes.push({
+                      name:att.name,
+                      value:att.value,
+                      attributeGroupName:att.attributeGroups.name,
+                      orderItemId:thisOrderItemId,
+                      productId:ite.productId
+                    })
+                  })
+                }
+              }
+            })
+            console.log("     Data to Insert to OrderItemAttribute:")
+            console.log(orderItemAttributes)
+            return DBOrderItemAttributes.bulkCreate(orderItemAttributes, {transaction: t})
+            .then (orderItemAtts => {
+              console.log("        Well, Done Insert to  DBOrderItemAttributes")
+              console.log(orderItemAtts)
+              tmpHihi = orderItemAtts;
+            })
+          })
+        });
+      
+      }).then(result => {
+        // Transaction has been committed
+        // result is whatever the result of the promise chain returned to the transaction callback
+        console.log("   OKKKKKK Transaction completed")
+        res.status(201).send({orderNumber:orderNumberSuccess})
+      }).catch(err => {
+        // Transaction has been rolled back
+        // err is whatever rejected the promise chain returned to the transaction callback
+        console.log("   ERRRRRR Transaction Error")
+        console.log(err)
+        res.status(400).send(error)
+      });
+    },
+    getUserOrders(req, res) {
+      //userId
+      
+      let userId = req.params.userId;
+      if (!userId) {
+        userId = req.body.userId;
+      }
+      console.log("server getUserOrders,userId:" + userId)
+      return DBOrders
+          .findAll({
+              where: {
+                customerIdFK: userId
+              },
+              include: [
+                {
+                  model: DBOrderItemss,
+                  as: 'orderItems',
+                  include: [{
+                      model:DBOrderItemAttributes, // Query Discount also
+                      as:'attributes'
+                  }]
+                },
+                {
+                  model: DBShipments,
+                  as: 'shipments'
+                }],
+              attributes: {exclude: ['createdAt', 'updatedAt']},
+              order: [
+                  ['placeDate', 'DESC'],
+                  // ['fixMoney', 'ASC'],
+              ],
+          })
+          .then(result => {
+              res.status(201).send(result)
+          })
+          .catch(error => res.status(400).send(error));
     },
 }

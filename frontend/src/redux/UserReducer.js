@@ -15,6 +15,10 @@ const USER_GET_FAVORITES = 'USER_GET_FAVORITES';
 const USER_GET_CARTITEMS = 'USER_GET_CARTITEMS';
 const USER_UPDATE_CARTITEM = 'USER_UPDATE_CARTITEM';
 
+const USER_PLACEORDER_OK = 'USER_PLACEORDER_OK';
+const USER_PLACEORDER_ERR = 'USER_PLACEORDER_ERR';
+const USER_GET_ORDERS = 'USER_GET_ORDERS';
+
 const USER_LOGOUT= 'USER_LOGOUT';
 
 // userProfile
@@ -26,7 +30,8 @@ const initialState = {
     userProfile: null,
     recentViews:[],
     favorites: [],
-    cartItems: []
+    cartItems: [],
+    orders: []
 };
 
 export const actUserLogout = () => (dispatch) => {
@@ -223,6 +228,37 @@ export const actUserGetCartItems = (userId) => (dispatch) => {
 }
 
 
+export const actUserPlaceOrder = (products, userProfile) => (dispatch) => {
+    console.log("  actUserPlaceOrder")
+    Backend.placeOrder(products,userProfile,
+        response => {
+            console.log("actUserPlaceOrder Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+            dispatch({
+                type: USER_PLACEORDER_OK,
+                payload:  response.data
+            });
+        },
+        error => {
+            console.log("actUserPlaceOrder error")
+        }); 
+}
+export const actUserGetOrders = (userId) => (dispatch) => {
+    console.log("  actUserGetOrders")
+    Backend.getUserOrders(userId,
+        response => {
+            console.log("actUserGetOrders Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+            dispatch({
+                type: USER_GET_ORDERS,
+                payload:  response.data
+            });
+        },
+        error => {
+            console.log("actUserGetOrders error")
+        }); 
+}
+
 
 // Note, in this Reducer, cannot Access state.user
 export default function(state = initialState, action) {
@@ -277,6 +313,11 @@ export default function(state = initialState, action) {
         return {
             ...state,
             cartItems: action.payload
+        }
+    case USER_GET_ORDERS:
+        return {
+            ...state,
+            orders: action.payload
         }
     default:
         return state;

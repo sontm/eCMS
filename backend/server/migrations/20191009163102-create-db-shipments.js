@@ -29,6 +29,9 @@ module.exports = {
       district: {
         type: Sequelize.STRING
       },
+      ward: {
+        type: Sequelize.STRING
+      },
       address: {
         type: Sequelize.TEXT
       },

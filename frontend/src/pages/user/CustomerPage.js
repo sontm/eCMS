@@ -30,7 +30,9 @@ class CustomerPage extends Component {
         super(props)
     }
     render() {
+        console.log("Custoer Page neeeeeeeeeeeeeeee")
         console.log(this.props.match.params)
+        console.log(this.props.match.query)
         let userName = (this.props.user.userProfile && this.props.user.userProfile.fullName) ?
         this.props.user.userProfile.fullName : "Tài Khoản";
         let avatarInfoView = 

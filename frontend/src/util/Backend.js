@@ -111,6 +111,31 @@ class Backend {
             .catch((error) => {onError(error);});
     }
 
+    addUserAddress(values, onOK, onError) {
+        axios.post("/users/address",
+            JSON.stringify(values),
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    editUserAddress(values, onOK, onError) {
+        axios.post("/users/address/edit",
+            JSON.stringify(values),
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+    getUserAddress(userId, onOK, onError) {
+        axios.get("/users/address/" + userId,
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
+
+
 
 
     placeOrder(products, userProfile, onOK, onError) {

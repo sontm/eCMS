@@ -23,6 +23,9 @@ module.exports = {
       custDistrict: {
         type: Sequelize.STRING
       },
+      custWard: {
+        type: Sequelize.STRING
+      },
       custAddress: {
         type: Sequelize.TEXT
       },

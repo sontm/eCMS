@@ -2,6 +2,7 @@ import AppUtil from '../components/AppUtil'
 
 const DBRoles = require('../server/models').DBRoles;
 const DBUsers = require('../server/models').DBUsers;
+const DBUserAddresses = require('../server/models').DBUserAddresses;
 const uuidv4 = require('uuid/v4');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
@@ -54,6 +55,61 @@ module.exports = {
         console.log("    User, getUserProfile called, req.user")
         console.log(req.user)
         res.send(req.user);
+    },
+    addUserAddress(req, res) {
+      req.body.active = true;
+      req.body.isDefault = false;
+        return DBUserAddresses
+          .create(req.body)
+          .then(result => {
+            //res.status(201).send(result)
+            module.exports.getAllAddressOfUser(req, res)
+          })
+          .catch(error => res.status(400).send(error));
+    },
+    editUserAddress(req, res) {
+      console.log("editUserAddress Found:" + req.body.id)
+      return DBUserAddresses
+        .findOne({
+          where: {
+            id: req.body.id
+          }
+        })
+        .then(result => {
+          if (result) {
+            return result
+              .update(req.body)
+              .then(ret => {
+                module.exports.getAllAddressOfUser(req, res)
+              })
+              .catch(error => {
+                console.log (error)
+                res.status(400).send(error);
+              })
+          } else {
+            res.status(400).send(error)
+          }
+        })
+        .catch(error => res.status(400).send(error));
+    },
+    getAllAddressOfUser(req, res) {
+      console.log(req.body);
+      let userId = req.params.userId;
+      if (!userId) {
+        userId = req.body.userId
+      }
+      return DBUserAddresses
+          .findAll({
+            where: {
+              userId: userId,
+              active: true
+            },
+            order: [
+              ['isDefault', 'ASC']
+            ]
+          })
+          .then(result => res.status(200).send(result))
+          .catch(error => res.status(400).send(error));
     },
     registerFacebookLogin(req, res, next) {
       console.log("auth:registerFacebookLogin")

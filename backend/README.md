@@ -60,6 +60,8 @@ $ sequelize model:create --name DBRoles --attributes rolename:string
 ### User, can be use for FB and Google also
 $ sequelize model:create --name DBUsers --attributes userId:string,email:string,phone:string,password:string,fullName:string,pictureUrl:string,accessToken:string,userType:string,roleId:integer
 
+### UserAddress, can be use for FB and Google also
+$ sequelize model:create --name DBUserAddresses --attributes fullName:string,phone:string,province:string,district:string,ward:string,address:text,isDefault:boolean,active:boolean,userId:integer
 
 ### Cart (Lightweight cart, for simialr as LocalStorage)
 $ sequelize model:create --name DBCarts --attributes userId:string,productId:integer,quantity:smallint
@@ -70,7 +72,7 @@ $ sequelize model:create --name DBFavorites --attributes userId:string,productId
 
 
 ### Shipment  (for each Order Item). Status: prepare|delivering|delivered
-$ sequelize model:create --name DBShipments --attributes orderId:integer,trackingNumber:string,receiveName:string,receivePhone:string,receivePhone2:string,province:string,district:string,address:text,expectedDate:date,startDate:date,finishDate:date,status:string
+$ sequelize model:create --name DBShipments --attributes orderId:integer,trackingNumber:string,receiveName:string,receivePhone:string,receivePhone2:string,province:string,district:string,ward:string,address:text,expectedDate:date,startDate:date,finishDate:date,status:string
 
 
 ### OrderItemAttribute  copied value from product attribute
@@ -85,7 +87,7 @@ $ sequelize model:create --name DBOrderItemss --attributes name:string,descShort
 Customer order -> pending for checking status, address -> confirmed when available product (reject when not accept) -> canceled when Customer Cancel before packaging & delivering -> if customer deny When Delevring to them, -> denied.
 custId is id such as Google, Facebook or User name
 Order contain several shipments. Each shipmen can link to orderItem
-$ sequelize model:create --name DBOrders --attributes customerIdFK:integer,custId:string,custFullName:string,custProvince:string,custDistrict:string,custAddress:text,custPhone:string,custEmail:string,itemTotal:float,shipTotal:float,finalTotal:float,orderNumber:string,placeDate:date,confirmedDate:date,cancelDate:date,deliveringDate:date,completedDate:date,status:string
+$ sequelize model:create --name DBOrders --attributes customerIdFK:integer,custId:string,custFullName:string,custProvince:string,custDistrict:string,custWard:string,custAddress:text,custPhone:string,custEmail:string,itemTotal:float,shipTotal:float,finalTotal:float,orderNumber:string,placeDate:date,confirmedDate:date,cancelDate:date,deliveringDate:date,completedDate:date,status:string
 
 
 

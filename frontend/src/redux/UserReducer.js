@@ -19,6 +19,9 @@ const USER_PLACEORDER_OK = 'USER_PLACEORDER_OK';
 const USER_PLACEORDER_ERR = 'USER_PLACEORDER_ERR';
 const USER_GET_ORDERS = 'USER_GET_ORDERS';
 
+const USER_ADD_ADDR_OK = 'USER_ADD_ADDR_OK';
+const USER_GET_ADDR_OK = 'USER_GET_ADDR_OK';
+
 const USER_LOGOUT= 'USER_LOGOUT';
 
 // userProfile
@@ -31,7 +34,8 @@ const initialState = {
     recentViews:[],
     favorites: [],
     cartItems: [],
-    orders: []
+    orders: [],
+    address: []
 };
 
 export const actUserLogout = () => (dispatch) => {
@@ -227,6 +231,55 @@ export const actUserGetCartItems = (userId) => (dispatch) => {
         }); 
 }
 
+export const actUserAddAddress = (values, userId) => (dispatch) => {
+    console.log("  actUserAddAddress")
+    values.userId = userId;
+    Backend.addUserAddress(values,
+        response => {
+            console.log("actUserAddAddress Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+            dispatch({
+                type: USER_ADD_ADDR_OK,
+                payload:  response.data
+            });
+        },
+        error => {
+            console.log("actUserAddAddress error")
+        }); 
+}
+export const actUserEditAddress = (values, userId) => (dispatch) => {
+    console.log("  actUserEditAddress")
+    values.userId = userId;
+    Backend.editUserAddress(values,
+        response => {
+            console.log("actUserEditAddress Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+            dispatch({
+                type: USER_ADD_ADDR_OK, // can use same dispatch
+                payload:  response.data
+            });
+        },
+        error => {
+            console.log("actUserAddAddress error")
+        }); 
+}
+export const actUserGetAllAddress = (userId) => (dispatch) => {
+    console.log("  actUserGetAllAddress")
+    Backend.getUserAddress(userId,
+        response => {
+            console.log("actUserGetAllAddress Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+            dispatch({
+                type: USER_GET_ADDR_OK,
+                payload:  response.data
+            });
+        },
+        error => {
+            console.log("actUserGetAllAddress error")
+        }); 
+}
+
+
 
 export const actUserPlaceOrder = (products, userProfile) => (dispatch) => {
     console.log("  actUserPlaceOrder")
@@ -318,6 +371,12 @@ export default function(state = initialState, action) {
         return {
             ...state,
             orders: action.payload
+        }
+    case USER_ADD_ADDR_OK:
+    case USER_GET_ADDR_OK:
+        return {
+            ...state,
+            address: action.payload
         }
     default:
         return state;

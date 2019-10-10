@@ -6,6 +6,9 @@ const DBUserAddresses = require('../server/models').DBUserAddresses;
 const uuidv4 = require('uuid/v4');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
+const models = require('../server/models');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 
 require('dotenv').config()
 
@@ -67,6 +70,50 @@ module.exports = {
           })
           .catch(error => res.status(400).send(error));
     },
+    setUserDefault(req, res) {
+      console.log("setUserDefault:" + req.body.id + ",user:" + req.body.userId)
+      return models.sequelize.transaction(t => {
+        // chain all your queries here. make sure you return them.
+        return DBUserAddresses.update(
+          {
+            isDefault: true
+          },{
+            where: {
+              userId: req.body.userId,
+              id: req.body.id
+            },
+            transaction: t
+          })
+        .then(addr1 => {
+            return DBUserAddresses.update(
+              {
+                isDefault: false
+              },{
+                where: {
+                  userId: req.body.userId,
+                  id: {
+                    [Op.not]: req.body.id
+                  }
+                },
+                transaction: t
+              })
+            .then(addr2 => {
+              
+            });
+        });
+      }).then(result => {
+        // Transaction has been committed
+        // result is whatever the result of the promise chain returned to the transaction callback
+        console.log("   OKKKKKK Transaction completed")
+        module.exports.getAllAddressOfUser(req, res)
+      }).catch(err => {
+        // Transaction has been rolled back
+        // err is whatever rejected the promise chain returned to the transaction callback
+        console.log("   ERRRRRR Transaction Error")
+        console.log(err)
+        res.status(400).send(err)
+      });
+    },
     editUserAddress(req, res) {
       console.log("editUserAddress Found:" + req.body.id)
       return DBUserAddresses
@@ -105,7 +152,7 @@ module.exports = {
               active: true
             },
             order: [
-              ['isDefault', 'ASC']
+              ['isDefault', 'DESC']
             ]
           })
           .then(result => res.status(200).send(result))

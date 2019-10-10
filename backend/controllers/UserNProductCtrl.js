@@ -500,7 +500,6 @@ module.exports = {
         placeDate: new Date(),
         status:"pending"
       }
-      let tmpHihi;
       return models.sequelize.transaction(t => {
         // chain all your queries here. make sure you return them.
         return DBOrders.create(orderRecord, {transaction: t})
@@ -540,7 +539,6 @@ module.exports = {
             .then (orderItemAtts => {
               console.log("        Well, Done Insert to  DBOrderItemAttributes")
               console.log(orderItemAtts)
-              tmpHihi = orderItemAtts;
             })
           })
         });
@@ -555,7 +553,7 @@ module.exports = {
         // err is whatever rejected the promise chain returned to the transaction callback
         console.log("   ERRRRRR Transaction Error")
         console.log(err)
-        res.status(400).send(error)
+        res.status(400).send(err)
       });
     },
     getUserOrders(req, res) {

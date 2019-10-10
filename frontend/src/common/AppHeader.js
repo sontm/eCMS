@@ -379,10 +379,12 @@ class AppHeader extends Component {
               <Row>
                 <Col md={7} lg={7} xl={7} xxl={7}>
                 <div className="top-header-menu-item">
+                  <Link to={"/customer/orders"}>
                   <Button type="link" ghost size="large">
                     <Icon type="shopping-cart" style={{fontSize:"1.2em"}} className="show-only-in-md"/>
-                    <span className="hidden-in-md">Theo Doi Don Hang</span>
+                    <span className="hidden-in-md">Theo Dõi Đơn Hàng</span>
                   </Button>
+                  </Link>
                 </div>
                 </Col>
                 <Col md={7} lg={7} xl={7} xxl={7}>

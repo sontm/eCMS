@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
-import { List, Row, Col, Icon,Slider, InputNumber, Input, Button, Card } from 'antd';
+import { List, Row, Col, Icon,Slider, InputNumber, Input, Button, Card, Descriptions } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {STORAGE_CART_PROD} from '../../constants'
@@ -52,7 +52,6 @@ class CartPage extends Component {
         super(props)
 
         this.handleRemoveCartItem = this.handleRemoveCartItem.bind(this)
-        this.placeOrder = this.placeOrder.bind(this)
     }
     componentDidMount() {
         if (this.props.user.isLogined) {
@@ -68,14 +67,6 @@ class CartPage extends Component {
         }
     }
 
-    placeOrder() {
-        if (this.props.user.isLogined) {
-            console.log(this.props.user.cartItems)
-            this.props.actUserPlaceOrder(this.props.user.cartItems, this.props.user.userProfile)
-        } else {
-            alert("please login")
-        }
-    }
     handleRemoveCartItem(itemId) {
         console.log("handleRemoveCartItem:" + itemId)
         if (this.props.user.isLogined) {
@@ -88,7 +79,12 @@ class CartPage extends Component {
         }
     }
     render() {
-        
+        let itemTotal = 0;
+        let finalTotal = 0;
+        this.props.user.cartItems.forEach(item => {
+            itemTotal += item.unitPrice;
+            finalTotal += item.unitPrice;
+        })
         return (
             <React.Fragment>
             <Row className="cart-product">
@@ -158,12 +154,21 @@ class CartPage extends Component {
                 </Col>
 
                 <Col span={6}>
-                    <Card size="med" title={<span>Tổng: 100000đ</span>} 
+                    <Card size="med" title="Thanh Toan"
                             style={{marginLeft: "5px"}}>
-                        <p>VAT: 0%</p>
-                        <p>Points to be earned: 50pt</p>
+                        <Descriptions column={1} bordered={false}>
+                            <Descriptions.Item label="Tạm Tính">{itemTotal}</Descriptions.Item>
+                            <Descriptions.Item label={
+                                <span style={{color:"#1890FF", fontSize: "1.2em"}}>Thành Tiền</span>
+                            }>
+                                <span style={{color:"#1890FF", fontSize: "1.2em"}}>
+                                {finalTotal}</span>
+                            </Descriptions.Item>
+                        </Descriptions>
                         <div style={{textAlign: "center"}}>
-                            <Button type="primary" size="large" onClick={this.placeOrder}>Tiến Hành Đặt Hàng</Button>
+                            <Link to={"/checkout"}>
+                            <Button type="primary" size="large">Tiến Hành Đặt Hàng</Button>
+                            </Link>
                         </div>
                     </Card>
                 </Col>

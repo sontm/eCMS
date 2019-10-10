@@ -13,6 +13,8 @@ import CartPage from './pages/cart/CartPage'
 import BrandPage from './pages/brand/BrandPage'
 import SearchPage from './pages/search/SearchPage'
 
+import CheckoutPage from './pages/cart/CheckoutPage'
+
 import CustomerPage from './pages/user/CustomerPage'
 import Login from './pages/user/Login'
 
@@ -104,6 +106,8 @@ class App extends Component {
                 <Route path="/product/:id" component={ProductDetailPage} />
                 <Route path="/brand/:id" component={BrandPage} />
                 <Route path="/cart" component={CartPage} />
+                <Route path="/checkout" component={CheckoutPage} />
+                
                 <Route path="/login" component={Login} />
                 <Route path="/customer/:info" component={CustomerPage} />
                 <Route path="/search/:keyword" component={SearchPage} />

@@ -69,6 +69,7 @@ app.post('/api/users/cart/removeItem', userNproduct.removeUserCartItem);
 app.post('/api/users/address', user.addUserAddress);
 app.get('/api/users/address/:userId', user.getAllAddressOfUser);
 app.post('/api/users/address/edit', user.editUserAddress);
+app.post('/api/users/address/setdefault', user.setUserDefault);
 
 app.post('/api/users/order/place', userNproduct.placeOrder);
 app.get('/api/users/order/:userId', userNproduct.getUserOrders);

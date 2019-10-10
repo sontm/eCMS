@@ -119,6 +119,14 @@ class Backend {
             .then((response) => {onOK(response);})
             .catch((error) => {onError(error);});
     }
+    setUserAddressDefault(values, onOK, onError) {
+        axios.post("/users/address/setdefault",
+            JSON.stringify(values),
+           // { headers: this.createHeader(), withCredentials: true})
+            { headers: this.createHeader(),})
+            .then((response) => {onOK(response);})
+            .catch((error) => {onError(error);});
+    }
     editUserAddress(values, onOK, onError) {
         axios.post("/users/address/edit",
             JSON.stringify(values),

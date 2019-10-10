@@ -22,6 +22,8 @@ const USER_GET_ORDERS = 'USER_GET_ORDERS';
 const USER_ADD_ADDR_OK = 'USER_ADD_ADDR_OK';
 const USER_GET_ADDR_OK = 'USER_GET_ADDR_OK';
 
+const USER_SET_CHECKOUT_ADDR = 'USER_SET_CHECKOUT_ADDR';
+
 const USER_LOGOUT= 'USER_LOGOUT';
 
 // userProfile
@@ -35,7 +37,8 @@ const initialState = {
     favorites: [],
     cartItems: [],
     orders: [],
-    address: []
+    address: [],
+    checkoutAddressId: 0
 };
 
 export const actUserLogout = () => (dispatch) => {
@@ -231,13 +234,16 @@ export const actUserGetCartItems = (userId) => (dispatch) => {
         }); 
 }
 
-export const actUserAddAddress = (values, userId) => (dispatch) => {
+export const actUserAddAddress = (values, userId, history) => (dispatch) => {
     console.log("  actUserAddAddress")
     values.userId = userId;
     Backend.addUserAddress(values,
         response => {
             console.log("actUserAddAddress Done&&&&&&&&&&&&&&&&&&&&&&&&6")
             console.log(response.data)
+            if (history) {
+                history.goBack();
+            }
             dispatch({
                 type: USER_ADD_ADDR_OK,
                 payload:  response.data
@@ -247,13 +253,32 @@ export const actUserAddAddress = (values, userId) => (dispatch) => {
             console.log("actUserAddAddress error")
         }); 
 }
-export const actUserEditAddress = (values, userId) => (dispatch) => {
+export const actUserSetAddressDefault = (values, userId) => (dispatch) => {
+    console.log("  actUserSetAddressDefault")
+    values.userId = userId;
+    Backend.setUserAddressDefault(values,
+        response => {
+            console.log("actUserSetAddressDefault Done&&&&&&&&&&&&&&&&&&&&&&&&6")
+            console.log(response.data)
+            dispatch({
+                type: USER_ADD_ADDR_OK, // can use same dispatch
+                payload:  response.data
+            });
+        },
+        error => {
+            console.log("actUserSetAddressDefault error")
+        }); 
+}
+export const actUserEditAddress = (values, userId, history) => (dispatch) => {
     console.log("  actUserEditAddress")
     values.userId = userId;
     Backend.editUserAddress(values,
         response => {
             console.log("actUserEditAddress Done&&&&&&&&&&&&&&&&&&&&&&&&6")
             console.log(response.data)
+            if (history) {
+                history.goBack();
+            }
             dispatch({
                 type: USER_ADD_ADDR_OK, // can use same dispatch
                 payload:  response.data
@@ -312,6 +337,14 @@ export const actUserGetOrders = (userId) => (dispatch) => {
         }); 
 }
 
+
+export const actUserSetCheckoutAddress = (id) => (dispatch) => {
+    console.log("  actUserPlaceOrder")
+    dispatch({
+        type: USER_SET_CHECKOUT_ADDR,
+        payload:  id
+    });
+}
 
 // Note, in this Reducer, cannot Access state.user
 export default function(state = initialState, action) {
@@ -378,6 +411,11 @@ export default function(state = initialState, action) {
             ...state,
             address: action.payload
         }
+    case USER_SET_CHECKOUT_ADDR:
+        return {
+            ...state,
+            checkoutAddressId: action.payload
+        } 
     default:
         return state;
     }

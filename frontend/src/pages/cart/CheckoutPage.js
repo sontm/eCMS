@@ -41,7 +41,8 @@ class CheckoutPage extends Component {
     placeOrder() {
         if (this.props.user.isLogined) {
             console.log(this.props.user.cartItems)
-            this.props.actUserPlaceOrder(this.props.user.cartItems, this.props.user.userProfile)
+            this.props.actUserPlaceOrder(this.props.user.cartItems, 
+                this.props.user.userProfile, this.props.history)
         } else {
             alert("please login")
         }
@@ -144,12 +145,12 @@ class CheckoutPage extends Component {
         return (
             <div>
                 <Row>
-                <Col span={12}>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
                     <Card title="Xác Nhận Địa Chỉ" style={{marginRight: "5px"}}>
                     {addressView}
                     </Card>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
                     <Card title="Xác Nhận Đơn Hàng" 
                         extra={
                             <Link to={"/cart"}>

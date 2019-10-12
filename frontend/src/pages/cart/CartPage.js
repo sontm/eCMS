@@ -88,7 +88,8 @@ class CartPage extends Component {
         return (
             <React.Fragment>
             <Row className="cart-product">
-                <Col span={18}>
+                <Col xs={24} sm={24} md={24} lg={18} xl={18} xxl={18} 
+                    style={{marginBottom: "10px"}}>
                 <List
                     itemLayout="vertical"
                     dataSource={
@@ -97,14 +98,16 @@ class CartPage extends Component {
                     <List.Item
                         key={item.id}
                         actions={[
+                            <Row>
                             <Button type="link" onClick={e => {
                                 this.handleRemoveCartItem(item.id)
                             }}>Xoá</Button>,
                             <Button type="link">Để Dành Mua Sau</Button>,
                             <div className="product-quantity">
-                                <span>&nbsp;&nbsp;Số Lượng (Hộp):&nbsp;&nbsp;</span>
+                                <span className="product-quantity-text">&nbsp;&nbsp;Số Lượng (Hộp):&nbsp;&nbsp;</span>
                                 <AppTouchSpin value={1}/>
                             </div>
+                            </Row>
                         ]}
                         extra={
                         <img
@@ -124,23 +127,23 @@ class CartPage extends Component {
                         />
                         
                         <Row>
-                        <Col span={10}>
+                        <Col xs={14} sm={14} md={14} lg={10} xl={10} xxl={10}>
+                        <div className="product-price">
+                            {item.unitPrice}đ
+                        </div>
                         <div className="product-price-old">
-                            100000đ
+                            {item.unitPrice}đ
                         </div>
                         
                         <div className="product-price-discount">
                             -27%
                         </div>
-                        <div className="product-price">
-                            {item.unitPrice}đ
-                        </div>
                         
                         </Col>
-                        <Col span={4}>
+                        <Col xs={0} sm={0} md={0} lg={4} xl={4} xxl={4}>
 
                         </Col>
-                        <Col span={10}>
+                        <Col xs={10} sm={10} md={10} lg={10} xl={10} xxl={10}>
                         <div className="product-sumprice-item">
                             {" x 3 = " + item.unitPrice * 3 + "đ"}
                             <span>&nbsp;</span>
@@ -152,10 +155,9 @@ class CartPage extends Component {
                     )}
                 />
                 </Col>
-
-                <Col span={6}>
+                <Col xs={24} sm={24} md={24} lg={6} xl={6} xxl={6}>
                     <Card size="med" title="Thanh Toan"
-                            style={{marginLeft: "5px"}}>
+                            style={{paddingLeft: "5px"}}>
                         <Descriptions column={1} bordered={false}>
                             <Descriptions.Item label="Tạm Tính">{itemTotal}</Descriptions.Item>
                             <Descriptions.Item label={

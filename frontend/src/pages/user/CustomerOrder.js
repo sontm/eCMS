@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './CustomerPage.css';
 import { Link,withRouter } from 'react-router-dom';
 import Backend from '../../util/Backend'
+import ProductWrapper from '../category/ProductWrapper'
 // Redux stuff
 import { connect } from 'react-redux';
 import {actUserGetOrders} from '../../redux/UserReducer'
@@ -65,54 +66,72 @@ class CustomerOrder extends Component {
                 </Descriptions>
                 </Card>
             );
-            let tblDataCurrent = currentOrder.orderItems;
-            let columnsCurrent = [
-            {
-                title: '',
-                dataIndex: 'imgThump',
-                render: (text, record) => (
-                    <img src={"/"+record.imgThump} style={{width:"100px", height:"130px"}}/>
+
+            if (window.innerWidth < 768) {
+                // Mobile UI
+                var orderMobileViews = [];
+                currentOrder.orderItems.forEach(element => {
+                    orderMobileViews.push(
+                        <Col xs={12} sm={12} md={12} lg={8} xl={6} xxl={6} key={element.id}>
+                            <ProductWrapper product={element} showLinkToProduct={true}/>
+                        </Col>  
+                    )
+                })
+                
+            } else {
+                let tblDataCurrent = currentOrder.orderItems;
+                let columnsCurrent = [
+                {
+                    title: '',
+                    dataIndex: 'imgThump',
+                    render: (text, record) => (
+                        <img src={"/"+record.imgThump} style={{width:"100px", height:"130px"}}/>
+                    )
+                },
+                {
+                    title: 'Name',
+                    dataIndex: 'name',
+                    render: (text, record) => (
+                        <div>
+                        <Link to={"/product/" + record.productId}>
+                            {record.name}
+                        </Link> <br/>
+                        <span>{record.descShort}</span><br/>
+                        {record.attributes.map(att => (
+                            <span>{att.attributeGroupName + ": " + att.name}</span>
+                        ))}
+                        </div>
+                    )
+                },
+                {
+                    title: 'Price',
+                    dataIndex: 'unitPrice',
+                    render: (text, record) => (
+                        <span>{record.unitPrice}</span>
+                    )
+                },
+                {
+                    title: 'So Long',
+                    dataIndex: 'quantity'
+                },
+                {
+                    title: 'Discount',
+                    key: 'unitDiscountMoney',
+                    render: (text, record) =>
+                        (
+                            <span>{record.unitDiscountMoney}</span>
+                    )
+                },
+                {
+                    title: 'Total',
+                    dataIndex: 'finalTotal'
+                }
+                ];
+                var tableView = (
+                    <Table dataSource={tblDataCurrent} pagination={false} size="small"
+                            columns={columnsCurrent} rowKey="id"/>
                 )
-            },
-            {
-                title: 'Name',
-                dataIndex: 'name',
-                render: (text, record) => (
-                    <div>
-                    <Link to={"/product/" + record.productId}>
-                        {record.name}
-                    </Link> <br/>
-                    <span>{record.descShort}</span><br/>
-                    {record.attributes.map(att => (
-                        <span>{att.attributeGroupName + ": " + att.name}</span>
-                    ))}
-                    </div>
-                )
-            },
-            {
-                title: 'Price',
-                dataIndex: 'unitPrice',
-                render: (text, record) => (
-                    <span>{record.unitPrice}</span>
-                )
-            },
-            {
-                title: 'So Long',
-                dataIndex: 'quantity'
-            },
-            {
-                title: 'Discount',
-                key: 'unitDiscountMoney',
-                render: (text, record) =>
-                    (
-                        <span>{record.unitDiscountMoney}</span>
-                )
-            },
-            {
-                title: 'Total',
-                dataIndex: 'finalTotal'
             }
-        ];
             return (
                 <div className="customer-content">
                     <Row>
@@ -124,73 +143,117 @@ class CustomerOrder extends Component {
                     </Row>
                     <br />
                     <Row>
-                    <Col span={10}>
+                    <Col xs={24} sm={24} md={24} lg={11} xl={11} xxl={11}>
                     {addressView}
                     </Col>
-                    <Col span={2}></Col>
-                    <Col span={10}>
+                    <Col xs={0} sm={0} md={0} lg={2} xl={2} xxl={2}></Col>
+                    <Col xs={24} sm={24} md={24} lg={11} xl={11} xxl={11}>
                     {priceView}
                     </Col>
                     </Row>
                     <br />
                     <Row>
                     <Card size="medium" title="Shipment 1, 2019/09/09">
-                        <Table dataSource={tblDataCurrent} pagination={false} size="small"
-                            columns={columnsCurrent} rowKey="id"/>
+                        {tableView}
+                        {orderMobileViews}
                     </Card>
                     </Row>
                 </div>
             );
         } else if (this.props.user.orders.length > 0) {
-            let orderListView = [];
-            let tblData = this.props.user.orders;
-            let columns = [
-                {
-                    title: 'Order Number',
-                    dataIndex: 'orderNumber',
-                    render: (text, record) => (
-                        <Link to={"/customer/orders?ordernumber=" + record.orderNumber}>
-                            {record.orderNumber}
-                        </Link>
+            if (window.innerWidth < 768) {
+                // This is Mobile UI
+                var orderDescView = [];
+                this.props.user.orders.forEach( item => {
+                    orderDescView.push(
+                        <React.Fragment>
+                        <Descriptions size="small" column={1} title={
+                            <Link to={"/customer/orders?ordernumber=" + item.orderNumber}>
+                                {item.orderNumber}
+                            </Link>}>
+                            <Descriptions.Item label="Place Date">
+                                {new Date(item.placeDate).toLocaleDateString()}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Total">{item.finalTotal}</Descriptions.Item>
+                            <Descriptions.Item label="Status">{item.status}</Descriptions.Item>
+                            <Descriptions.Item label="Products">
+                                <ul>
+                                    {item.orderItems.map(i => {
+                                        return <li>{i.name}</li>
+                                    })}
+                                </ul>
+                            </Descriptions.Item>
+                        </Descriptions>
+                        <hr />
+                        </React.Fragment>
                     )
-                },
-                {
-                    title: 'Place Date',
-                    dataIndex: 'placeDate',
-                    render: (text, record) => {
-                        return (
-                        <span>{new Date(record.placeDate).toLocaleDateString()}</span>
-                    )}
-                },
-                {
-                    title: 'Products',
-                    key: 'orderItems',
-                    render: (text, record) =>
-                        (
-                            <ul>
-                                {record.orderItems.map(item => {
-                                    return <li>{item.name}</li>
-                                })}
-                            </ul>
-                    )
-                },
-                {
-                    title: 'Total',
-                    dataIndex: 'finalTotal'
-                },
-                {
-                    title: 'Status',
-                    dataIndex: 'status'
-                }
-            ];
+                })
+            } else {
+                let orderListView = [];
+                let tblData = this.props.user.orders;
+                let columns = [
+                    {
+                        title: 'Order Number',
+                        dataIndex: 'orderNumber',
+                        render: (text, record) => (
+                            <Link to={"/customer/orders?ordernumber=" + record.orderNumber}>
+                                {record.orderNumber}
+                            </Link>
+                        )
+                    },
+                    {
+                        title: 'Place Date',
+                        dataIndex: 'placeDate',
+                        render: (text, record) => {
+                            return (
+                            <span>{new Date(record.placeDate).toLocaleDateString()}</span>
+                        )}
+                    },
+                    {
+                        title: 'Products',
+                        key: 'orderItems',
+                        render: (text, record) =>
+                            (
+                                <ul>
+                                    {record.orderItems.map(item => {
+                                        return <li>{item.name}</li>
+                                    })}
+                                </ul>
+                        )
+                    },
+                    {
+                        title: 'Total',
+                        dataIndex: 'finalTotal'
+                    },
+                    {
+                        title: 'Status',
+                        dataIndex: 'status'
+                    }
+                ];
+                var tableView = (
+                    <Table dataSource={tblData} pagination={
+                        {pageSize: 5,showTotal:(total) => (`Total ${total} items`)}}
+                        columns={columns} rowKey="orderNumber"
+                        size={window.innerWidth < 768 ? "small" : "middle"}
+                        />
+                )
+            }
             
             
             return (
+                <React.Fragment>
+                    {window.innerWidth < 768 ? (
+                        <Link to ={"/customer/default"}>
+                            <Button type="link" style={{paddingLeft: "0"}}>
+                            {"<< Quay lại Tài Khoản"}
+                        </Button></Link>) : ("")}
+                < br/>
+                <h2 style={{textAlign: "center"}}>Đơn Hàng Của Tôi</h2>
                 <div className="customer-content-nopadding">
-                    <Table dataSource={tblData} pagination={
-                        {pageSize: 5,showTotal:(total) => (`Total ${total} items`)}}
-                        columns={columns} rowKey="orderNumber"/>
+                    {tableView}
+                    {orderDescView}
                 </div>
+                </React.Fragment>
             );
         } else {
             return (

@@ -5,6 +5,10 @@ const CATE_GET_OK = 'CATE_GET_OK';
 const CATE_GET_ERR = 'CATE_GET_ERR';
 const BRAND_GET_OK = 'BRAND_GET_OK';
 
+    //categoriesLevel:  "BanhKeo":{
+  //       "id": 1,
+  //       "Banh":{id: 4, subs: [{id:8, name:"Banh1"}, {id:9, name:"Banh2"}]},
+  //     },
 const initialState = {
     categories: [],
     categoriesLevel:{},

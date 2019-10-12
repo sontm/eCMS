@@ -26,7 +26,7 @@ class HotDiscountHome extends Component {
                 if (element.product) {
                     // Force use 5 Columns here
                     producView.push(
-                        <Col xs={8} sm={8} md={8} lg={6} xl={4} xxl={4} style={{width:"20%"}} key={element.product.id}>
+                        <Col xs={12} sm={12} md={8} lg={6} xl={6} xxl={4}  key={element.product.id}>
                             <ProductWrapper product={element.product}/>
                         </Col>)
                 }

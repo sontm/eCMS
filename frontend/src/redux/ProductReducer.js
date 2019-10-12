@@ -1,6 +1,6 @@
 import {
     PROD_QUERY_OK,PROD_QUERY_ERR, PROD_GETDETAIL_OK, PROD_BRANDLIST_OK,PROD_BRANDCOUNTRYLIST_OK,
-    PROD_ATTRIBUTE_QUERY_OK, PROD_FILTER, PROD_PRICERANGE_QUERY_OK
+    PROD_ATTRIBUTE_QUERY_OK, PROD_FILTER, PROD_PRICERANGE_QUERY_OK, PROD_QUERY_CLEAR
   } from './ProductActions'
 import Helpers from '../util/Helpers'
 
@@ -24,6 +24,12 @@ export default function(state = initialState, action) {
             ...state,
             productsQuery: action.payload,
             productsQueryFiltered: action.payload
+        };
+    case PROD_QUERY_CLEAR:
+        return {
+            ...state,
+            productsQuery: [],
+            productsQueryFiltered: []
         };
     case PROD_FILTER:
         return {

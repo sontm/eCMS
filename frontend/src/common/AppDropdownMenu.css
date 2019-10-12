@@ -4,7 +4,7 @@
     color: rgb(5, 5, 5);
 }
 
-.flyout-container-display-home {
+.parent-menu-container {
     display: block;
     margin-top: 0px;
     width: 96%;
@@ -17,7 +17,14 @@
     display: block;
     color: rgb(5, 5, 5);
 }
-
+@media (max-width : 768px) {
+    .flyout-container-display-home {
+        display: block;
+        width: 96%;
+        height: 0px;
+        overflow: hidden;
+    }
+}
 
 
 

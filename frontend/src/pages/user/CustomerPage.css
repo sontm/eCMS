@@ -19,7 +19,15 @@
     padding-left: 20px !important;
     padding-right: 20px !important;
 }
-
+@media only screen and (max-width : 768px) {
+    .customer-content {
+        padding-top: 20px !important;
+        background: white;
+        min-height: 500px;
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+    }
+}
 .customer-content-nopadding {
     padding-top: 20px !important;
     background: white;
@@ -34,4 +42,16 @@
 }
 .profile-form {
     /* margin-right: 200px; */
+}
+
+.customer-menu-list-mobile-account {
+    height: 64px;
+    background: white;
+}
+
+.customer-menu-list-mobile {
+    height: 40px;
+    background: white;
+    margin-top: 1px;
+    padding-left: 10px;
 }

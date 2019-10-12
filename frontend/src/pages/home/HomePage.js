@@ -18,22 +18,22 @@ export default class HomePage extends Component {
                 <div className="homepage-container">
                 <div className="home-first-impression-space">
                 <Row>
-                <Col span={4}></Col>
-                <Col span={20}>
-                    <Carousel showArrows={true} infiniteLoop={true} autoPlay={true} 
+                <Col xs={0} sm={0} md={0} lg={4} xl={4} xxl={4}></Col>
+                <Col xs={24} sm={24} md={24} lg={20} xl={20} xxl={20}>
+                    <Carousel showArrows={window.innerWidth <= 768 ? false : true} infiniteLoop={true} autoPlay={true} 
                             showThumbs={false} showStatus={false} stopOnHover={false}
                             swipeable={true} useKeyboardArrows={true}>
                         <div>
-                            <img src="/images/home/carousel/carousel-1.jpg" style={{maxWidth: "100%",height:"100%"}}/>
+                            <img src="/images/home/carousel/carousel-1.jpg" className="my-img-carousel"/>
                         </div>
                         <div>
-                            <img src="/images/home/carousel/carousel-2.jpg" style={{maxWidth: "100%",height:"100%"}}/>
+                            <img src="/images/home/carousel/carousel-2.jpg" className="my-img-carousel"/>
                         </div>
                         <div>
-                            <img src="/images/home/carousel/carousel-3.jpg" style={{maxWidth: "100%",height:"100%"}}/>
+                            <img src="/images/home/carousel/carousel-3.jpg" className="my-img-carousel"/>
                         </div>
                         <div>
-                            <img src="/images/home/carousel/carousel-4.jpg" style={{maxWidth: "100%",height:"100%"}}/>
+                            <img src="/images/home/carousel/carousel-4.jpg" className="my-img-carousel"/>
                         </div>
                     </Carousel>
                 </Col>

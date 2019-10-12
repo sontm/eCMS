@@ -206,28 +206,63 @@ class AppHeader extends Component {
       }
     }
 
-    renderBottomMenuMobile () {
+    renderBottomMenuMobile() {
+      return (
+        <Button.Group size="large" className="mobile-bottom-menu">
+          <Link to={"/"}><Button type="primary" size="large" style={{width: "20%"}}>
+            <Icon type="home" /><br/>
+            <p style={{fontSize:"0.7em"}}>Trang Chủ</p>
+          </Button></Link>
+          <Link to={"/categorylist"}><Button type="primary" size="large" style={{width: "20%"}}>
+            <Icon type="appstore" /><br/>
+            <p style={{fontSize:"0.7em"}}>Danh Mục</p>
+          </Button></Link>
+          <Link to={"/brandlist"}><Button type="primary" size="large" style={{width: "20%"}}>
+            <Icon type="shopping" /><br/>
+            <p style={{fontSize:"0.7em"}}>Nhãn Hàng</p>
+          </Button></Link>
+          <Link to={"/cart"}><Button type="primary" size="large" style={{width: "20%"}}>
+            <Icon type="shopping-cart" /><br/>
+            <p style={{fontSize:"0.7em"}}>Giỏ Hàng</p>
+          </Button></Link>
+          <Link to={"/customer/default"}><Button type="primary" size="large" style={{width: "20%"}}>
+            <Icon type="user" /><br/>
+            <p style={{fontSize:"0.7em"}}>Tài Khoản</p>
+          </Button></Link>
+        </Button.Group>
+      )
+    }
+    renderBottomMenuMobile1 () {
       return (
         <Menu
+            theme="dark"
             mode="horizontal"
-            inlineIndent={20}
+            inlineIndent={0}
             className="mobile-bottom-menu"
         >
             <Menu.Item key="home">
-              <Icon type="mail" />
-              <span>Home</span>
+            <div style={{textAlign: "center"}}>
+              <Icon type="home" /><br/>
+              <span>Trang Chủ</span>
+            </div>
             </Menu.Item>
             <Menu.Item key="category">
-              <Icon type="mail" />
-              <span>Category</span>
+              <div style={{textAlign: "center"}}>
+              <Icon type="appstore" /><br/>
+              <span>Danh Mục</span>
+              </div>
             </Menu.Item>
             <Menu.Item key="cart">
-              <Icon type="shopping-cart" />
-              <span>Cart</span>
+            <div style={{textAlign: "center"}}>
+              <Icon type="shopping-cart" /><br/>
+              <span>Giỏ Hàng</span>
+            </div>
             </Menu.Item>
             <Menu.Item key="user">
-              <Icon type="user" />
-              <span>User</span>
+            <div style={{textAlign: "center"}}>
+              <Icon type="user" /><br/>
+              <span>Tài Khoản</span>
+            </div>
             </Menu.Item>
         </Menu>
       )
@@ -359,16 +394,18 @@ class AppHeader extends Component {
           <div className="app-header">
           <Row>
             <div>
-            <Col xs={0} sm={0} md={4} lg={4} xl={4} xxl={4}>
+            <Col xs={0} sm={4} md={4} lg={4} xl={4} xxl={4}>
+            <Link to="/">
             <div className="app-title" >
-              <Link to="/" style={{paddingLeft: "20px"}}>Phu Phuong</Link>
+              <span>Phu Phuong</span>
             </div>
+            </Link>
             </Col>
 
-            <Col xs={24} sm={24} md={12} lg={10} xl={10} xxl={10}>
+            <Col xs={24} sm={20} md={12} lg={10} xl={10} xxl={10}>
               <Search
                 placeholder="Search product, category..."
-                enterButton="Tìm Kiếm"
+                enterButton={window.innerWidth<=768 ? true : "Tìm Kiếm"}
                 size="large"
                 value={this.state.searchTerm}
                 onChange={this.onChangeSearch}
@@ -390,14 +427,12 @@ class AppHeader extends Component {
                 <Col md={7} lg={7} xl={7} xxl={7}>
                 <div className="top-header-menu-item">
                 <Popover content={this.renderPopoverUser()} placement="bottom">
-                <Link to={"/customer/profile"}>
                   <Button type="link" ghost size="large">
                     <Icon type="user" style={{fontSize:"1.2em"}} className="show-only-in-md"/>
                     <span className="hidden-in-md">
                       {this.props.user.userProfile ? this.props.user.userProfile.fullName : "Tài Khoản"}
                     </span>
                   </Button>
-                </Link>
                 </Popover>
                 </div>
                 </Col>

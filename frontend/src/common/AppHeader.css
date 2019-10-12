@@ -2,6 +2,30 @@
   float: left;
   height: 50px;
   overflow: hidden;
+  padding-left: 10px;
+  color: white;
+  font-size: 1.5em;
+}
+@media (max-width: 992px) {
+  .app-title {
+    float: left;
+    height: 50px;
+    overflow: hidden;
+    padding-left: 0px;
+    font-size: 1.3em;
+    color: white;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-title {
+    float: left;
+    height: 50px;
+    overflow: hidden;
+    padding-left: 0px;
+    font-size: 1.2em;
+    color: white;
+  }
 }
 /* .app-header {
   position: fixed;
@@ -192,6 +216,16 @@
   
     width: 100%;
     z-index: 300;
+
+    padding: 0px;
+  }
+  .mobile-bottom-menu.ant-menu-horizontal {
+    line-height: 30px !important;
+  }
+  .mobile-bottom-menu.ant-btn-group-lg > .ant-btn, .ant-btn-group-lg > span > .ant-btn {
+    line-height: 20px !important;
+    height: 40px !important;
+    padding: 0px;
   }
 }
 

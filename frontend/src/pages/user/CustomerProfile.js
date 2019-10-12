@@ -67,14 +67,19 @@ class CustomerProfile extends Component {
             disableEdit = false;
         }
         return (
-            <div className="customer-content">
-
+            <React.Fragment>
+            {window.innerWidth < 768 ? (
+                <Link to ={"/customer/default"}>
+                    <Button type="link" style={{paddingLeft: "0"}}>
+                    {"<< Quay lại Tài Khoản"}
+                </Button></Link>) : ("")}
             <br />
+            <div className="customer-content">
+            
             <Row>
             <Col xs={24} sm={24} md={16} lg={16} xl={16}>{infoView}</Col>
             </Row>
-            <br />
-
+            
             <Form {...formItemLayout} onSubmit={this.handleSubmit} className="profile-form">
                 <FormItem label="Họ Tên">
                     <Input 
@@ -103,6 +108,7 @@ class CustomerProfile extends Component {
                 }
             </Form>
             </div>
+            </React.Fragment>
         );
     }
 }

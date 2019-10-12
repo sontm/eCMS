@@ -26,7 +26,7 @@ class FavoriteHome extends Component {
                 if (element) {
                     // Force use 5 Columns here
                     producView.push(
-                        <Col xs={8} sm={8} md={8} lg={6} xl={4} xxl={4} style={{width:"20%"}} key={element.id}>
+                        <Col xs={12} sm={12} md={8} lg={6} xl={6} xxl={4} key={element.id}>
                             <ProductWrapper product={element}/>
                         </Col>)
                 }

@@ -1,6 +1,7 @@
 import Backend from '../util/Backend';
 import Helpers from '../util/Helpers'
 
+export const PROD_QUERY_CLEAR = 'PROD_QUERY_CLEAR';
 export const PROD_QUERY_OK = 'PROD_QUERY_OK';
 export const PROD_GET_PRODS_INCART_OK = 'PROD_GET_PRODS_INCART_OK';
 export const PROD_FILTER = 'PROD_FILTER';
@@ -108,4 +109,12 @@ export const actProductGetDetail = (prodId) => (dispatch) => {
     error => {
         console.log("Get All Product error")
     }); 
+}
+
+
+export const actProductClearQuery = () => (dispatch) => {
+    dispatch({
+        type: PROD_QUERY_CLEAR,
+        payload:  []
+    });
 }

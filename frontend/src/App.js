@@ -12,6 +12,8 @@ import ProductDetailPage from './pages/product/ProductDetailPage'
 import CartPage from './pages/cart/CartPage'
 import BrandPage from './pages/brand/BrandPage'
 import SearchPage from './pages/search/SearchPage'
+import CategoryList from './pages/category/CategoryList'
+import BrandList from './pages/brand/BrandList'
 
 import CheckoutPage from './pages/cart/CheckoutPage'
 
@@ -25,6 +27,7 @@ import { ACCESS_TOKEN } from './constants';
 
 import AppHeader from './common/AppHeader';
 import AppFooter from './common/AppFooter';
+import AuthenticationRoute from './common/AuthenticationRoute'
 
 import NotFound from './common/NotFound';
 import LoadingIndicator from './common/LoadingIndicator';
@@ -53,7 +56,7 @@ class App extends Component {
     notification.config({
       placement: 'bottomRight',
       bottom: 20,
-      duration: 2,
+      duration: 5,
     });    
   }
 
@@ -63,12 +66,11 @@ class App extends Component {
     // If user have just Logined and not Inital Fetch data, Fetch
     console.log("-------------Loaded Module, ThisLocation:" + this.props.location.pathname)
     if (!this.mHasJustLogin && this.props.user.isLogined) {
-      console.log("&&&&&&&&&& Have just login, PRev:" + this.mPrevLocationPath)
       // TODO, Copy Cart from LocalStorage to DB here
       this.props.actUserGetCartItems(this.props.user.userProfile.id)
 
       // Reload Previous Path
-      this.props.history.push(this.mPrevLocationPath)
+      //this.props.history.push(this.mPrevLocationPath)
       this.mHasJustLogin = true
     }
     
@@ -80,14 +82,14 @@ class App extends Component {
   }
 
   // To Remember History, Back when User Login
-  componentWillReceiveProps(nextProps) {
-    if (this.props.location.pathname != "/login" && this.props.location.pathname != "/register" &&
-        nextProps.location !== this.props.location) {
-      console.log("---------------LastLocation:" + this.props.location.pathname)
-      // if location is not Logiin or Register
-      this.mPrevLocationPath = this.props.location.pathname
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.location.pathname != "/login" && this.props.location.pathname != "/register" &&
+  //       nextProps.location !== this.props.location) {
+  //     console.log("---------------LastLocation:" + this.props.location.pathname)
+  //     // if location is not Logiin or Register
+  //     this.mPrevLocationPath = this.props.location.pathname
+  //   }
+  // }
 
   render() {
     if(this.props.user.isLoading) {
@@ -103,22 +105,28 @@ class App extends Component {
               <Switch>      
                 <Route exact path="/" component={HomePage} />
                 <Route path="/category/:id/:lvl" component={ProductListPage} />
+                <Route path="/categorylist" component={CategoryList} />
                 <Route path="/product/:id" component={ProductDetailPage} />
                 <Route path="/brand/:id" component={BrandPage} />
+                <Route path="/brandlist" component={BrandList} />
+                
                 <Route path="/cart" component={CartPage} />
-                <Route path="/checkout" component={CheckoutPage} />
                 
                 <Route path="/login" component={Login} />
-                <Route path="/customer/:info" component={CustomerPage} />
                 <Route path="/search/:keyword" component={SearchPage} />
                 
+                <PrivateRoute path="/checkout" component={CheckoutPage} authenticated={this.props.user.isLogined}/>
+
+                <PrivateRoute path="/customer/:info" component={CustomerPage} authenticated={this.props.user.isLogined}/>
+
                 <Route component={NotFound}></Route>
               </Switch>
             </Content>
           </Layout>
-          <Footer style={{ textAlign: 'center', minHeight:"200px", marginTop:"20px"}}>
+          
+          {window.innerWidth <= 768 ? "" : (<Footer style={{ textAlign: 'center', minHeight:"200px", marginTop:"20px"}}>
             <AppFooter />
-          </Footer>
+          </Footer>)}
           <BackTop />
         </Layout>
     );

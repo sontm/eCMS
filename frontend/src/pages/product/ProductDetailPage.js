@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import {
     Link,
-    withRouter
+    withRouter,
+    Redirect
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Card, Row, Col, Button, Icon } from 'antd';
@@ -21,10 +22,50 @@ import ProductDetailImageList from '../../common/ProductDetailImageList'
 import AppConstant from '../../util/AppConstant'
 
 import './ProductDetailPage.css'
-// import "react-image-gallery/styles/css/image-gallery.css";
+
+//https://www.npmjs.com/package/react-image-gallery
+import ImageGallery from 'react-image-gallery';
+import "react-image-gallery/styles/css/image-gallery.css";
 import Carousel, { Modal, ModalGateway } from 'react-images';
 
 const IMAGE_PATH_PREFIX = "/";
+function parseImagesFromProductForMobileList(product) {
+    let result = [];
+    if (product) {
+        if (product.img1 && product.img1.length > 0) {
+            result.push({original: IMAGE_PATH_PREFIX+product.img1, 
+                thumbnail:IMAGE_PATH_PREFIX+product.img1,
+                originalClass: 'image-list-mobile'})
+        }
+        if (product.img2 && product.img2.length > 0) {
+            result.push({original: IMAGE_PATH_PREFIX+product.img2, 
+                thumbnail:IMAGE_PATH_PREFIX+product.img2,
+                originalClass: 'image-list-mobile'})
+        }
+        if (product.img3 && product.img3.length > 0) {
+            result.push({original: IMAGE_PATH_PREFIX+product.img3,
+                thumbnail:IMAGE_PATH_PREFIX+product.img3,
+                originalClass: 'image-list-mobile'})
+        }
+        if (product.img4 && product.img4.length > 0) {
+            result.push({original: IMAGE_PATH_PREFIX+product.img4, 
+                thumbnail:IMAGE_PATH_PREFIX+product.img4,
+                originalClass: 'image-list-mobile'})
+        }
+        if (product.img5 && product.img5.length > 0) {
+            result.push({original: IMAGE_PATH_PREFIX+product.img5, 
+                thumbnail:IMAGE_PATH_PREFIX+product.img5,
+                originalClass: 'image-list-mobile'})
+        }
+        if (product.img6 && product.img6.length > 0) {
+            result.push({original: IMAGE_PATH_PREFIX+product.img6, 
+                thumbnail:IMAGE_PATH_PREFIX+product.img6,
+                originalClass: 'image-list-mobile'})
+        }
+    }
+    return result;
+}
+
 function parseImagesFromProduct2(product) {
     let result = [];
     if (product) {
@@ -85,7 +126,9 @@ class ProductDetailPage extends Component {
         if (this.props.user.isLogined) {
             this.props.actUserUpdateCartItem(this.props.user.userProfile.id,this.props.product.productDetail.id, 1)
         } else {
-            this.props.actCartAddToCart(this.props.product.productDetail.id)
+            // replace work as Redirect which replace current
+            this.props.history.replace({pathname: "/login", state: { from: this.props.location }})
+            //this.props.actCartAddToCart(this.props.product.productDetail.id)
         }
     }
     
@@ -185,6 +228,8 @@ class ProductDetailPage extends Component {
                 currentIndexImgCarousel = idx;
             }
         })
+
+        let imagesMobile = parseImagesFromProductForMobileList(this.props.product.productDetail);
         const visibleNum = 5;
         return (
             <React.Fragment>
@@ -198,13 +243,21 @@ class ProductDetailPage extends Component {
                 </ModalGateway>
                 <Row style={{background: "white"}}>
                 <div className="product-detail">
-                    <Col span={2}>
+                    <Col xs={24} sm={24} md={24} lg={3} xl={2} xxl={2} key={"imglist"}>
+                    <div className="image-list-mobile-container">
+                        <ImageGallery items={imagesMobile} showThumbnails={false} 
+                            showPlayButton={false} autoPlay={true} showFullscreenButton={false}
+                            showBullets={true} showIndex={true}
+                        />
+                    </div>
+                    <div className="image-list-container">
                         <ProductDetailImageList images={images} visibleNum={visibleNum}
                             thumbnailHeight={"80px"} onClick={this.onClickThumbnail}
                             onClickMore={this.onClickProductDetail}
                             />
+                    </div>
                     </Col>
-                    <Col span={8}>
+                    <Col xs={0} sm={0} md={0} lg={9} xl={8} xxl={8} >
                         <div onClick={this.onClickProductDetail} style={{paddingRight:"30px"}}>
                         <ReactImageMagnify {...{
                             smallImage: {
@@ -233,7 +286,7 @@ class ProductDetailPage extends Component {
                         />
                         </div>
                     </Col>
-                    <Col span={10}>
+                    <Col xs={24} sm={24} md={24} lg={12} xl={10} xxl={10} style={{padding: "10px"}}>
                         <div className="product-title">
                         {this.props.product.productDetail.name}
                         </div>
@@ -268,16 +321,19 @@ class ProductDetailPage extends Component {
                         <hr />
                         {this.renderDiscountInfos(discountInfo.discounts)}
 
-                        <Row>
+                        <Row style={{textAlign: "center"}}>
                         <span>Số Lượng (Hộp):&nbsp;&nbsp;</span>
                         <AppTouchSpin value={1}/>
 
-                        <Button size="large" type="primary" className="btn-addtocart" onClick={this.onAddToCart}>
+                        {window.innerWidth <= 576 ? (<div><br/><br/></div>) : ""}
+                        <Button size={window.innerWidth <= 576 ? "medium": "large"} type="primary" 
+                        className="btn-addtocart" onClick={this.onAddToCart}>
                             CHỌN MUA
                         </Button>
 
-                        <Button type="link" className="btn-addtofav" onClick={this.onAddToFav} title={"Them Vao Yeu Thich"}>
-                            <Icon type="heart" />
+                        <Button size={window.innerWidth <= 576 ? "medium": "large"} type="primary" 
+                        className="btn-addtofav" onClick={this.onAddToFav} title={"Thêm Vào Yêu Thích"}>
+                            <Icon type="heart" style={{fontSize: "20px"}}/> Thêm Vào Yêu Thích
                         </Button>
                         </Row>
                         <br />
@@ -286,7 +342,7 @@ class ProductDetailPage extends Component {
                         Phan Anh San Pham Khong Chinh Xac
                         </Link>
                     </Col>
-                    <Col span={4}>
+                    <Col xs={0} sm={0} md={0} lg={0} xl={4} xxl={4} >
                         <Card size="small" title="Liên Hệ">
                             <p><Icon type="phone" style={{fontSize: "20px"}} /> Hotline đặt hàng:
                             <br/>

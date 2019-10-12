@@ -10,7 +10,7 @@ import { actCategoryGet } from '../../redux/SiteInfoReducer';
 import {actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry, actQueryChangePriceRange} from '../../redux/ProductQueryReducer'
 
 
-import { actProductGetOfCategory, actProductFilter } from '../../redux/ProductActions';
+import { actProductGetOfCategory, actProductFilter, actProductClearQuery } from '../../redux/ProductActions';
 import './ProductListPage.css';
 
 import { Row, Col, Radio, Button, Icon, Input, Select } from 'antd';
@@ -24,16 +24,16 @@ class ProductListPage extends Component {
 
         this.onChangeFilter = this.onChangeFilter.bind(this);
         this.onSearchFilter = this.onSearchFilter.bind(this);
-        
+        this.previousCategoryId = null;
     }
 
     // Note when Refresh by URL, there is no parsedQuery.lvl
     componentDidMount() {
         //var parsedQuery = queryString.parse(this.props.location.search);
-        if (this.props.product.productsQuery.length <= 0 ) {
+        //if (this.props.product.productsQuery.length <= 0 ) {
             //this.props.actProductGetOfCategory(this.props.match.params.id, parsedQuery.lvl);
             this.props.actQueryChangeCategory(this.props.query, this.props.match.params.id, this.props.match.params.lvl);
-        }
+        //}
     }
     componentDidUpdate() {
         if (this.previousCategoryId != this.props.match.params.id) {
@@ -42,7 +42,14 @@ class ProductListPage extends Component {
         }
         this.previousCategoryId = this.props.match.params.id;
     }
-
+    componentWillReceiveProps(nextProps) {
+        console.log("   componentWillReceiveProps PRODUCT LIST PAGEeee:" + this.previousCategoryId + ",next:" + 
+        nextProps.match.params.id);
+    }
+    componentWillUnmount() {
+        this.previousCategoryId=null;
+        this.props.actProductClearQuery();
+    }
     onChangeFilter (e) {
         console.log('Name:' + e.target.name);
         this.props.actProductFilter(e.target.name, this.props.product.searchFilter, this.props.product.productsQuery)
@@ -124,6 +131,7 @@ class ProductListPage extends Component {
         );
     }
     render() {
+        console.log(" '''RENDER PRODUCT LIST PAGEeee:" + this.previousCategoryId)
         var parsedQuery = queryString.parse(this.props.location.search);
         let producView = [];
         if (this.props.product.productsQueryFiltered.length > 0) {
@@ -139,6 +147,7 @@ class ProductListPage extends Component {
             <React.Fragment>
                 <Row>
                     <Col xs={0} sm={0} md={6} lg={5} xl={4} xxl={4}>
+                    <div className="categorylist-sidemenu">
                     <SideMenu category={this.props.siteInfo} product={this.props.product}
                         query={this.props.query}
                         actCategoryGet={this.props.actCategoryGet}
@@ -148,6 +157,7 @@ class ProductListPage extends Component {
                         actQuerySetBrandCountry={this.props.actQuerySetBrandCountry}
                         actQueryChangePriceRange={this.props.actQueryChangePriceRange}
                     />
+                    </div>
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={19} xl={20} xxl={20}>
                         {this.renderFilterBar()}
@@ -170,6 +180,7 @@ const mapActionsToProps = {
     actProductGetOfCategory,
     actQueryChangeCategory,
     actProductFilter,
+    actProductClearQuery,
 
     actCategoryGet,actQuerySetBrand, actQuerySetAttribute, actQuerySetBrandCountry,actQueryChangePriceRange
 };

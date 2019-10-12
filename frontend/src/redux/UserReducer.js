@@ -1,7 +1,7 @@
 import Backend from '../util/Backend';
 import Helpers from '../util/Helpers'
 import cloneDeep from 'lodash/cloneDeep';
-
+import { notification } from 'antd';
 import AppContant from '../util/AppConstant'
 
 const USER_LOGIN_OK = 'USER_LOGIN_OK';
@@ -50,7 +50,7 @@ export const actUserLogout = () => (dispatch) => {
     });
 }
 
-export const actUserLogin = ({username, password}, history) => (dispatch) => {
+export const actUserLogin = ({username, password}, history, fromBeforeLogin) => (dispatch) => {
     console.log("  Do Login with:" + username + "," + password)
     dispatch({
         type: USER_LOGIN_START,
@@ -65,6 +65,8 @@ export const actUserLogin = ({username, password}, history) => (dispatch) => {
                 type: USER_LOGIN_OK,
                 payload:  response.data
             });
+            // Back to location before Login
+            history.push(fromBeforeLogin)
         },
         error => {
             console.log("actUserLogin error")
@@ -306,12 +308,18 @@ export const actUserGetAllAddress = (userId) => (dispatch) => {
 
 
 
-export const actUserPlaceOrder = (products, userProfile) => (dispatch) => {
+export const actUserPlaceOrder = (products, userProfile, history) => (dispatch) => {
     console.log("  actUserPlaceOrder")
     Backend.placeOrder(products,userProfile,
         response => {
             console.log("actUserPlaceOrder Done&&&&&&&&&&&&&&&&&&&&&&&&6")
             console.log(response.data)
+            history.push("/customer/orders")
+            notification.success({
+                message: response.data.orderNumber,
+                description:
+                  'Đặt Hàng Thành Công. Mã Đơn Hàng: ' + response.data.orderNumber,
+            });
             dispatch({
                 type: USER_PLACEORDER_OK,
                 payload:  response.data
@@ -319,6 +327,12 @@ export const actUserPlaceOrder = (products, userProfile) => (dispatch) => {
         },
         error => {
             console.log("actUserPlaceOrder error")
+            notification.error({
+                message: "Có Lỗi Xảy Ra",
+                description:
+                  'Đặt Hàng Thất Bại. Xin hãy thử lại sau!',
+            });
+            history.push("/cart")
         }); 
 }
 export const actUserGetOrders = (userId) => (dispatch) => {
@@ -416,6 +430,11 @@ export default function(state = initialState, action) {
             ...state,
             checkoutAddressId: action.payload
         } 
+    case USER_PLACEORDER_OK:
+        return {
+            ...state,
+            cartItems: []
+        }
     default:
         return state;
     }

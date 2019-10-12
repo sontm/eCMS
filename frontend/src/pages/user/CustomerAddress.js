@@ -169,9 +169,21 @@ class CustomerAddress extends Component {
                 }
                 return (
                     <div>
+                        {window.innerWidth < 768 ? (
+                            <Link to ={"/customer/default"}>
+                                <Button type="link" style={{paddingLeft: "0"}}>
+                                {"<< Quay lại Tài Khoản"}
+                            </Button></Link>) : ("")}
                         <Link to={"/customer/addressbook?action=add"}>
-                            <Button size="large" type="primary">Thêm Địa Chỉ Mới
-                        </Button></Link>
+                            {window.innerWidth < 768 ? (
+                            <Button size="large" type="primary"
+                                style={{float: "right"}}>Thêm Địa Chỉ Mới
+                            </Button>) : (
+                                <Button size="large" type="primary"
+                                    >Thêm Địa Chỉ Mới
+                                </Button>
+                            )}
+                        </Link>
                         <br /><br />
                         {addressView}
                     </div>

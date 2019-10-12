@@ -36,12 +36,14 @@ class LoginForm extends Component {
             if (!err) {
                 console.log("Handle Submit..")
                 console.log(values)
-                this.props.actUserLogin(values, this.props.history)
+                this.props.actUserLogin(values, this.props.history, this.props.location.state.from.pathname)
             }
         });
     }
 
     render() {
+        console.log("Login Page..............")
+        console.log(this)
         const { getFieldDecorator } = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">

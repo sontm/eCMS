@@ -32,11 +32,20 @@ class CustomerRecentView extends Component {
             });
         }
         return (
+            <React.Fragment>
+                {window.innerWidth < 768 ? (
+                <Link to ={"/customer/default"}>
+                    <Button type="link" style={{paddingLeft: "0"}}>
+                    {"<< Quay lại Tài Khoản"}
+                </Button></Link>) : ("")}
+            <br />
+            <h2 style={{textAlign: "center"}}>Sản Phẩm Xem Gần Đây</h2>
             <div className="customer-content">
                 <Row type="flex">
                 {producView}
                 </Row>
             </div>
+            </React.Fragment>
         );
     }
 }

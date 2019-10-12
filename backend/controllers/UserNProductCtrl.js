@@ -539,6 +539,15 @@ module.exports = {
             .then (orderItemAtts => {
               console.log("        Well, Done Insert to  DBOrderItemAttributes")
               console.log(orderItemAtts)
+
+              // Delete User Card Items
+              return DBCarts.destroy({
+                where: {
+                  userId: req.body.customer.id
+                }
+              }).then(deletedOK => {
+                console.log("          Delete All Cart ITems of user OK:" + req.body.customer.id)
+              })
             })
           })
         });

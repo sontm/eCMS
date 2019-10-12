@@ -9,6 +9,7 @@ import {actUserUpdateCartItem} from '../../redux/UserReducer'
 import './ProductWrapper.css'
 import helpers from '../../util/Helpers';
 
+// props: showLinkToProduct
 class ProductWrapper extends Component {
     constructor(props) {
         super(props);
@@ -23,12 +24,16 @@ class ProductWrapper extends Component {
         if (this.props.user.isLogined) {
             this.props.actUserUpdateCartItem(this.props.user.userProfile.id ,this.props.product.id, 1)
         } else {
-            this.props.actCartAddToCart(this.props.product.id)
+            this.props.history.replace({pathname: "/login", state: { from: this.props.location }})
+            //this.props.actCartAddToCart(this.props.product.id)
         }
     }
     onClickProductDetail() {
         console.log("onClickProductDetail:" + this.props.product.name)
-        this.props.history.push("/product/" + this.props.product.id);
+
+        // productId is more priority
+        this.props.history.push("/product/" + (this.props.product.productId ? 
+            this.props.product.productId : this.props.product.id));
     }
 
     // {"id":1,"desc":"Category Banh Mem giam gia 30% trong thang 9","from":"2019-09-01T16:42:06.000Z",
@@ -73,10 +78,10 @@ class ProductWrapper extends Component {
                     (discountInfo.coupon) ? <div className="coupon-banner">{discountInfo.coupon}</div> : ("")}
                 
                 <div className="image-thump">
-                    <img src={"/"+this.props.product.imgThump} style={{width:"100%", height:"100%"}}/>
+                    <img src={"/"+this.props.product.imgThump}/>
                 </div>
                 <div className="product-title">
-                    {this.props.product.name}
+                    <span style={{color: "#1890FF", cursor: "pointer"}}>{this.props.product.name}</span>
                 </div>
                
                 <div className="product-price">
@@ -89,9 +94,12 @@ class ProductWrapper extends Component {
                 <div className="product-price-discount">
                     {discountInfo.bestDiscount > 0 ? ("-" + discountInfo.bestDiscount + discountInfo.unit): ""}
                 </div>
+                <div className="product-quantity">
+                    {this.props.product.quantity ? ("x " + this.props.product.quantity) : null}
+                </div>
                 {this.renderDiscountInfos(discountInfo.discounts)}
 
-                <div style={{height: "36px"}} />
+                <div className="empty-space-36pxheight" />
                 
                 <Button type="primary" className="btn-addtocart" onClick={this.onAddToCart}>Add to Cart</Button>
                 

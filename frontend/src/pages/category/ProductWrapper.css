@@ -11,7 +11,9 @@
     display: inline-block;
 
     max-width: 300px;
+    /* xs ,sm */
 }
+
 
 /* Override Padding 24 of ANTD */
 .product-wrapper .ant-card-body  {
@@ -30,8 +32,12 @@
     margin-left: 2%;
     margin-right: 2%;
     transition: all 0.2s linear;
+    text-align: center;
     /* position: relative; 
     overflow:hidden; */
+}
+.product-wrapper .image-thump img {
+    max-height:100%;
 }
 
 .product-wrapper .product-title {
@@ -60,6 +66,13 @@
     margin-right: 10px;
     font-weight: bold;
     font-size: 1em;
+}
+.product-wrapper .product-quantity {
+    display:inline-block;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 1em;
+    float: right;
 }
 
 .product-wrapper .btn-addtocart {
@@ -204,3 +217,136 @@
     border-right: 12px solid rgb(255, 95, 95);
     border-bottom: 7px solid transparent;
 }
+.empty-space-36pxheight{
+    height: 36px;
+}
+/* lg */
+@media only screen and (max-width : 992px) {
+    .product-wrapper {
+        min-height: 300px;
+        margin:0.5px;
+        margin-top: 2px;
+        /* background: var(--xx) */
+        height: 100%;
+        display: inline-block;
+        max-width: 300px;
+    }
+    .product-wrapper .image-thump {
+        width:96%;
+        height:200px;
+        text-align: center;
+    }
+    .product-wrapper .image-thump img {
+        max-height:100%;
+    }
+    .product-wrapper .btn-addtocart {
+        display: none;
+    }
+    /* Override Padding 24 of ANTD */
+    .product-wrapper .ant-card-body  {
+        /* top right bottom left */
+        padding: 10px 12px 8px 12px !important;
+        zoom: 1;
+        height: 100% !important;
+    }
+    .ant-card-head {
+        padding: 0 16px !important;
+    }
+    .ant-card-body {
+        padding: 16px !important;
+    }
+
+    /* Space for AddToCard button, but not used when small screen */
+    .empty-space-36pxheight{
+        display: none;
+    }
+}
+/* md */
+@media only screen and (max-width : 768px) {
+    .product-wrapper {
+        min-height: 300px;
+        margin:0.5px;
+        margin-top: 2px;
+        /* background: var(--xx) */
+        height: 100%;
+        display: inline-block;
+        max-width: 300px;
+    }
+    .product-wrapper .image-thump {
+        width:96%;
+        height:150px;
+        text-align: center;
+    }
+    .product-wrapper .image-thump img {
+        max-height:100%;
+    }
+    .product-wrapper .btn-addtocart {
+        display: none;
+    }
+    /* Override Padding 24 of ANTD */
+    .product-wrapper .ant-card-body  {
+        /* top right bottom left */
+        padding: 6px 8px 6px 8px !important;
+        zoom: 1;
+        height: 100% !important;
+    }
+    .ant-card-head {
+        padding: 0 12px !important;
+    }
+    .ant-card-body {
+        padding: 12px !important;
+    }
+    /* Space for AddToCard button, but not used when small screen */
+    .empty-space-36pxheight{
+        display: none;
+    }
+    .product-wrapper .product-price-discount {
+        display: none;
+    }
+}
+
+
+
+@media only screen and (max-width : 576px) {
+    .product-wrapper {
+        min-height: 200px;
+        margin:0.5px;
+        margin-top: 2px;
+        /* background: var(--xx) */
+        height: 100%;
+        display: inline-block;
+    }
+    .product-wrapper .image-thump {
+        height: 120px;
+        width: 100%;
+        text-align: center;
+    }
+    .product-wrapper .image-thump img {
+        max-height:100%;
+    }
+
+    .product-wrapper .btn-addtocart {
+        display: none;
+    }
+    /* Override Padding 24 of ANTD */
+    .product-wrapper .ant-card-body  {
+        /* top right bottom left */
+        padding: 4px 5px 4px 5px !important;
+        zoom: 1;
+        height: 100% !important;
+    }
+    .ant-card-head {
+        padding: 0 8px !important;
+    }
+    .ant-card-body {
+        padding: 8px !important;
+    }
+    /* Space for AddToCard button, but not used when small screen */
+    .empty-space-36pxheight{
+        display: none;
+    }
+    .product-wrapper .product-price-discount {
+        display: none;
+    }
+}
+

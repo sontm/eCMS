@@ -58,20 +58,20 @@ app.get('/api/categoriesFull', category.getAllWithProduct);
 app.get('/api/categoriesFull/:id', category.getOneWithProduct);
 
 
-app.post('/api/users/recentViews', userNproduct.addUserRecentViews);
-app.get('/api/users/recentViews/:userId', userNproduct.getRecentViewsOfUser);
-app.post('/api/users/favorites', userNproduct.addUserFavorite);
-app.get('/api/users/favorites/:userId', userNproduct.getFavoritesOfUser);
-app.post('/api/users/cart', userNproduct.addUserCartItem);
-app.get('/api/users/cart/:userId', userNproduct.getUserCartItems);
-app.post('/api/users/cart/removeItem', userNproduct.removeUserCartItem);
+app.post('/api/users/recentViews', passport.authenticate('jwt', {session: false}), userNproduct.addUserRecentViews);
+app.get('/api/users/recentViews/:userId', passport.authenticate('jwt', {session: false}), userNproduct.getRecentViewsOfUser);
+app.post('/api/users/favorites', passport.authenticate('jwt', {session: false}), userNproduct.addUserFavorite);
+app.get('/api/users/favorites/:userId', passport.authenticate('jwt', {session: false}), userNproduct.getFavoritesOfUser);
+app.post('/api/users/cart', passport.authenticate('jwt', {session: false}), userNproduct.addUserCartItem);
+app.get('/api/users/cart/:userId', passport.authenticate('jwt', {session: false}), userNproduct.getUserCartItems);
+app.post('/api/users/cart/removeItem', passport.authenticate('jwt', {session: false}), userNproduct.removeUserCartItem);
 
-app.post('/api/users/address', user.addUserAddress);
-app.get('/api/users/address/:userId', user.getAllAddressOfUser);
-app.post('/api/users/address/edit', user.editUserAddress);
-app.post('/api/users/address/setdefault', user.setUserDefault);
+app.post('/api/users/address', passport.authenticate('jwt', {session: false}), user.addUserAddress);
+app.get('/api/users/address/:userId', passport.authenticate('jwt', {session: false}), user.getAllAddressOfUser);
+app.post('/api/users/address/edit', passport.authenticate('jwt', {session: false}), user.editUserAddress);
+app.post('/api/users/address/setdefault', passport.authenticate('jwt', {session: false}), user.setUserDefault);
 
-app.post('/api/users/order/place', userNproduct.placeOrder);
-app.get('/api/users/order/:userId', userNproduct.getUserOrders);
+app.post('/api/users/order/place', passport.authenticate('jwt', {session: false}), userNproduct.placeOrder);
+app.get('/api/users/order/:userId', passport.authenticate('jwt', {session: false}), userNproduct.getUserOrders);
 
 };
